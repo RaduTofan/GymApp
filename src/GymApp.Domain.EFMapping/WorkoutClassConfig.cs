@@ -12,6 +12,7 @@ namespace GymApp.Domain.EFMapping
     {
         public void Configure(EntityTypeBuilder<WorkoutClass> builder)
         {
+            builder.HasKey(e => e.Id);
 
             builder.Property(e => e.ClientId).IsRequired();
 
@@ -21,13 +22,11 @@ namespace GymApp.Domain.EFMapping
 
             builder.Property(e => e.ScheduledTime).IsRequired();
 
-            builder.HasKey(wk => new { wk.ClientId, wk.TrainerId });
 
             builder.HasOne(d => d.ExercisePlan)
                 .WithMany()
                 .HasForeignKey(d => d.ExercisePlanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__WorkoutCl__Exerc__5535A963");
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

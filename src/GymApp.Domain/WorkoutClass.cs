@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymApp.Domain
 {
-    public class WorkoutClass
+    public class WorkoutClass : Entity
     {
         public long TrainerId { get; set; }
         public virtual Trainer Trainer { get; set; }

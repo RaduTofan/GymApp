@@ -17,8 +17,6 @@ namespace GymApp.Domain.EFMapping
 
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Id);
-
             builder.Property(e => e.DateOfBirth).HasColumnType("date").IsRequired();
 
             builder.Property(e => e.Email)
@@ -27,8 +25,6 @@ namespace GymApp.Domain.EFMapping
                 .IsUnicode(false);
 
             builder.Property(e => e.FullName).HasMaxLength(255).IsRequired();
-
-            builder.Property(e => e.NutritionPlanId);
 
             builder.Property(e => e.Phone)
                 .IsRequired()
@@ -40,9 +36,8 @@ namespace GymApp.Domain.EFMapping
 
             builder.HasOne(d => d.NutritionPlan)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(d => d.NutritionPlanId)
-                .HasConstraintName("FK__Clients__Nutriti__4D94879B");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasForeignKey(d => d.NutritionPlanId);
 
         }
     }

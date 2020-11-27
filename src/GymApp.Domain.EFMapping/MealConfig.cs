@@ -12,10 +12,10 @@ namespace GymApp.Domain.EFMapping
     {
         public void Configure(EntityTypeBuilder<Meal> builder)
         {
+            builder.HasKey(e => e.Id);
+
             builder.HasIndex(e => e.MealName)
                     .IsUnique();
-
-            builder.HasKey(e => e.Id);
 
             builder.Property(e => e.MealName)
                 .IsRequired()

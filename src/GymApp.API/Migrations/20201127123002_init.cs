@@ -88,11 +88,11 @@ namespace GymApp.API.Migrations
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__Clients__Nutriti__4D94879B",
+                        name: "FK_Clients_NutritionPlans_NutritionPlanId",
                         column: x => x.NutritionPlanId,
                         principalTable: "NutritionPlans",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,6 +123,8 @@ namespace GymApp.API.Migrations
                 name: "WorkoutClasses",
                 columns: table => new
                 {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TrainerId = table.Column<long>(type: "bigint", nullable: false),
                     ClientId = table.Column<long>(type: "bigint", nullable: false),
                     ScheduledTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -130,19 +132,19 @@ namespace GymApp.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkoutClasses", x => new { x.ClientId, x.TrainerId });
-                    table.ForeignKey(
-                        name: "FK__WorkoutCl__Exerc__5535A963",
-                        column: x => x.ExercisePlanId,
-                        principalTable: "ExercisePlans",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_WorkoutClasses", x => x.Id);
                     table.ForeignKey(
                         name: "FK_WorkoutClasses_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WorkoutClasses_ExercisePlans_ExercisePlanId",
+                        column: x => x.ExercisePlanId,
+                        principalTable: "ExercisePlans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WorkoutClasses_Trainers_TrainerId",
                         column: x => x.TrainerId,
@@ -197,6 +199,11 @@ namespace GymApp.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_WorkoutClasses_ClientId",
+                table: "WorkoutClasses",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WorkoutClasses_ExercisePlanId",
                 table: "WorkoutClasses",
                 column: "ExercisePlanId");
@@ -219,10 +226,10 @@ namespace GymApp.API.Migrations
                 name: "Meals");
 
             migrationBuilder.DropTable(
-                name: "ExercisePlans");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "ExercisePlans");
 
             migrationBuilder.DropTable(
                 name: "Trainers");

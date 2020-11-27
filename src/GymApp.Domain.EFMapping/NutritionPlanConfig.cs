@@ -17,8 +17,6 @@ namespace GymApp.Domain.EFMapping
 
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.Id);
-
             builder.Property(e => e.NutritionType)
                 .IsRequired()
                 .HasMaxLength(255)

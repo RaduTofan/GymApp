@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymApp.API.Migrations
 {
     [DbContext(typeof(GymAppDbContext))]
-    [Migration("20201127092548_init")]
+    [Migration("20201127123002_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,10 +191,12 @@ namespace GymApp.API.Migrations
 
             modelBuilder.Entity("GymApp.Domain.WorkoutClass", b =>
                 {
-                    b.Property<long>("ClientId")
-                        .HasColumnType("bigint");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
 
-                    b.Property<long>("TrainerId")
+                    b.Property<long>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ExercisePlanId")
@@ -203,7 +205,12 @@ namespace GymApp.API.Migrations
                     b.Property<DateTime>("ScheduledTime")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ClientId", "TrainerId");
+                    b.Property<long>("TrainerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("ExercisePlanId");
 
@@ -216,9 +223,7 @@ namespace GymApp.API.Migrations
                 {
                     b.HasOne("GymApp.Domain.NutritionPlan", "NutritionPlan")
                         .WithMany()
-                        .HasForeignKey("NutritionPlanId")
-                        .HasConstraintName("FK__Clients__Nutriti__4D94879B")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("NutritionPlanId");
 
                     b.Navigation("NutritionPlan");
                 });
@@ -260,7 +265,6 @@ namespace GymApp.API.Migrations
                     b.HasOne("GymApp.Domain.ExercisePlan", "ExercisePlan")
                         .WithMany()
                         .HasForeignKey("ExercisePlanId")
-                        .HasConstraintName("FK__WorkoutCl__Exerc__5535A963")
                         .IsRequired();
 
                     b.HasOne("GymApp.Domain.Trainer", "Trainer")
