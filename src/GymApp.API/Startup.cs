@@ -52,8 +52,7 @@ namespace GymApp.API
             services.AddSingleton(mapperConfig.CreateMapper());
             services.AddScoped<IClientService, ClientService>();
 
-            //services.AddSingleton(mapperConfigWorkoutClass.CreateMapper());
-            //services.AddScoped<IWorkoutClassService, WorkoutClassService>();
+            services.AddScoped<IWorkoutClassService, WorkoutClassService>();
 
             services.AddCors(options =>
             {

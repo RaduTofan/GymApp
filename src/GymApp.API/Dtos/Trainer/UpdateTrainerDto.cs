@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GymApp.API.Dtos
+namespace GymApp.API.Dtos.Trainer
 {
     public class UpdateTrainerDto
     {

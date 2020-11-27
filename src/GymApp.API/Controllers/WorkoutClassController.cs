@@ -44,5 +44,48 @@ namespace GymApp.API.Controllers
             //return CreatedAtAction(nameof(GetAll), result);
             return Ok(result);
         }
+
+        // GET api/<WorkoutClasssController>/id
+        [HttpGet("{id}")]
+        public IActionResult GetWorkoutClass(long id)
+        {
+            var workoutClass = _workoutClassService.GetWorkoutClassById(id);
+            if (workoutClass == null)
+                return NotFound();
+
+            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
+            return Ok(result);
+        }
+
+        // PUT api/<WorkoutClasssController>/id
+        [HttpPut("{id}")]
+        public IActionResult Put(long id, [FromBody] CreateWorkoutClassDto dto)
+        {
+            var workoutClass = _workoutClassService.UpdateWorkoutClass(id, dto);
+
+            if (workoutClass == null)
+                return BadRequest("Failed to update clientxd");
+
+            return NoContent();
+        }
+
+
+        // DELETE api/<WorkoutClasssController>/id
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            var isDeleted = _workoutClassService.RemoveWorkoutClassById(id);
+
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
     }
 }

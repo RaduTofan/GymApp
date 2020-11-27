@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GymApp.Domain;
 
-namespace GymApp.API.Dtos
+namespace GymApp.API.Dtos.Client
 {
     public class ClientDto
     {

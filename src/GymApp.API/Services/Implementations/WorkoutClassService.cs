@@ -34,10 +34,10 @@ namespace GymApp.API.Services.Implementations
             return workoutClass;
         }
 
-        //public WorkoutClass GetWorkoutClassByClientId(long clientId)
-        //{
-        //    return _workoutClassRepository.Get(clientId);
-        //}
+        public WorkoutClass GetWorkoutClassById(long id)
+        {
+            return _workoutClassRepository.Get(id);
+        }
 
 
         public IList<WorkoutClass> GetWorkoutClasses()
@@ -48,14 +48,30 @@ namespace GymApp.API.Services.Implementations
             return workoutClasses.ToList();
         }
 
-        //public bool RemoveWorkoutClassById(long id)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public bool RemoveWorkoutClassById(long id)
+        {
+            var workoutClass = _workoutClassRepository.Get(id);
+            if (workoutClass != null)
+            {
+                _workoutClassRepository.Remove(workoutClass);
+                _workoutClassRepository.Save();
+                return true;
+            }
+            else return false;
+        }
 
-        //public WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
+        {
+            var workoutClass = _workoutClassRepository.Get(id);
+
+            workoutClass.TrainerId = dto.TrainerId;
+            workoutClass.ClientId = dto.ClientId;
+            workoutClass.ScheduledTime = dto.ScheduledTime;
+            workoutClass.ExercisePlanId = dto.ExercisePlanId;
+
+            _workoutClassRepository.Save();
+
+            return workoutClass;
+        }
     }
 }

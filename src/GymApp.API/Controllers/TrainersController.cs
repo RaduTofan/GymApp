@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GymApp.API;
 using GymApp.Domain;
-using GymApp.API.Dtos;
+using GymApp.API.Dtos.Trainer;
 using GymApp.API.Services.Interfaces;
 
 namespace GymApp.API.Controllers

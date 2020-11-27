@@ -15,6 +15,8 @@ namespace GymApp.API.Dtos.WorkoutClass
         public long ClientId { get; set; }
 
         [Required]
+        [Range(typeof(DateTime), "1/1/2020", "1/1/2025",
+        ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime ScheduledTime { get; set; }
 
         [Required]

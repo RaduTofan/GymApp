@@ -7,6 +7,7 @@ namespace GymApp.API.Dtos.WorkoutClass
 {
     public class WorkoutClassDto
     {
+        public long Id { get; set; }
         public long TrainerId { get; set; }
         public long ClientId { get; set; }
         public DateTime ScheduledTime { get; set; }

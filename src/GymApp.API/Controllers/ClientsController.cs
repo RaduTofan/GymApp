@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GymApp.API.Dtos;
 using GymApp.API.Dtos.Client;
 using GymApp.API.Services.Interfaces;
 
