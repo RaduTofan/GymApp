@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.API.Dtos.WorkoutClass;
 using GymApp.API.Repositories.Interfaces;
+using GymApp.API.Services.Interfaces;
 
-namespace GymApp.API.Services
+namespace GymApp.API.Services.Implementations
 {
     public class WorkoutClassService : IWorkoutClassService
     {

@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GymApp.API.Dtos.WorkoutClass;
-using GymApp.API.Services;
+using GymApp.API.Services.Interfaces;
 
 namespace GymApp.API.Controllers
 {

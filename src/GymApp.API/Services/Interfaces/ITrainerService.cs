@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.API.Dtos;
 
-namespace GymApp.API.Services
+namespace GymApp.API.Services.Interfaces
 {
     public interface ITrainerService
     {

@@ -17,7 +17,8 @@ using AutoMapper;
 using GymApp.API.Profiles;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Repositories.Implementations;
-using GymApp.API.Services;
+using GymApp.API.Services.Interfaces;
+using GymApp.API.Services.Implementations;
 using Microsoft.OpenApi.Models;
 
 namespace GymApp.API
@@ -45,7 +46,6 @@ namespace GymApp.API
 
             services.AddControllers();
 
-            //services.AddSingleton(mapperConfigTrainer.CreateMapper());
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ITrainerService, TrainerService>();
 

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GymApp.API.Dtos;
 using GymApp.API.Dtos.Client;
-using GymApp.API.Services;
+using GymApp.API.Services.Interfaces;
 
 namespace GymApp.API.Controllers
 {
@@ -37,7 +37,7 @@ namespace GymApp.API.Controllers
 
         // GET api/<clientsController>/id
         [HttpGet("{id}")]
-        public IActionResult Getclient(long id)
+        public IActionResult GetClient(long id)
         {
             var client = _clientService.GetClientById(id);
             if (client == null)
@@ -55,7 +55,7 @@ namespace GymApp.API.Controllers
 
             var result = _mapper.Map<ClientDto>(client);
 
-            return CreatedAtAction(nameof(Getclient), new { id = client.Id }, result);
+            return CreatedAtAction(nameof(GetClient), new { id = client.Id }, result);
         }
 
         // PUT api/<clientsController>/5
