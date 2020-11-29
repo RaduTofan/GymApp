@@ -9,9 +9,11 @@ namespace GymApp.API.Dtos.WorkoutClass
     public class CreateWorkoutClassDto
     {
         [Required]
+        [Range(1, 1000000)]
         public long TrainerId { get; set; }
 
         [Required]
+        [Range(1, 1000000)]
         public long ClientId { get; set; }
 
         [Required]
@@ -20,6 +22,7 @@ namespace GymApp.API.Dtos.WorkoutClass
         public DateTime ScheduledTime { get; set; }
 
         [Required]
+        [Range(1, 1000000)]
         public long ExercisePlanId { get; set; }
     }
 }

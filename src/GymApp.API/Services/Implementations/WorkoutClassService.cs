@@ -20,6 +20,12 @@ namespace GymApp.API.Services.Implementations
 
         public WorkoutClass AddNewWorkoutClass(CreateWorkoutClassDto dto)
         {
+            if (_workoutClassRepository.Get(x => x.ClientId == dto.ClientId)==null ||
+                _workoutClassRepository.Get(x => x.TrainerId == dto.TrainerId)==null)
+            {
+                return null;
+            }
+
             var workoutClass = new WorkoutClass
             {
                 TrainerId = dto.TrainerId,
@@ -62,6 +68,11 @@ namespace GymApp.API.Services.Implementations
 
         public WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
         {
+            if (_workoutClassRepository.Get(dto.ClientId) == null || _workoutClassRepository.Get(dto.TrainerId) == null)
+            {
+                return null;
+            }
+
             var workoutClass = _workoutClassRepository.Get(id);
 
             workoutClass.TrainerId = dto.TrainerId;

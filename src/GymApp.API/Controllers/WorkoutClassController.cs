@@ -37,12 +37,16 @@ namespace GymApp.API.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CreateWorkoutClassDto dto)
         {
-            var WorkoutClass = _workoutClassService.AddNewWorkoutClass(dto);
+            var workoutClass = _workoutClassService.AddNewWorkoutClass(dto);
 
-            var result = _mapper.Map<WorkoutClassDto>(WorkoutClass);
+            if (workoutClass == null)
+            {
+                return BadRequest("There is no such trainer or client in the database!");
+            }
 
-            //return CreatedAtAction(nameof(GetAll), result);
-            return Ok(result);
+            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
+
+            return CreatedAtAction(nameof(GetAll), result);
         }
 
         // GET api/<WorkoutClasssController>/id
@@ -62,9 +66,11 @@ namespace GymApp.API.Controllers
         public IActionResult Put(long id, [FromBody] CreateWorkoutClassDto dto)
         {
             var workoutClass = _workoutClassService.UpdateWorkoutClass(id, dto);
-
             if (workoutClass == null)
-                return BadRequest("Failed to update clientxd");
+            {
+                return BadRequest("There is no such trainer or client in the database!");
+            }
+
 
             return NoContent();
         }
