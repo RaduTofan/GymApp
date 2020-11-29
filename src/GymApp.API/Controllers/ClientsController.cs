@@ -52,6 +52,11 @@ namespace GymApp.API.Controllers
         {
             var client = _clientService.AddNewClient(dto);
 
+            if (client == null)
+            {
+                return BadRequest("Client with such phone already exists!");
+            }
+
             var result = _mapper.Map<ClientDto>(client);
 
             return CreatedAtAction(nameof(GetClient), new { id = client.Id }, result);
@@ -64,8 +69,9 @@ namespace GymApp.API.Controllers
             var client = _clientService.UpdateClient(id, dto);
 
             if (client == null)
-                return BadRequest("Failed to update clientxd");
-
+            {
+                return BadRequest("The client you are trying to update doesn't exist or such phone already exists!");
+            }
             return NoContent();
         }
 

@@ -54,6 +54,11 @@ namespace GymApp.API.Controllers
         {
             var trainer = _trainerService.AddNewTrainer(dto);
 
+            if (trainer == null)
+            {
+                return BadRequest("Trainer with such phone already exists!");
+            }
+
             var result = _mapper.Map<TrainerDto>(trainer);
 
             return CreatedAtAction(nameof(GetTrainer), new { id = trainer.Id }, result);
@@ -65,10 +70,11 @@ namespace GymApp.API.Controllers
         {
             var trainer = _trainerService.UpdateTrainer(id, dto);
 
-
-
             if (trainer == null)
-                return BadRequest("Failed to update trainerxd");
+            {
+                return BadRequest("The trainer you are trying to update doesn't exist or such phone already exists!");
+            }
+
 
             return NoContent();
         }
@@ -86,7 +92,7 @@ namespace GymApp.API.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound("The trainer you are trying to delete was not found");
             }
         }
 

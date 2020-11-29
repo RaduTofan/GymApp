@@ -19,6 +19,12 @@ namespace GymApp.API.Services.Implementations
         }
         public Client AddNewClient(CreateClientDto dto)
         {
+            if (PhoneExists(dto.Phone))
+            {
+                return null;
+            }
+
+
             var client = new Client
             {
                 FullName = dto.FullName,
@@ -64,6 +70,11 @@ namespace GymApp.API.Services.Implementations
         {
             var client = _clientRepository.Get(id);
 
+            if (client == null || (dto.Phone != client.Phone && PhoneExists(dto.Phone)))
+            {
+                return null;
+            }
+
             client.FullName = dto.FullName;
             client.DateOfBirth = dto.DateOfBirth;
             client.Email = dto.Email;
@@ -77,5 +88,9 @@ namespace GymApp.API.Services.Implementations
             return client;
         }
 
+        private bool PhoneExists(string phone)
+        {
+            return _clientRepository.Get(x => x.Phone == phone) !=null;
+        }
     }
 }

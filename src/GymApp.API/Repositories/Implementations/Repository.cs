@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using GymApp.API;
 using GymApp.Domain;
 using GymApp.API.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace GymApp.API.Repositories.Implementations
 {
@@ -42,7 +43,11 @@ namespace GymApp.API.Repositories.Implementations
 
         public TEntity Get(long id)
         {
-            return _dbSet.FirstOrDefault(x => x.Id == id);    
+            return _dbSet.FirstOrDefault(x => x.Id == id);
+        }
+        public TEntity Get(Expression<Func<TEntity, bool>> predicate)
+        {
+            return _dbSet.FirstOrDefault(predicate);
         }
 
         public IQueryable<TEntity> GetAll()
@@ -54,5 +59,7 @@ namespace GymApp.API.Repositories.Implementations
         {
             return _dbSet.Update(entity).Entity;
         }
+
+       
     }
 }

@@ -19,6 +19,11 @@ namespace GymApp.API.Services.Implementations
         }
         public Trainer AddNewTrainer(CreateTrainerDto dto)
         {
+            if (PhoneExists(dto.Phone))
+            {
+                return null;
+            }
+
             var trainer = new Trainer
             {
                 FullName = dto.FullName,
@@ -62,6 +67,11 @@ namespace GymApp.API.Services.Implementations
         {
             var trainer = _trainerRepository.Get(id);
 
+            if (trainer==null || (dto.Phone!=trainer.Phone && PhoneExists(dto.Phone)))
+            {
+                return null;
+            }
+
             trainer.FullName = dto.FullName;
             trainer.Experience = dto.Experience;
             trainer.DateOfBirth = dto.DateOfBirth;
@@ -73,6 +83,9 @@ namespace GymApp.API.Services.Implementations
             return trainer;
 
         }
-
+        private bool PhoneExists(string phone)
+        {
+            return _trainerRepository.Get(x => x.Phone == phone) != null;
+        }
     }
 }
