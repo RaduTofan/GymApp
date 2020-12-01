@@ -6,10 +6,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.Domain.EFMapping;
+using GymApp.Domain.Auth;
+using GymApp.Domain.EFMapping.Schemas;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace GymApp.API
 {
-    public class GymAppDbContext : DbContext
+    public class GymAppDbContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
         public GymAppDbContext(DbContextOptions<GymAppDbContext> options):base(options)
         {
@@ -43,7 +46,20 @@ namespace GymApp.API
             modelBuilder.ApplyConfiguration(new WorkoutClassConfig());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(WorkoutClassConfig)));
 
+
+            ApplyIdentityMapConfiguration(modelBuilder);
+
         }
 
+        private void ApplyIdentityMapConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().ToTable("Users", SchemaConsts.Auth);
+            modelBuilder.Entity<UserClaim>().ToTable("UserClaims", SchemaConsts.Auth);
+            modelBuilder.Entity<UserLogin>().ToTable("UserLogins", SchemaConsts.Auth);
+            modelBuilder.Entity<UserToken>().ToTable("UserRoles", SchemaConsts.Auth);
+            modelBuilder.Entity<Role>().ToTable("Roles", SchemaConsts.Auth);
+            modelBuilder.Entity<RoleClaim>().ToTable("RoleClaims", SchemaConsts.Auth);
+            modelBuilder.Entity<UserRole>().ToTable("UserRole", SchemaConsts.Auth);
+        }
     }
 }

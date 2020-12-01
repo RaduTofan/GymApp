@@ -20,6 +20,9 @@ using GymApp.API.Repositories.Implementations;
 using GymApp.API.Services.Interfaces;
 using GymApp.API.Services.Implementations;
 using Microsoft.OpenApi.Models;
+using GymApp.Domain.Auth;
+using GymApp.API.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace GymApp.API
 {
@@ -39,9 +42,9 @@ namespace GymApp.API
             {
                 optionsbuilder.UseSqlServer(Configuration.GetConnectionString("GymAppConnection"));
             });
-            
+
             var mapperConfig = new MapperConfiguration(m => m.AddProfile(new MappingProfile()));
-          
+
             ConfigureSwagger(services);
 
             services.AddControllers();
@@ -64,7 +67,22 @@ namespace GymApp.API
                         builder.AllowAnyHeader();
                     });
             });
-            
+
+
+
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequiredLength = 6;
+            })
+            .AddEntityFrameworkStores<GymAppDbContext>();
+
+            var authOptions = services.ConfigureAuthOptions(Configuration);
+            services.AddJwtAuthentication(authOptions);
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(new AuthorizeFilter());
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
