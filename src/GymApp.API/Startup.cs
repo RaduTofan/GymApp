@@ -97,6 +97,7 @@ namespace GymApp.API
             app.UseCors();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseSwagger();
