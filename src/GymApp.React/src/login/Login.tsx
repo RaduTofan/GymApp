@@ -7,6 +7,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Controller, useForm } from 'react-hook-form';
+import { UserForLogin, login } from '../api/account/login';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
     const classes = useStyles();
+    const { control, handleSubmit, errors } = useForm<UserForLogin>();
+
+    const onSubmit = (data: UserForLogin) => {
+        console.log("the data from form:",data);
+        const token = login(data);
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -39,39 +47,70 @@ export default function Login() {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
-          </Typography>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="user"
-                        label="User"
-                        name="user"
-                        autoComplete="user"
-                        autoFocus
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <Controller
+                        control={control}
+                        name="username"
+                        defaultValue={''}
+                        rules={{
+                            required: true,
+                        }}
+                        errors={errors}
+                        render={({ ref, value, onChange, onBlur }) => (
+                            <TextField
+                                inputRef={ref}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                value={value}
+                                error={errors.username !== undefined}
+                                helperText={errors.username && 'Please provide a valid username'}
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                type="text"
+                                label="Username"
+                                autoFocus
+                            />
+                        )}
                     />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+                    <Controller
+                        control={control}
                         name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
+                        defaultValue={''}
+                        rules={{
+                            required: true
+                        }}
+                        errors={errors}
+                        render={({ ref, value, onChange, onBlur }) => (
+                            <TextField
+                                inputRef={ref}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                                value={value}
+                                error={errors.password !== undefined}
+                                helperText={
+                                    errors.password && 'Please provide a valid password'
+                                }
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                label="Password"
+                                type="password"
+                                autoComplete="current-password"
+                            />
+                        )}
                     />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
-                        className={classes.submit}
-                    >
+                        className={classes.submit}>
                         Log In
-            </Button>
+                    </Button>
                 </form>
             </div>
         </Container>
