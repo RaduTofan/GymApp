@@ -30,12 +30,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+
     const classes = useStyles();
     const { control, handleSubmit, errors } = useForm<UserForLogin>();
 
     const onSubmit = (data: UserForLogin) => {
         console.log("the data from form:",data);
         const token = login(data);
+        
     }
 
     return (

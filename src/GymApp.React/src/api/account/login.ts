@@ -1,4 +1,5 @@
 import config from "../../config";
+import {history}  from "../../history";
 
 const baseUrl = config.API_URL + 'account/';
 
@@ -24,8 +25,13 @@ export const login = async (form: UserForLogin) => {
 
   const result = await response.json();
   const token = result.accessToken;
-  localStorage.setItem('token',token)
-  console.log("token from localstorage func",localStorage.getItem('token'));
+
+  if(response.ok && await result.accessToken!==null){
+    localStorage.setItem('token',token)
+    console.log("token from localstorage func",localStorage.getItem('token'));
+    history.push("/admin")
+  }
+
   return token;
 }
 
