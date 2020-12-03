@@ -11,26 +11,24 @@ export interface UserForLogin {
 
 
 export const login = async (form: UserForLogin) => {
-  const response = await fetch(baseUrl + 'login/', {
-    method: 'post',
+  var token;
+  fetch(baseUrl + 'login/', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(form)
-  });
-
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-
-  const result = await response.json();
-  const token = result.accessToken;
-
-  if(response.ok && await result.accessToken!==null){
-    localStorage.setItem('token',token)
+  })
+  .then(response=>response.json())
+  .then(response=>{
+    token = response.accessToken;
+    localStorage.setItem('token',token);
     console.log("token from localstorage func",localStorage.getItem('token'));
-    history.push("/admin")
-  }
+    history.push("/admin");
+  })
+  .catch(error=>{
+    console.log("Eror trying to login",error);
+  });
 
   return token;
 }
