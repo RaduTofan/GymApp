@@ -12,7 +12,7 @@ function App() {
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/login">
           <Login />
         </Route>
         <Route path="/admin">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,15 +11,49 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import {
+  BrowserRouter, 
+  Link as RouterLink, LinkProps as RouterLinkProps,
+  Route, Switch as RouterSwitch
+} from 'react-router-dom';
 import { mainListItems, secondaryListItems } from './listItems/ListItems';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import TrainersList from './trainers/TrainersList';
+import ClientsList from './clients/ClientsList';
+import PeopleIcon from '@material-ui/icons/People';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 
+
+interface ListItemLinkProps {
+  icon?: React.ReactElement;
+  primary: string;
+  to: string;
+}
+
+function ListItemLink(props: ListItemLinkProps) {
+  const { icon, primary, to } = props;
+
+  const renderLink = useMemo(
+    () =>
+      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
+        <RouterLink to={to} ref={ref} {...itemProps} />
+      )),
+    [to],
+  );
+
+  return (
+    <li>
+      <ListItem button component={renderLink}>
+        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
+        <ListItemText primary={primary} />
+      </ListItem>
+    </li>
+  );
+}
 
 const drawerWidth = 240;
 
@@ -153,18 +187,21 @@ export default function Dashboard() {
         <List>{mainListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <ListItemLink to={`/trainers`} primary="Trainers" icon={<SupervisedUserCircleIcon />} />
+        <ListItemLink to={`/clients`} primary="Clients" icon={<PeopleIcon />} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <h1>main page/dashboard</h1>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
+        <BrowserRouter>
+          <RouterSwitch>
+            <Route exact path='/trainers'>
+              <TrainersList />
+            </Route>
+            <Route path='/clients'>
+              <ClientsList />
+            </Route>
+          </RouterSwitch>
+        </BrowserRouter>
       </main>
     </div>
   );
