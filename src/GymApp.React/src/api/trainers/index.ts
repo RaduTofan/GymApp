@@ -45,7 +45,7 @@ export const addTrainer = async (trainerData: any) => {
         .then(response => response.json())
         .then(res => console.log(res))
         .catch(error => {
-            console.log('HEHE ERROR XDXD', error); //TO-DO
+            console.log('Error while adding trainer: ', error);
         })
 
     return;
