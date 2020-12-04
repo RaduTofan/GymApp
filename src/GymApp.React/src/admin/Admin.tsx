@@ -25,7 +25,6 @@ import {
   Link as RouterLink, LinkProps as RouterLinkProps,
   Route, Switch as RouterSwitch, Router
 } from 'react-router-dom';
-import { mainListItems, secondaryListItems } from './listItems/ListItems';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import TrainersList from './trainers/TrainersList';
 import ClientsList from './clients/ClientsList';
@@ -143,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Admin = ()=> {
+const Admin = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -191,19 +190,29 @@ const Admin = ()=> {
           </IconButton>
         </div>
         <Divider />
-        {/* <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List> */}
         <List>
-          <ListItem button component={RouterLink} to="/clients">
+
+          <ListItem button component={RouterLink} to="/admin">
             <ListItemIcon>
               <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Clientssssssssssssss" />
+            <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItemLink to={`/admin`} primary="Dashboard" icon={<AccessibilityNewIcon />} />
-          <ListItemLink to={`/trainers`} primary="Trainers" icon={<SupervisedUserCircleIcon />} />
-          <ListItemLink to={`/clients`} primary="Clients" icon={<PeopleIcon />} />
+
+          <ListItem button component={RouterLink} to="/admin/clients">
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Clients" />
+          </ListItem>
+
+          <ListItem button component={RouterLink} to="/admin/trainers">
+            <ListItemIcon>
+              <SupervisedUserCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Trainers" />
+          </ListItem>
+
         </List>
 
       </Drawer>
@@ -215,33 +224,22 @@ const Admin = ()=> {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+
+            <Grid item xs={12} md={2} lg={9}>
               <Paper className={fixedHeightPaper}>
                 <WelcomePage />
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <h1>TEST 2ND GRID</h1>
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <h3>another grid</h3>
-              </Paper>
-            </Grid>
+
           </Grid>
         </Container>
 
 
         <RouterSwitch>
-          <Route exact path='/trainers'>
+          <Route exact path={`/admin/trainers`}>
             <TrainersList />
           </Route>
-          <Route path='/clients' component={ClientsList}>
+          <Route exact path='/admin/clients' component={ClientsList}>
           </Route>
         </RouterSwitch>
 
@@ -249,5 +247,5 @@ const Admin = ()=> {
     </div>
   </>
 };
- 
+
 export default Admin;
