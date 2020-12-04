@@ -15,10 +15,15 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import {
-  BrowserRouter, 
+  BrowserRouter,
   Link as RouterLink, LinkProps as RouterLinkProps,
-  Route, Switch as RouterSwitch
+  Route, Switch as RouterSwitch, Router
 } from 'react-router-dom';
 import { mainListItems, secondaryListItems } from './listItems/ListItems';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
@@ -26,7 +31,9 @@ import TrainersList from './trainers/TrainersList';
 import ClientsList from './clients/ClientsList';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-
+import { light } from '@material-ui/core/styles/createPalette';
+import WelcomePage from './welcomepage/WelcomePage';
+import { history } from "../history";
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -136,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+const Admin = ()=> {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -147,7 +154,7 @@ export default function Dashboard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  return (
+  return <>
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -184,25 +191,63 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        {/* <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
-        <ListItemLink to={`/trainers`} primary="Trainers" icon={<SupervisedUserCircleIcon />} />
-        <ListItemLink to={`/clients`} primary="Clients" icon={<PeopleIcon />} />
+        <List>{secondaryListItems}</List> */}
+        <List>
+          <ListItem button component={RouterLink} to="/clients">
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Clientssssssssssssss" />
+          </ListItem>
+          <ListItemLink to={`/admin`} primary="Dashboard" icon={<AccessibilityNewIcon />} />
+          <ListItemLink to={`/trainers`} primary="Trainers" icon={<SupervisedUserCircleIcon />} />
+          <ListItemLink to={`/clients`} primary="Clients" icon={<PeopleIcon />} />
+        </List>
+
       </Drawer>
-      <main className={classes.content}>
+      <main
+        className={clsx(classes.content, {
+          [classes.appBarShift]: open,
+        })}
+      >
         <div className={classes.appBarSpacer} />
-        <BrowserRouter>
-          <RouterSwitch>
-            <Route exact path='/trainers'>
-              <TrainersList />
-            </Route>
-            <Route path='/clients'>
-              <ClientsList />
-            </Route>
-          </RouterSwitch>
-        </BrowserRouter>
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            {/* Chart */}
+            <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <WelcomePage />
+              </Paper>
+            </Grid>
+            {/* Recent Deposits */}
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper className={fixedHeightPaper}>
+                <h1>TEST 2ND GRID</h1>
+              </Paper>
+            </Grid>
+            {/* Recent Orders */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <h3>another grid</h3>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+
+
+        <RouterSwitch>
+          <Route exact path='/trainers'>
+            <TrainersList />
+          </Route>
+          <Route path='/clients' component={ClientsList}>
+          </Route>
+        </RouterSwitch>
+
       </main>
     </div>
-  );
-}
+  </>
+};
+ 
+export default Admin;

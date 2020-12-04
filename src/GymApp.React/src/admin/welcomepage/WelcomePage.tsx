@@ -12,13 +12,9 @@ const WelcomePage = ()=>{
       }));
     const classes = useStyles();
     return(
-        <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8} lg={9}>
-              <h1>main page/dashboard</h1>
-          </Grid>
-        </Grid>
-      </Container>
+
+      <h1>main page/dashboard</h1>
+
     )
 }
 
