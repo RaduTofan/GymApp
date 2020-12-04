@@ -16,6 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -28,11 +29,13 @@ import {
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import TrainersList from './trainers/TrainersList';
 import ClientsList from './clients/ClientsList';
+import WorkoutClassList from './workoutclasses/WorkoutClassesList';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import { light } from '@material-ui/core/styles/createPalette';
 import WelcomePage from './welcomepage/WelcomePage';
 import { history } from "../history";
+import { Dashboard } from '@material-ui/icons';
 
 interface ListItemLinkProps {
   icon?: React.ReactElement;
@@ -194,7 +197,7 @@ const Admin = () => {
 
           <ListItem button component={RouterLink} to="/admin">
             <ListItemIcon>
-              <PeopleIcon />
+              <Dashboard />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
@@ -211,6 +214,13 @@ const Admin = () => {
               <SupervisedUserCircleIcon />
             </ListItemIcon>
             <ListItemText primary="Trainers" />
+          </ListItem>
+
+          <ListItem button component={RouterLink} to="/admin/workoutclasses">
+            <ListItemIcon>
+              <FitnessCenterIcon />
+            </ListItemIcon>
+            <ListItemText primary="Workout Classes" />
           </ListItem>
 
         </List>
@@ -239,7 +249,11 @@ const Admin = () => {
           <Route exact path={`/admin/trainers`}>
             <TrainersList />
           </Route>
+
           <Route exact path='/admin/clients' component={ClientsList}>
+          </Route>
+
+          <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
           </Route>
         </RouterSwitch>
 

@@ -1,8 +1,8 @@
-import { useGetAllTrainers } from "../../api/trainers/index";
+import { useGetAllTrainers } from "../../api/trainer/index";
 import React, { useEffect, useState } from 'react';
 import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
 
-function TrainersList() {
+const TrainersList = () => {
     let [items, setItems] = useState([]);
     useEffect(() => {
         FetchItem();

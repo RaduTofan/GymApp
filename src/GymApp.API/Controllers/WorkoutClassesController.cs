@@ -12,12 +12,12 @@ namespace GymApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WorkoutClassController : ControllerBase
+    public class WorkoutClassesController : ControllerBase
     {
         private readonly IWorkoutClassService _workoutClassService;
         private readonly IMapper _mapper;
 
-        public WorkoutClassController(IWorkoutClassService workoutClassService, IMapper mapper)
+        public WorkoutClassesController(IWorkoutClassService workoutClassService, IMapper mapper)
         {
             _workoutClassService = workoutClassService;
             _mapper = mapper;

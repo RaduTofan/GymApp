@@ -1,29 +1,25 @@
-
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import { useGetAllWorkoutClasses } from "../../api/workoutclass/index";
 import React, { useEffect, useState } from 'react';
 import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
-import { useGetAllClients } from "../../api/client/index";
 
-const ClientsList = () => {
-
+const WorkoutClassList = () => {
     let [items, setItems] = useState([]);
     useEffect(() => {
         FetchItem();
     }, []);
 
     let FetchItem = async () => {
-        let data = await useGetAllClients();
+        let data = await useGetAllWorkoutClasses();
         setItems(data);
     }
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
-        { field: 'fullName', headerName: 'Full Name', width: 250 },
+        { field: 'trainerId', headerName: 'TrainerId', width: 250 },
+        { field: 'clientId', headerName: 'ClientId', width: 125 },
         {
-            field: 'dateOfBirth',
-            headerName: 'Date of Birth',
+            field: 'scheduledTime',
+            headerName: 'Scheduled Time',
             width: 200,
             type: 'dateTime',
             valueFormatter: ({ value }) =>
@@ -31,11 +27,7 @@ const ClientsList = () => {
                     year: 'numeric', month: 'long', day: 'numeric'
                 }),
         },
-        { field: 'email', headerName: 'Email', width: 200 },
-        { field: 'phone', headerName: 'Phone nr.', width: 125 },
-        { field: 'height', headerName: 'Height (cm)', width: 125 },
-        { field: 'clientWeight', headerName: 'Weight (kg)', width: 125 },
-        { field: 'nutritionPlanId', headerName: 'NutritionPlanId', width: 125 },
+        { field: 'exercisePlanId', headerName: 'Exercise Plan Id', width: 200 }
 
 
     ];
@@ -56,4 +48,4 @@ const ClientsList = () => {
 
 }
 
-export default ClientsList
+export default WorkoutClassList;
