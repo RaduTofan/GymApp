@@ -37,32 +37,6 @@ import WelcomePage from './welcomepage/WelcomePage';
 import { history } from "../history";
 import { Dashboard } from '@material-ui/icons';
 
-interface ListItemLinkProps {
-  icon?: React.ReactElement;
-  primary: string;
-  to: string;
-}
-
-function ListItemLink(props: ListItemLinkProps) {
-  const { icon, primary, to } = props;
-
-  const renderLink = useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to],
-  );
-
-  return (
-    <li>
-      <ListItem button component={renderLink}>
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
-      </ListItem>
-    </li>
-  );
-}
 
 const drawerWidth = 240;
 
