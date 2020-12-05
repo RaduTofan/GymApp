@@ -35,7 +35,7 @@ const TrainersList = () => {
 
 
     return (
-        <div style={{ height: 500, width: '100%', marginTop: 20 }}>
+        <div style={{ height: 500, width: '98%', marginTop: 20, padding:"2%"}}>
             {
                 <DataGrid
                     rows={items ?? []}

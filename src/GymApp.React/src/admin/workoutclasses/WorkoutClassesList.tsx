@@ -20,11 +20,11 @@ const WorkoutClassList = () => {
         {
             field: 'scheduledTime',
             headerName: 'Scheduled Time',
-            width: 200,
+            width: 225,
             type: 'dateTime',
             valueFormatter: ({ value }) =>
                 (new Date(`${value}`)).toLocaleDateString('en-US', {
-                    year: 'numeric', month: 'long', day: 'numeric'
+                    year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'
                 }),
         },
         { field: 'exercisePlanId', headerName: 'Exercise Plan Id', width: 200 }
@@ -34,7 +34,7 @@ const WorkoutClassList = () => {
 
 
     return (
-        <div style={{ height: 500, width: '100%', marginTop: 20 }}>
+        <div style={{ height: 500, width: '98%', marginTop: 20, padding:"2%"}}>
             {
                 <DataGrid
                     rows={items ?? []}
