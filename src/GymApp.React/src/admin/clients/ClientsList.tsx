@@ -36,7 +36,7 @@ const ClientsList = () => {
             setSortColumn(sortModel.field);
             setSortDirection(`${sortModel.sort}`);
         } else {
-            setSortColumn('title');
+            setSortColumn('fullName');
             setSortDirection('asc');
         }
     }
