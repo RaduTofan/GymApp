@@ -9,6 +9,9 @@ using GymApp.API;
 using GymApp.Domain;
 using GymApp.API.Repositories.Interfaces;
 using System.Linq.Expressions;
+using GymApp.API.Infrastructure.Models;
+using AutoMapper;
+using GymApp.API.Infrastructure.Extensions;
 
 namespace GymApp.API.Repositories.Implementations
 {
@@ -16,11 +19,13 @@ namespace GymApp.API.Repositories.Implementations
     {
         private readonly GymAppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
+        private readonly IMapper _mapper;
 
-        public Repository(GymAppDbContext context)
+        public Repository(GymAppDbContext context, IMapper mapper)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
+            _mapper = mapper;
         }
 
         public void Add(TEntity entity)
@@ -28,7 +33,6 @@ namespace GymApp.API.Repositories.Implementations
             _dbSet.Add(entity);
 
         }
-
 
         public void Remove(TEntity entity)
         {
@@ -60,6 +64,10 @@ namespace GymApp.API.Repositories.Implementations
             return _dbSet.Update(entity).Entity;
         }
 
-       
+        public async Task<PaginatedResult<TDto>> GetPagedData<TEntity, TDto>(PaginatedRequest paginatedRequest) where TEntity : Entity
+                                                                                                     where TDto : class
+        {
+            return await _context.Set<TEntity>().CreatePaginatedResultAsync<TEntity, TDto>(paginatedRequest, _mapper);
+        }
     }
 }

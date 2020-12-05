@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.API.Dtos.Client;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Interfaces
 {
@@ -17,5 +18,7 @@ namespace GymApp.API.Services.Interfaces
         Client UpdateClient(long id, CreateClientDto dto);
 
         bool RemoveClientById(long id);
+
+        Task<PaginatedResult<ClientGridRowDto>> GetPaginatedClients(PaginatedRequest paginatedRequest);
     }
 }

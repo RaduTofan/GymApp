@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using GymApp.API.Infrastructure.Models;
 using GymApp.Domain;
 
 namespace GymApp.API.Repositories.Interfaces
@@ -17,5 +18,7 @@ namespace GymApp.API.Repositories.Interfaces
         IQueryable<TEntity> GetAll();
         TEntity Update(TEntity entity);
         void Save();
+        Task<PaginatedResult<TDto>> GetPagedData<TEntity, TDto>(PaginatedRequest paginatedRequest) where TEntity : Entity
+                                                                                             where TDto : class;
     }
 }

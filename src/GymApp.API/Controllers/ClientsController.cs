@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GymApp.API.Dtos.Client;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Controllers
 {
@@ -92,7 +93,12 @@ namespace GymApp.API.Controllers
             }
         }
 
-        
+        [HttpPost("PaginatedSearch")]
+        public IActionResult GetPaginatedClients([FromBody] PaginatedRequest pagedRequest)
+        {
+            var pagedClients = _clientService.GetPaginatedClients(pagedRequest);
 
+            return Ok(pagedClients.Result);
+        }
     }
 }

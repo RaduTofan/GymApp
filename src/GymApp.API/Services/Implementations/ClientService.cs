@@ -6,6 +6,7 @@ using GymApp.Domain;
 using GymApp.API.Dtos.Client;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Implementations
 {
@@ -91,6 +92,13 @@ namespace GymApp.API.Services.Implementations
         private bool PhoneExists(string phone)
         {
             return _clientRepository.Get(x => x.Phone == phone) !=null;
+        }
+
+        public async Task<PaginatedResult<ClientGridRowDto>> GetPaginatedClients(PaginatedRequest paginatedRequest)
+        {
+            var clients = await _clientRepository.GetPagedData<Client,ClientGridRowDto>(paginatedRequest);
+
+            return clients;
         }
     }
 }

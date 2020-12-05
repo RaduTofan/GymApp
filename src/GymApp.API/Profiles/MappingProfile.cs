@@ -17,6 +17,8 @@ namespace GymApp.API.Profiles
             CreateMap<Client, ClientDto>();
             CreateMap<Trainer, TrainerDto>();
             CreateMap<WorkoutClass, WorkoutClassDto>();
+            CreateMap<Client, ClientGridRowDto>()
+                .ForMember(x => x.NutritionPlan, y => y.MapFrom(z => z.NutritionPlan.NutritionType));
 
         }
     }
