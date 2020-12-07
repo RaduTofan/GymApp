@@ -1,4 +1,7 @@
 import config from "../../config";
+import { PaginatedRequest } from "../../lib/grid/PaginatedRequest";
+import { PaginatedResult } from "../../lib/grid/PaginatedResult";
+import { TrainerGridRow } from "./models/TrainerGridRow";
 
 const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
@@ -49,4 +52,23 @@ export const addTrainer = async (trainerData: any) => {
         })
 
     return;
+}
+
+export const getTrainersPaged =
+  async (paginatedRequest: PaginatedRequest) => {
+    const response = await fetch(API_URL + 'trainers/PaginatedSearch/', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer '+authToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(paginatedRequest),
+    });
+
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+
+    const data: PaginatedResult<TrainerGridRow> = await response.json();
+    return data;
 }

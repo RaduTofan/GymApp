@@ -1,7 +1,4 @@
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { ClientGridRow } from '../../api/client/models/ClientGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
@@ -14,17 +11,6 @@ const ClientsList = () => {
     const [page, setPage] = useState(0);
     const [sortColumn, setSortColumn] = useState('fullName');
     const [sortDirection, setSortDirection] = useState('asc');
-
-
-    // let [items, setItems] = useState([]);
-    // useEffect(() => {
-    //     FetchItem();
-    // }, []);
-
-    // let FetchItem = async () => {
-    //     let data = await useGetAllClients();
-    //     setItems(data);
-    // }
 
     const handlePageChange = (params: PageChangeParams) => {
         setPage(params.page - 1);

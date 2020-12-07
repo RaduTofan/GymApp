@@ -9,6 +9,7 @@ using GymApp.API;
 using GymApp.Domain;
 using GymApp.API.Dtos.Trainer;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Controllers
 {
@@ -96,7 +97,13 @@ namespace GymApp.API.Controllers
             }
         }
 
+        [HttpPost("PaginatedSearch")]
+        public IActionResult GetPaginatedTrainers([FromBody] PaginatedRequest pagedRequest)
+        {
+            var pagedTrainers = _trainerService.GetPaginatedTrainers(pagedRequest);
 
+            return Ok(pagedTrainers.Result);
+        }
 
 
     }

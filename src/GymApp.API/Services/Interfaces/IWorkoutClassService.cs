@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.API.Dtos.WorkoutClass;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Interfaces
 {
@@ -17,5 +18,7 @@ namespace GymApp.API.Services.Interfaces
         WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto);
 
         bool RemoveWorkoutClassById(long id);
+
+        Task<PaginatedResult<WorkoutClassGridRowDto>> GetPaginatedWorkoutClasses(PaginatedRequest paginatedRequest);
     }
 }

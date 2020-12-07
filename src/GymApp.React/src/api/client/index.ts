@@ -72,4 +72,4 @@ export const getClientsPaged =
 
     const data: PaginatedResult<ClientGridRow> = await response.json();
     return data;
-  }
+}

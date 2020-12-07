@@ -6,6 +6,7 @@ using GymApp.Domain;
 using GymApp.API.Dtos.WorkoutClass;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Implementations
 {
@@ -83,6 +84,15 @@ namespace GymApp.API.Services.Implementations
             _workoutClassRepository.Save();
 
             return workoutClass;
+        }
+
+
+
+        public async Task<PaginatedResult<WorkoutClassGridRowDto>> GetPaginatedWorkoutClasses(PaginatedRequest paginatedRequest)
+        {
+            var workoutClasses = await _workoutClassRepository.GetPagedData<WorkoutClass, WorkoutClassGridRowDto>(paginatedRequest);
+
+            return workoutClasses;
         }
     }
 }

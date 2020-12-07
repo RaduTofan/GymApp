@@ -1,17 +1,50 @@
-import { useGetAllTrainers } from "../../api/trainer/index";
+import { useGetAllTrainers, getTrainersPaged } from "../../api/trainer/index";
+import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
 import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
+import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
 
 const TrainersList = () => {
-    let [items, setItems] = useState([]);
-    useEffect(() => {
-        FetchItem();
-    }, []);
+    const [loading, setLoading] = useState(true);
+    const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [page, setPage] = useState(0);
+    const [sortColumn, setSortColumn] = useState('fullName');
+    const [sortDirection, setSortDirection] = useState('asc');
 
-    let FetchItem = async () => {
-        let data = await useGetAllTrainers();
-        setItems(data);
+    const handlePageChange = (params: PageChangeParams) => {
+        setPage(params.page - 1);
+    };
+
+    const handleSortChange = (params: SortModelParams) => {
+        const sortModel = params.sortModel[0];
+        if (sortModel) {
+            setSortColumn(sortModel.field);
+            setSortDirection(`${sortModel.sort}`);
+        } else {
+            setSortColumn('fullName');
+            setSortDirection('asc');
+        }
     }
+
+    useEffect(() => {
+        (async () => {
+            setLoading(true);
+            try {
+                let data = await getTrainersPaged({
+                    pageIndex: page,
+                    pageSize: 5,
+                    columnNameForSorting: sortColumn,
+                    sortDirection: sortDirection
+                });
+                setPaginatedTrainers(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        })();
+
+    }, [page, sortColumn, sortDirection]);
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
@@ -38,11 +71,19 @@ const TrainersList = () => {
         <div style={{ height: 500, width: '98%', marginTop: 20, padding:"2%"}}>
             {
                 <DataGrid
-                    rows={items ?? []}
-                    columns={columns}
-                />
-            }
-            {console.log(items)}
+                rows={paginatedTrainers?.items ?? []}
+                columns={columns}
+                pagination
+                pageSize={paginatedTrainers?.pageSize ?? 0}
+                rowCount={paginatedTrainers?.total ?? 0}
+                paginationMode="server"
+                sortingMode="server"
+                onSortModelChange={handleSortChange}
+                onPageChange={handlePageChange}
+                loading={loading}
+            />
+        }
+        {console.log(paginatedTrainers?.items)}
         </div>
     )
 

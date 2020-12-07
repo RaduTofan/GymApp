@@ -1,4 +1,7 @@
 import config from "../../config";
+import { PaginatedResult } from "../../lib/grid/PaginatedResult";
+import { PaginatedRequest } from "../../lib/grid/PaginatedRequest";
+import { WorkoutClassGridRow } from "./models/WorkoutClassGridRow";
 
 const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
@@ -49,4 +52,24 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
         })
 
     return;
+}
+
+
+export const getWorkoutClassesPaged =
+  async (paginatedRequest: PaginatedRequest) => {
+    const response = await fetch(API_URL + 'workoutclasses/PaginatedSearch/', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer '+authToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(paginatedRequest),
+    });
+
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+
+    const data: PaginatedResult<WorkoutClassGridRow> = await response.json();
+    return data;
 }

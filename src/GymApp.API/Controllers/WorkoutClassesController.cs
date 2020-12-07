@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using GymApp.API.Dtos.WorkoutClass;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Controllers
 {
@@ -92,6 +93,13 @@ namespace GymApp.API.Controllers
             }
         }
 
+        [HttpPost("PaginatedSearch")]
+        public IActionResult GetPaginatedWorkoutClasses([FromBody] PaginatedRequest pagedRequest)
+        {
+            var pagedWorkoutClasses = _workoutClassService.GetPaginatedWorkoutClasses(pagedRequest);
 
+            return Ok(pagedWorkoutClasses.Result);
+        }
     }
 }
+

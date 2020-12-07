@@ -6,6 +6,7 @@ using GymApp.Domain;
 using GymApp.API.Dtos.Trainer;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Implementations
 {
@@ -67,7 +68,7 @@ namespace GymApp.API.Services.Implementations
         {
             var trainer = _trainerRepository.Get(id);
 
-            if (trainer==null || (dto.Phone!=trainer.Phone && PhoneExists(dto.Phone)))
+            if (trainer == null || (dto.Phone != trainer.Phone && PhoneExists(dto.Phone)))
             {
                 return null;
             }
@@ -86,6 +87,14 @@ namespace GymApp.API.Services.Implementations
         private bool PhoneExists(string phone)
         {
             return _trainerRepository.Get(x => x.Phone == phone) != null;
+        }
+
+        public async Task<PaginatedResult<TrainerGridRowDto>> GetPaginatedTrainers(PaginatedRequest paginatedRequest)
+        {
+            var trainers = await _trainerRepository.GetPagedData<Trainer, TrainerGridRowDto>(paginatedRequest);
+
+            return trainers;
+
         }
     }
 }

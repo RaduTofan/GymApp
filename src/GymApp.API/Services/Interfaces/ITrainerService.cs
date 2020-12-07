@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GymApp.Domain;
 using GymApp.API.Dtos.Trainer;
+using GymApp.API.Infrastructure.Models;
 
 namespace GymApp.API.Services.Interfaces
 {
@@ -17,5 +18,7 @@ namespace GymApp.API.Services.Interfaces
         Trainer UpdateTrainer(long id, CreateTrainerDto dto);
 
         bool RemoveTrainerById(long id);
+
+        Task<PaginatedResult<TrainerGridRowDto>> GetPaginatedTrainers(PaginatedRequest paginatedRequest);
     }
 }
