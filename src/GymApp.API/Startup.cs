@@ -63,6 +63,8 @@ namespace GymApp.API
 
             services.AddScoped<IWorkoutClassService, WorkoutClassService>();
 
+            services.AddScoped<INutritionPlanService,NutritionPlanService>();
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(

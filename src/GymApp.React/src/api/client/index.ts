@@ -42,7 +42,7 @@ export const addClient = async (clientData: any) => {
             'Authorization': 'Bearer '+authToken,
              'Content-Type': 'application/json' 
             },
-        body: clientData
+        body: JSON.stringify(clientData)
     };
 
     fetch(`${API_URL}clients`, requestOptions)

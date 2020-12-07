@@ -4,6 +4,8 @@ import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
 import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, useGetAllClients } from "../../api/client/index";
+import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const ClientsList = () => {
     const [loading, setLoading] = useState(true);
@@ -70,6 +72,9 @@ const ClientsList = () => {
 
     return (
         <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+            <Button component={Link} to="/admin/clients/create" size="medium" variant="contained" color="primary">
+                Add client
+            </Button>
             {
                 <DataGrid
                     rows={paginatedClients?.items ?? []}

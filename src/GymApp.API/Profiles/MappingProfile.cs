@@ -7,6 +7,7 @@ using GymApp.Domain;
 using GymApp.API.Dtos.WorkoutClass;
 using GymApp.API.Dtos.Client;
 using GymApp.API.Dtos.Trainer;
+using GymApp.API.Dtos.NutritionPlan;
 
 namespace GymApp.API.Profiles
 {
@@ -17,6 +18,7 @@ namespace GymApp.API.Profiles
             CreateMap<Client, ClientDto>();
             CreateMap<Trainer, TrainerDto>();
             CreateMap<WorkoutClass, WorkoutClassDto>();
+            CreateMap<NutritionPlan, NutritionPlanDto>();
 
             CreateMap<Client, ClientGridRowDto>()
                 .ForMember(x => x.NutritionPlan, y => y.MapFrom(z => z.NutritionPlan.NutritionType));
