@@ -1,8 +1,9 @@
 import { useGetAllWorkoutClasses, getWorkoutClassesPaged } from "../../api/workoutclass/index";
 import React, { useEffect, useState } from 'react';
-import { ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
+import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { WorkoutClassGridRow } from '../../api/workoutclass/models/WorkoutClassGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
+import { Button } from "@material-ui/core";
 
 const WorkoutClassList = () => {
     const [loading, setLoading] = useState(true);
@@ -17,10 +18,10 @@ const WorkoutClassList = () => {
 
     const sortModel = [
         {
-          field: sortColumn,
-          sort: sortDirection as SortDirection,
+            field: sortColumn,
+            sort: sortDirection as SortDirection,
         },
-      ];
+    ];
 
     const handleSortChange = (params: SortModelParams) => {
         const sortModel = params.sortModel[0];
@@ -67,30 +68,49 @@ const WorkoutClassList = () => {
                     year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'
                 }),
         },
-        { field: 'exercisePlan', headerName: 'Exercise Plan', width: 200 }
+        { field: 'exercisePlan', headerName: 'Exercise Plan', width: 200 },
+        {
+            field: "",
+            headerName: "Action",
+            disableClickEventBubbling: true,
+            renderCell: (params: CellParams) => {
+                const onClick = () => {
+                    const api: GridApi = params.api;
+                    const fields = api
+                        .getAllColumns()
+                        .map((c) => c.field);
+                    
+                    fields.forEach((f) => {
+                        console.log(f);
+                        
+                    });
+                };
 
+                return <Button onClick={onClick}>Click</Button>;
+            }
+        }
 
     ];
 
 
     return (
-        <div style={{ height: 500, width: '98%', marginTop: 20, padding:"2%"}}>
-             {
+        <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+            {
                 <DataGrid
-                rows={paginatedWorkoutClasses?.items ?? []}
-                columns={columns}
-                pagination
-                pageSize={paginatedWorkoutClasses?.pageSize ?? 0}
-                rowCount={paginatedWorkoutClasses?.total ?? 0}
-                paginationMode="server"
-                sortingMode="server"
-                onSortModelChange={handleSortChange}
-                onPageChange={handlePageChange}
-                loading={loading}
-                sortModel={sortModel}
-            />
-        }
-        {console.log(paginatedWorkoutClasses?.items)}
+                    rows={paginatedWorkoutClasses?.items ?? []}
+                    columns={columns}
+                    pagination
+                    pageSize={paginatedWorkoutClasses?.pageSize ?? 0}
+                    rowCount={paginatedWorkoutClasses?.total ?? 0}
+                    paginationMode="server"
+                    sortingMode="server"
+                    onSortModelChange={handleSortChange}
+                    onPageChange={handlePageChange}
+                    loading={loading}
+                    sortModel={sortModel}
+                />
+            }
+            {console.log(paginatedWorkoutClasses?.items)}
         </div>
     )
 
