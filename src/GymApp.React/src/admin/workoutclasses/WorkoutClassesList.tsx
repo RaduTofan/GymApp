@@ -1,6 +1,6 @@
 import { useGetAllWorkoutClasses, getWorkoutClassesPaged } from "../../api/workoutclass/index";
 import React, { useEffect, useState } from 'react';
-import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
+import { ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { WorkoutClassGridRow } from '../../api/workoutclass/models/WorkoutClassGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 
@@ -14,6 +14,13 @@ const WorkoutClassList = () => {
     const handlePageChange = (params: PageChangeParams) => {
         setPage(params.page - 1);
     };
+
+    const sortModel = [
+        {
+          field: sortColumn,
+          sort: sortDirection as SortDirection,
+        },
+      ];
 
     const handleSortChange = (params: SortModelParams) => {
         const sortModel = params.sortModel[0];
@@ -80,6 +87,7 @@ const WorkoutClassList = () => {
                 onSortModelChange={handleSortChange}
                 onPageChange={handlePageChange}
                 loading={loading}
+                sortModel={sortModel}
             />
         }
         {console.log(paginatedWorkoutClasses?.items)}

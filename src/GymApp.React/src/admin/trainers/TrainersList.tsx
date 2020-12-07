@@ -1,14 +1,14 @@
 import { useGetAllTrainers, getTrainersPaged } from "../../api/trainer/index";
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
-import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
+import { ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
 
 const TrainersList = () => {
     const [loading, setLoading] = useState(true);
     const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
     const [page, setPage] = useState(0);
-    const [sortColumn, setSortColumn] = useState('fullName');
+    const [sortColumn, setSortColumn] = useState('experience');
     const [sortDirection, setSortDirection] = useState('asc');
 
     const handlePageChange = (params: PageChangeParams) => {
@@ -21,10 +21,17 @@ const TrainersList = () => {
             setSortColumn(sortModel.field);
             setSortDirection(`${sortModel.sort}`);
         } else {
-            setSortColumn('fullName');
+            setSortColumn('experience');
             setSortDirection('asc');
         }
     }
+
+    const sortModel = [
+        {
+          field: sortColumn,
+          sort: sortDirection as SortDirection,
+        },
+      ];
 
     useEffect(() => {
         (async () => {
@@ -81,6 +88,7 @@ const TrainersList = () => {
                 onSortModelChange={handleSortChange}
                 onPageChange={handlePageChange}
                 loading={loading}
+                sortModel={sortModel}
             />
         }
         {console.log(paginatedTrainers?.items)}

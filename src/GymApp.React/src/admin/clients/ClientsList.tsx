@@ -2,16 +2,17 @@
 import { ClientGridRow } from '../../api/client/models/ClientGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
-import { ColDef, DataGrid, PageChangeParams, SortModelParams } from '@material-ui/data-grid';
+import { ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, useGetAllClients } from "../../api/client/index";
 import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 
 const ClientsList = () => {
     const [loading, setLoading] = useState(true);
     const [paginatedClients, setPaginatedClients] = useState<PaginatedResult<ClientGridRow>>();
     const [page, setPage] = useState(0);
-    const [sortColumn, setSortColumn] = useState('fullName');
+    const [sortColumn, setSortColumn] = useState('height');
     const [sortDirection, setSortDirection] = useState('asc');
 
     const handlePageChange = (params: PageChangeParams) => {
@@ -24,10 +25,17 @@ const ClientsList = () => {
             setSortColumn(sortModel.field);
             setSortDirection(`${sortModel.sort}`);
         } else {
-            setSortColumn('fullName');
+            setSortColumn('height');
             setSortDirection('asc');
         }
     }
+
+    const sortModel = [
+        {
+          field: sortColumn,
+          sort: sortDirection as SortDirection,
+        },
+      ];
 
     useEffect(() => {
         (async () => {
@@ -49,6 +57,8 @@ const ClientsList = () => {
 
     }, [page, sortColumn, sortDirection]);
 
+    
+      
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
         { field: 'fullName', headerName: 'Full Name', width: 150 },
@@ -67,6 +77,7 @@ const ClientsList = () => {
         { field: 'height', headerName: 'Height (cm)', width: 125 },
         { field: 'clientWeight', headerName: 'Weight (kg)', width: 125 },
         { field: 'nutritionPlan', headerName: 'Nutrition Plan', width: 150 },
+        
     ];
 
 
@@ -75,7 +86,7 @@ const ClientsList = () => {
             <Button component={Link} to="/admin/clients/create" size="medium" variant="contained" color="primary">
                 Add client
             </Button>
-            {
+            
                 <DataGrid
                     rows={paginatedClients?.items ?? []}
                     columns={columns}
@@ -87,8 +98,9 @@ const ClientsList = () => {
                     onSortModelChange={handleSortChange}
                     onPageChange={handlePageChange}
                     loading={loading}
+                    sortModel={sortModel}
                 />
-            }
+            
             {console.log(paginatedClients?.items)}
         </div>
     )
