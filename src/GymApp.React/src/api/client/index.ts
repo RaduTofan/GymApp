@@ -76,7 +76,6 @@ export const getClientsPaged =
 }
 
 export const updateClient = async(clientForUpdate : Client)=>{
-    console.log(clientForUpdate);
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -92,4 +91,20 @@ export const updateClient = async(clientForUpdate : Client)=>{
             console.log('Error while updating client: ', error);
         })
 
+}
+
+export const removeClient = async(id :number)=>{
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer '+authToken,
+             'Content-Type': 'application/json' 
+            }
+    };
+
+    return fetch(`${API_URL}clients/${id}`, requestOptions)
+        .then(response => response)
+        .catch(error => {
+            console.log('Error while deleting client: ', error);
+        })
 }

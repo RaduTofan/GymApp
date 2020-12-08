@@ -4,9 +4,26 @@ import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
 import { CellParams, ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, useGetAllClients } from "../../api/client/index";
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { DesktopWindows } from '@material-ui/icons';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { removeClient } from "../../api/client/index";
+
+
+const useStyles = makeStyles((theme) => ({
+    button: {
+        margin: theme.spacing(1),
+    },
+}));
+
 
 const ClientsList = () => {
     const [loading, setLoading] = useState(true);
@@ -14,8 +31,24 @@ const ClientsList = () => {
     const [page, setPage] = useState(0);
     const [sortColumn, setSortColumn] = useState('height');
     const [sortDirection, setSortDirection] = useState('asc');
+    const [open, setOpen] = useState(false);
+    const [rowToRemove, setRowToRemove]= useState<string|number>();
+    const [value,setValue] = useState<any>();
 
     const history = useHistory();
+
+    const classes = useStyles();
+
+
+    const handleAlertClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleAlertClose = () => {
+        setOpen(false);
+    };
+
+
 
     const handlePageChange = (params: PageChangeParams) => {
         setPage(params.page - 1);
@@ -34,10 +67,10 @@ const ClientsList = () => {
 
     const sortModel = [
         {
-          field: sortColumn,
-          sort: sortDirection as SortDirection,
+            field: sortColumn,
+            sort: sortDirection as SortDirection,
         },
-      ];
+    ];
 
     useEffect(() => {
         (async () => {
@@ -59,10 +92,10 @@ const ClientsList = () => {
 
     }, [page, sortColumn, sortDirection]);
 
-    
-      
+
+
     const columns: ColDef[] = [
-        { field: 'id', headerName: 'Id', hide: true },
+        { field: 'id', headerName: 'Id' },
         { field: 'fullName', headerName: 'Full Name', width: 150 },
         {
             field: 'dateOfBirth',
@@ -83,19 +116,82 @@ const ClientsList = () => {
             field: "",
             headerName: "Action",
             disableClickEventBubbling: true,
+            width: 250,
             renderCell: (params: CellParams) => {
-                const onClick = () => {
-                    const clickedRow=params.row;
+                const onClickEdit = () => {
+                    const clickedRow = params.row;
                     history.push({
                         pathname: 'clients/update',
-                        state: {client: clickedRow}
+                        state: { client: clickedRow }
                     });
                 };
 
-                return <Button onClick={onClick}>Edit</Button>;
+
+                const handleItemDeletion = () => {
+                    handleAlertClickOpen();
+                    setRowToRemove(params.row.id);
+
+                }
+
+                const deleteItem=()=>{
+                    if(rowToRemove!==undefined && typeof rowToRemove!=='string'){
+                        //removeClient(rowToRemove);
+                        setOpen(false);
+                        let newClients=paginatedClients;
+                        for(let i=0;i<newClients?.items.length!;i++){
+                            if(newClients?.items[i].id===rowToRemove){
+                                newClients.items.splice(i,1);
+                            }
+                        }
+                        setPaginatedClients(newClients);
+                        
+                    }
+                }
+
+
+                return <div><Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<EditIcon />} onClick={onClickEdit}>
+                    Edit
+                        </Button>
+
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<DeleteIcon />} onClick={handleItemDeletion}>
+                        Remove
+                        </Button>
+
+                    <div>
+                        <Dialog
+                            open={open}
+                            onClose={handleAlertClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"You are about to remove an item"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure you want to remove this item ?
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleAlertClose} color="primary" autoFocus>
+                                    No
+                              </Button>
+                                <Button onClick={deleteItem} color="primary" key={params.row.id}>
+                                    Yes
+                              </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                </div>
             }
+
         }
-        
+
     ];
 
 
@@ -104,20 +200,21 @@ const ClientsList = () => {
             <Button component={Link} to="/admin/clients/create" size="medium" variant="contained" color="primary">
                 Add client
             </Button>
-            
-                <DataGrid
-                    rows={paginatedClients?.items ?? []}
-                    columns={columns}
-                    pagination
-                    pageSize={paginatedClients?.pageSize ?? 0}
-                    rowCount={paginatedClients?.total ?? 0}
-                    paginationMode="server"
-                    sortingMode="server"
-                    onSortModelChange={handleSortChange}
-                    onPageChange={handlePageChange}
-                    loading={loading}
-                    sortModel={sortModel}
-                />
+
+            <DataGrid
+                rows={paginatedClients?.items ?? []}
+                columns={columns}
+                pagination
+                pageSize={paginatedClients?.pageSize ?? 0}
+                rowCount={paginatedClients?.total ?? 0}
+                paginationMode="server"
+                sortingMode="server"
+                onSortModelChange={handleSortChange}
+                onPageChange={handlePageChange}
+                loading={loading}
+                sortModel={sortModel}
+            />
+
         </div>
     )
 

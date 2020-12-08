@@ -24,7 +24,7 @@ const UpdateClient = () => {
     const { control, handleSubmit, errors } = useForm<Client>();
     const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
     const location = useLocation();
-    const [nutritionPlanId, setnutritionPlanId] = useState(4);
+    const [nutritionPlanId, setnutritionPlanId] = useState(0);
 
 
     const state = location.state as CustomState;
@@ -267,7 +267,7 @@ const UpdateClient = () => {
                                     onChange={selectNplans}
                                     onBlur={onBlur}
                                 >
-                                    <MenuItem value={-1} disabled>Select nutrition plan</MenuItem>
+                                    <MenuItem value={0} disabled>Select nutrition plan</MenuItem>
                                     {
                                         nutritionplans.map(p => (
                                             <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
