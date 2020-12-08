@@ -1,31 +1,57 @@
 import { Button, Grid, MenuItem, Select, TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     KeyboardDatePicker
 } from '@material-ui/pickers';
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
-
 import { NutritionPlan } from '../../api/nutritionplan/models/NutritionPlan';
 import { getAllNutritionPlans } from '../../api/nutritionplan/index';
 import { Client } from '../../api/client/models/Client';
-import { addClient } from '../../api/client/index';
+import { ClientGridRow } from "../../api/client/models/ClientGridRow";
+import { setPageStateUpdate } from "@material-ui/data-grid";
+import { updateClient } from "../../api/client/index";
+
+interface CustomState {
+    pathname: string,
+    client: ClientGridRow
+}
 
 
-const AddClient = () => {
+const UpdateClient = () => {
     const { control, handleSubmit, errors } = useForm<Client>();
     const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
+    const location = useLocation();
+    const [nutritionPlanId, setnutritionPlanId] = useState(4);
+
+
+    const state = location.state as CustomState;
+    const client = state.client;
+
+
+    const selectNplans = (e: any) => {
+        setnutritionPlanId(e.target.value);
+    }
 
 
     const history = useHistory();
 
+
     useEffect(() => {
         (async () => {
             try {
-                const nutPlan = await getAllNutritionPlans();
-                setNutritionPlans(nutPlan);
+                const nutPlans = await getAllNutritionPlans();
+
+                for (let element of nutPlans) {
+                    if (element.nutritionType === client.nutritionPlan) {
+                        setnutritionPlanId(element.id);
+                        break;
+                    }
+                }
+                setNutritionPlans(nutPlans);
+
             } catch (error) {
                 console.error(error);
             }
@@ -35,7 +61,9 @@ const AddClient = () => {
     const onSubmit = (form: Client) => {
         (async () => {
             try {
-                await addClient(form);
+                form.id=client.id;
+                form.nutritionPlanId = nutritionPlanId;
+                await updateClient(form);
                 history.push('/admin/clients');
             } catch (error) {
                 console.error(error);
@@ -51,7 +79,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="fullName"
-                            defaultValue={''}
+                            defaultValue={client.fullName}
                             rules={{
                                 required: true,
                                 minLength: 7
@@ -80,7 +108,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="dateOfBirth"
-                            defaultValue={new Date()}
+                            defaultValue={client.dateOfBirth}
                             rules={{
                                 required: true,
                                 min: 0
@@ -109,7 +137,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="email"
-                            defaultValue={''}
+                            defaultValue={client.email}
                             rules={{
                                 required: true,
                                 minLength: 5
@@ -137,7 +165,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="phone"
-                            defaultValue={''}
+                            defaultValue={client.phone}
                             rules={{
                                 required: true,
                                 minLength: 9,
@@ -166,7 +194,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="height"
-                            defaultValue={0}
+                            defaultValue={client.height}
                             rules={{
                                 required: true,
                                 min: 120,
@@ -195,7 +223,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="clientWeight"
-                            defaultValue={0}
+                            defaultValue={client.clientWeight}
                             rules={{
                                 required: true,
                                 min: 40,
@@ -226,7 +254,7 @@ const AddClient = () => {
                         <Controller
                             control={control}
                             name="nutritionPlanId"
-                            defaultValue={''}
+                            defaultValue={nutritionPlanId}
                             rules={{
                                 required: false,
                                 min: 0
@@ -235,8 +263,8 @@ const AddClient = () => {
                             render={({ ref, value, onChange, onBlur }) => (
                                 <Select
                                     inputRef={ref}
-                                    value={value}
-                                    onChange={onChange}
+                                    value={nutritionPlanId}
+                                    onChange={selectNplans}
                                     onBlur={onBlur}
                                 >
                                     <MenuItem value={-1} disabled>Select nutrition plan</MenuItem>
@@ -250,13 +278,12 @@ const AddClient = () => {
                         />
                     </Grid>
 
-
                     <Grid item xs={12}>
                         <Button
                             type="submit"
                             variant="contained"
                             color="primary">
-                            Create
+                            Update
                         </Button>
                     </Grid>
 
@@ -266,4 +293,4 @@ const AddClient = () => {
     </>;
 }
 
-export default AddClient;
+export default UpdateClient;

@@ -2,10 +2,10 @@
 import { ClientGridRow } from '../../api/client/models/ClientGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
-import { ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
+import { CellParams, ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, useGetAllClients } from "../../api/client/index";
 import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 
 const ClientsList = () => {
@@ -14,6 +14,8 @@ const ClientsList = () => {
     const [page, setPage] = useState(0);
     const [sortColumn, setSortColumn] = useState('height');
     const [sortDirection, setSortDirection] = useState('asc');
+
+    const history = useHistory();
 
     const handlePageChange = (params: PageChangeParams) => {
         setPage(params.page - 1);
@@ -77,6 +79,22 @@ const ClientsList = () => {
         { field: 'height', headerName: 'Height (cm)', width: 125 },
         { field: 'clientWeight', headerName: 'Weight (kg)', width: 125 },
         { field: 'nutritionPlan', headerName: 'Nutrition Plan', width: 150 },
+        {
+            field: "",
+            headerName: "Action",
+            disableClickEventBubbling: true,
+            renderCell: (params: CellParams) => {
+                const onClick = () => {
+                    const clickedRow=params.row;
+                    history.push({
+                        pathname: 'clients/update',
+                        state: {client: clickedRow}
+                    });
+                };
+
+                return <Button onClick={onClick}>Edit</Button>;
+            }
+        }
         
     ];
 
@@ -100,8 +118,6 @@ const ClientsList = () => {
                     loading={loading}
                     sortModel={sortModel}
                 />
-            
-            {console.log(paginatedClients?.items)}
         </div>
     )
 

@@ -2,6 +2,7 @@ import config from "../../config";
 import { PaginatedResult } from "../../lib/grid/PaginatedResult";
 import { PaginatedRequest } from "../../lib/grid/PaginatedRequest";
 import { ClientGridRow } from "./models/ClientGridRow";
+import { Client } from "./models/Client";
 
 const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
@@ -72,4 +73,23 @@ export const getClientsPaged =
 
     const data: PaginatedResult<ClientGridRow> = await response.json();
     return data;
+}
+
+export const updateClient = async(clientForUpdate : Client)=>{
+    console.log(clientForUpdate);
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer '+authToken,
+             'Content-Type': 'application/json' 
+            },
+        body: JSON.stringify(clientForUpdate)
+    };
+
+    return fetch(`${API_URL}clients/${clientForUpdate.id}`, requestOptions)
+        .then(response => response)
+        .catch(error => {
+            console.log('Error while updating client: ', error);
+        })
+
 }

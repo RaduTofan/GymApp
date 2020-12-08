@@ -75,18 +75,12 @@ const WorkoutClassList = () => {
             disableClickEventBubbling: true,
             renderCell: (params: CellParams) => {
                 const onClick = () => {
-                    const api: GridApi = params.api;
-                    const fields = api
-                        .getAllColumns()
-                        .map((c) => c.field);
-                    
-                    fields.forEach((f) => {
-                        console.log(f);
-                        
-                    });
+                    const clickedRow=params.row;
+                    console.log(clickedRow);
+
                 };
 
-                return <Button onClick={onClick}>Click</Button>;
+                return <Button onClick={onClick}>Edit</Button>;
             }
         }
 

@@ -29,6 +29,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import TrainersList from './trainers/TrainersList';
 import ClientsList from './clients/ClientsList';
 import AddClient from './clients/AddClient';
+import UpdateClient from './clients/UpdateClient';
 import WorkoutClassList from './workoutclasses/WorkoutClassesList';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
@@ -227,6 +228,9 @@ const Admin = () => {
           </Route>
 
           <Route exact path='/admin/clients/create' component={AddClient}>
+          </Route>
+
+          <Route exact path='/admin/clients/update' component={UpdateClient}>
           </Route>
         </RouterSwitch>
 
