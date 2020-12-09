@@ -9,13 +9,13 @@ import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { DesktopWindows } from '@material-ui/icons';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeClient } from "../../api/client/index";
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +35,6 @@ const ClientsList = () => {
     const [rowToRemove, setRowToRemove]= useState<string|number>();
     const [clientIsRemoved, setClientIsRemoved] = useState(false);
 
-  
-    const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
     const history = useHistory();
 
@@ -142,14 +140,15 @@ const ClientsList = () => {
                     if(rowToRemove!==undefined && typeof rowToRemove!=='string'){
                         removeClient(rowToRemove);
 
+                        if(paginatedClients?.pageSize==1){
+                            paginatedClients.pageIndex=-1;
+                        }
                         setClientIsRemoved(true);
    
                         handleAlertClose();
                     }
                    
                 }
-
-
 
                 return <div><Button
                     className={classes.button}
@@ -200,7 +199,13 @@ const ClientsList = () => {
     return (
         <div
         id="thegrid" style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
-            <Button component={Link} to="/admin/clients/create" size="medium" variant="contained" color="primary">
+            <Button 
+            component={Link} 
+            to="/admin/clients/create" 
+            size="medium" 
+            variant="contained" 
+            color="primary"
+            startIcon={<AddCircleIcon/>}>
                 Add client
             </Button>
 

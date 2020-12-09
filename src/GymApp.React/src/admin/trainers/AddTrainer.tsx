@@ -8,45 +8,36 @@ import { useHistory } from "react-router-dom";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
-import { NutritionPlan } from '../../api/nutritionplan/models/NutritionPlan';
-import { getAllNutritionPlans } from '../../api/nutritionplan/index';
-import { Client } from '../../api/client/models/Client';
-import { addClient } from '../../api/client/index';
+import { Trainer } from '../../api/trainer/models/Trainer';
+import { addTrainer } from '../../api/trainer/index';
+
+const AddTrainer = () => {
+
+    const { control, handleSubmit, errors } = useForm<Trainer>();
 
 
-const AddClient = () => {
-    const { control, handleSubmit, errors } = useForm<Client>();
-    const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
+    const history = useHistory();
+
 
 
     const minDate = new Date(1950, 1, 1);
     const maxDate = new Date(2005, 1, 1);
 
-    const history = useHistory();
 
-    useEffect(() => {
+    const onSubmit = (form: Trainer) => {
+        
         (async () => {
             try {
-                const nutPlan = await getAllNutritionPlans();
-                setNutritionPlans(nutPlan);
-            } catch (error) {
-                console.error(error);
-            }
-        })()
-    }, []);
-
-    const onSubmit = (form: Client) => {
-        (async () => {
-            try {
-                await addClient(form);
-                history.push('/admin/clients');
+                console.log(form);
+                await addTrainer(form);
+                history.push('/admin/trainers');
             } catch (error) {
                 console.error(error);
             }
         })()
     };
 
-    return <>
+    return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={3}>
@@ -72,6 +63,36 @@ const AddClient = () => {
                                     required
                                     type="text"
                                     label="Full Name"
+                                    autoFocus
+                                />
+                            )}
+                            
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Controller
+                            control={control}
+                            name="experience"
+                            defaultValue={0}
+                            rules={{
+                                required: true,
+                                min: 0,
+                                max: 300
+                            }}
+                            errors={errors}
+                            render={({ ref, value, onChange, onBlur }) => (
+                                <TextField
+                                    inputRef={ref}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    value={value}
+                                    error={errors.experience !== undefined}
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    type="number"
+                                    label="Experience"
                                     autoFocus
                                 />
                             )}
@@ -168,95 +189,6 @@ const AddClient = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Controller
-                            control={control}
-                            name="height"
-                            defaultValue={0}
-                            rules={{
-                                required: true,
-                                min: 120,
-                                max: 250
-                            }}
-                            errors={errors}
-                            render={({ ref, value, onChange, onBlur }) => (
-                                <TextField
-                                    inputRef={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    error={errors.height !== undefined}
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    type="number"
-                                    label="Height"
-                                    autoFocus
-                                />
-                            )}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Controller
-                            control={control}
-                            name="clientWeight"
-                            defaultValue={0}
-                            rules={{
-                                required: true,
-                                min: 40,
-                                max: 350
-                            }}
-                            errors={errors}
-                            render={({ ref, value, onChange, onBlur }) => (
-                                <TextField
-                                    inputRef={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    error={errors.clientWeight !== undefined}
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    type="number"
-                                    label="Weight"
-                                    autoFocus
-                                />
-                            )}
-                        />
-                    </Grid>
-
-
-
-                    <Grid item xs={12}>
-                        <Controller
-                            control={control}
-                            name="nutritionPlanId"
-                            defaultValue={''}
-                            rules={{
-                                required: false,
-                                min: 0
-                            }}
-                            errors={errors}
-                            render={({ ref, value, onChange, onBlur }) => (
-                                <Select
-                                    inputRef={ref}
-                                    value={value}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                >
-                                    <MenuItem value={-1} disabled>Select nutrition plan</MenuItem>
-                                    {
-                                        nutritionplans.map(p => (
-                                            <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            )}
-                        />
-                    </Grid>
-
-
-                    <Grid item xs={12}>
                         <Button
                             type="submit"
                             variant="contained"
@@ -268,7 +200,7 @@ const AddClient = () => {
                 </Grid>
             </form>
         </MuiPickersUtilsProvider>
-    </>;
+    );
 }
 
-export default AddClient;
+export default AddTrainer;

@@ -41,7 +41,7 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: workoutclassesData
+        body: JSON.stringify(workoutclassesData)
     };
 
     fetch(`${API_URL}workoutclasses`, requestOptions)

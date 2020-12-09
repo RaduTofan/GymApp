@@ -26,10 +26,13 @@ import {
   Route, Switch as RouterSwitch, Router
 } from 'react-router-dom';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import TrainersList from './trainers/TrainersList';
 import ClientsList from './clients/ClientsList';
 import AddClient from './clients/AddClient';
 import UpdateClient from './clients/UpdateClient';
+import TrainersList from './trainers/TrainersList';
+import AddTrainer from './trainers/AddTrainer';
+import UpdateTrainer from './trainers/UpdateTrainer';
+
 import WorkoutClassList from './workoutclasses/WorkoutClassesList';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
@@ -37,6 +40,7 @@ import { light } from '@material-ui/core/styles/createPalette';
 import WelcomePage from './welcomepage/WelcomePage';
 import { history } from "../history";
 import { Dashboard } from '@material-ui/icons';
+import { addTrainer } from '../api/trainer';
 
 
 const drawerWidth = 240;
@@ -217,20 +221,29 @@ const Admin = () => {
 
 
         <RouterSwitch>
-          <Route exact path={`/admin/trainers`}>
-            <TrainersList />
-          </Route>
-
+          
           <Route exact path='/admin/clients' component={ClientsList}>
-          </Route>
-
-          <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
           </Route>
 
           <Route exact path='/admin/clients/create' component={AddClient}>
           </Route>
 
           <Route exact path='/admin/clients/update' component={UpdateClient}>
+          </Route>
+
+          <Route exact path={`/admin/trainers`}>
+            <TrainersList />
+          </Route>
+
+          <Route exact path={`/admin/trainers/create`}>
+            <AddTrainer/>
+          </Route>
+
+          <Route exact path={`/admin/trainers/update`}>
+            <UpdateTrainer/>
+          </Route>
+
+          <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
           </Route>
         </RouterSwitch>
 
