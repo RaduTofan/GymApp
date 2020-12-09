@@ -1,8 +1,8 @@
 
 import { ClientGridRow } from '../../api/client/models/ClientGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
-import React, { useEffect, useState } from 'react';
-import { CellParams, ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, useGetAllClients } from "../../api/client/index";
 import { Button, makeStyles } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
@@ -33,11 +33,15 @@ const ClientsList = () => {
     const [sortDirection, setSortDirection] = useState('asc');
     const [open, setOpen] = useState(false);
     const [rowToRemove, setRowToRemove]= useState<string|number>();
-    const [value,setValue] = useState<any>();
+    const [clientIsRemoved, setClientIsRemoved] = useState(false);
+
+  
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
     const history = useHistory();
 
     const classes = useStyles();
+
 
 
     const handleAlertClickOpen = () => {
@@ -46,6 +50,7 @@ const ClientsList = () => {
 
     const handleAlertClose = () => {
         setOpen(false);
+
     };
 
 
@@ -90,12 +95,12 @@ const ClientsList = () => {
             }
         })();
 
-    }, [page, sortColumn, sortDirection]);
+    }, [page, sortColumn, sortDirection, clientIsRemoved]);
 
 
 
     const columns: ColDef[] = [
-        { field: 'id', headerName: 'Id' },
+        { field: 'id', headerName: 'Id', hide:true },
         { field: 'fullName', headerName: 'Full Name', width: 150 },
         {
             field: 'dateOfBirth',
@@ -132,21 +137,18 @@ const ClientsList = () => {
                     setRowToRemove(params.row.id);
 
                 }
-
+                
                 const deleteItem=()=>{
                     if(rowToRemove!==undefined && typeof rowToRemove!=='string'){
-                        //removeClient(rowToRemove);
-                        setOpen(false);
-                        let newClients=paginatedClients;
-                        for(let i=0;i<newClients?.items.length!;i++){
-                            if(newClients?.items[i].id===rowToRemove){
-                                newClients.items.splice(i,1);
-                            }
-                        }
-                        setPaginatedClients(newClients);
-                        
+                        removeClient(rowToRemove);
+
+                        setClientIsRemoved(true);
+   
+                        handleAlertClose();
                     }
+                   
                 }
+
 
 
                 return <div><Button
@@ -196,7 +198,8 @@ const ClientsList = () => {
 
 
     return (
-        <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+        <div
+        id="thegrid" style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
             <Button component={Link} to="/admin/clients/create" size="medium" variant="contained" color="primary">
                 Add client
             </Button>
