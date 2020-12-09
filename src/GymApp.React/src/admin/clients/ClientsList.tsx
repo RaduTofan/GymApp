@@ -133,6 +133,7 @@ const ClientsList = () => {
                 const handleItemDeletion = () => {
                     handleAlertClickOpen();
                     setRowToRemove(params.row.id);
+                    setClientIsRemoved(false);
 
                 }
                 

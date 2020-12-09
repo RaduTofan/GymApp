@@ -28,7 +28,6 @@ const TrainersList = () => {
     const [trainerIsRemoved, setTrainerIsRemoved] = useState(false);
 
 
-
     const history = useHistory();
 
     const classes = useStyles();
@@ -118,6 +117,7 @@ const TrainersList = () => {
                 const handleItemDeletion = () => {
                     handleAlertClickOpen();
                     setRowToRemove(params.row.id);
+                    setTrainerIsRemoved(false);
 
                 }
 

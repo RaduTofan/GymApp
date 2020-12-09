@@ -25,7 +25,7 @@ const UpdateClient = () => {
     const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
     const location = useLocation();
     const [nutritionPlanId, setnutritionPlanId] = useState(0);
-
+    
 
     const state = location.state as CustomState;
     const client = state.client;
