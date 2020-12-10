@@ -1,4 +1,4 @@
-import { useGetAllTrainers, getTrainersPaged, removeTrainer, updateTrainer } from "../../api/trainer/index";
+import { getAllTrainers, getTrainersPaged, removeTrainer, updateTrainer } from "../../api/trainer/index";
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useState } from 'react';
 import { CellParams, ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';

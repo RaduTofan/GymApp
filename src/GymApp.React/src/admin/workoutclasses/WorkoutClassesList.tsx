@@ -1,9 +1,19 @@
-import { useGetAllWorkoutClasses, getWorkoutClassesPaged } from "../../api/workoutclass/index";
+import { getAllWorkoutClasses, getWorkoutClassesPaged, removeWorkoutClass } from "../../api/workoutclass/index";
 import React, { useEffect, useState } from 'react';
 import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { WorkoutClassGridRow } from '../../api/workoutclass/models/WorkoutClassGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
-import { Button } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+
+const useStyles = makeStyles((theme) => ({
+    button: {
+        margin: theme.spacing(1),
+    },
+}));
 
 const WorkoutClassList = () => {
     const [loading, setLoading] = useState(true);
@@ -11,6 +21,23 @@ const WorkoutClassList = () => {
     const [page, setPage] = useState(0);
     const [sortColumn, setSortColumn] = useState('scheduledTime');
     const [sortDirection, setSortDirection] = useState('desc');
+    const [open, setOpen] = useState(false);
+    const [rowToRemove, setRowToRemove] = useState<string | number>();
+    const [workoutClassIsRemoved, setWorkoutClassIsRemoved] = useState(false);
+
+
+    const history = useHistory();
+
+    const classes = useStyles();
+
+    const handleAlertClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleAlertClose = () => {
+        setOpen(false);
+
+    };
 
     const handlePageChange = (params: PageChangeParams) => {
         setPage(params.page - 1);
@@ -52,7 +79,7 @@ const WorkoutClassList = () => {
             }
         })();
 
-    }, [page, sortColumn, sortDirection]);
+    }, [page, sortColumn, sortDirection, workoutClassIsRemoved]);
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
@@ -73,15 +100,81 @@ const WorkoutClassList = () => {
             field: "",
             headerName: "Action",
             disableClickEventBubbling: true,
+            width: 250,
             renderCell: (params: CellParams) => {
-                const onClick = () => {
-                    const clickedRow=params.row;
-                    console.log(clickedRow);
-
+                const onClickEdit = () => {
+                    const clickedRow = params.row;
+                    history.push({
+                        pathname: 'workoutclasses/update',
+                        state: { workoutclass: clickedRow }
+                    });
                 };
 
-                return <Button onClick={onClick}>Edit</Button>;
+
+                const handleItemDeletion = () => {
+                    handleAlertClickOpen();
+                    setRowToRemove(params.row.id);
+                    setWorkoutClassIsRemoved(false);
+
+                }
+
+                const deleteItem = () => {
+                    if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
+                        removeWorkoutClass(rowToRemove); //TODO index.ts
+
+                        if (paginatedWorkoutClasses?.pageSize == 1) {
+                            paginatedWorkoutClasses.pageIndex = -1;
+                        }
+                        setWorkoutClassIsRemoved(true);
+
+                        handleAlertClose();
+                    }
+
+                }
+
+
+
+                return <div><Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    startIcon={<EditIcon />} onClick={onClickEdit}>
+                    Edit
+                        </Button>
+
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<DeleteIcon />} onClick={handleItemDeletion}>
+                        Remove
+                        </Button>
+
+                    <div>
+                        <Dialog
+                            open={open}
+                            onClose={handleAlertClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"You are about to remove an item"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Are you sure you want to remove this item ?
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleAlertClose} color="primary" autoFocus>
+                                    No
+                              </Button>
+                                <Button onClick={deleteItem} color="primary" key={params.row.id}>
+                                    Yes
+                              </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                </div>
             }
+
         }
 
     ];
@@ -89,7 +182,15 @@ const WorkoutClassList = () => {
 
     return (
         <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
-            {
+            <Button 
+            component={Link} 
+            to="/admin/workoutclasses/create" 
+            size="medium" 
+            variant="contained" 
+            color="primary"
+            startIcon={<AddCircleIcon/>}>
+                Add workout class
+            </Button>
                 <DataGrid
                     rows={paginatedWorkoutClasses?.items ?? []}
                     columns={columns}
@@ -103,8 +204,6 @@ const WorkoutClassList = () => {
                     loading={loading}
                     sortModel={sortModel}
                 />
-            }
-            {console.log(paginatedWorkoutClasses?.items)}
         </div>
     )
 

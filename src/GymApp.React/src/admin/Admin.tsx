@@ -32,8 +32,9 @@ import UpdateClient from './clients/UpdateClient';
 import TrainersList from './trainers/TrainersList';
 import AddTrainer from './trainers/AddTrainer';
 import UpdateTrainer from './trainers/UpdateTrainer';
-
 import WorkoutClassList from './workoutclasses/WorkoutClassesList';
+import AddWorkoutClass from './workoutclasses/AddWorkoutClass';
+import UpdateWorkoutClass from './workoutclasses/UpdateWorkoutClass';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import { light } from '@material-ui/core/styles/createPalette';
@@ -244,6 +245,12 @@ const Admin = () => {
           </Route>
 
           <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
+          </Route>
+
+          <Route exact path='/admin/workoutclasses/create' component={AddWorkoutClass}>
+          </Route>
+
+          <Route exact path='/admin/workoutclasses/update' component={UpdateWorkoutClass}>
           </Route>
         </RouterSwitch>
 

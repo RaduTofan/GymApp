@@ -3,7 +3,7 @@ import { ClientGridRow } from '../../api/client/models/ClientGridRow';
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
-import { getClientsPaged, useGetAllClients } from "../../api/client/index";
+import { getClientsPaged, getAllClients } from "../../api/client/index";
 import { Button, makeStyles } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
