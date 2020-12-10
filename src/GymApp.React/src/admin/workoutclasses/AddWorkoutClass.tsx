@@ -1,5 +1,5 @@
 import { Button, Grid, MenuItem, Select, TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
     KeyboardDatePicker
@@ -7,12 +7,16 @@ import {
 import { useHistory } from "react-router-dom";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { WorkoutClass } from '../../api/workoutclass/models/WorkoutClass';
 import { addWorkoutClass } from '../../api/workoutclass/index';
 
 
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { PaginatedResult } from "../../lib/grid/PaginatedResult";
+import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
+import { getTrainersPaged } from "../../api/trainer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,17 +33,47 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const AddWorkoutClass = () => {
-    const classes = useStyles();
-
+    const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [searchedTrainer, setSearchedTrainer] = useState("");
     const { control, handleSubmit, errors } = useForm<WorkoutClass>();
 
+    const textFieldRef = useRef<HTMLInputElement>();
+    const readTextFieldValue = () => {
+        setSearchedTrainer(textFieldRef.current?.value!);
+    }
 
+    const classes = useStyles();
     const history = useHistory();
 
 
 
-    const minDate = new Date("2020-1-1 10:30 AM");
-    const maxDate = new Date(2025, 1, 1);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let data = await getTrainersPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedTrainer
+                            }
+                        ]
+                    }
+                });
+                setPaginatedTrainers(data);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+
+    }, [searchedTrainer]);
 
 
     const onSubmit = (form: WorkoutClass) => {
@@ -66,28 +100,48 @@ const AddWorkoutClass = () => {
                             name="trainerId"
                             defaultValue={''}
                             rules={{
-                                required: true,
-                                min: 0
+                                required: true
                             }}
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
-                                <TextField
-                                    inputRef={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    error={errors.trainerId !== undefined}
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    type="number"
-                                    label="Trainer Id"
-                                    autoFocus
+                                <Autocomplete
+                                    id="combo-box-trainer"
+                                    options={paginatedTrainers?.items ?? []}
+                                    getOptionLabel={(trainer) => trainer.fullName}
+                                    style={{ width: 300 }}
+                                    renderInput={(params) => (<TextField
+                                        inputRef={textFieldRef}
+                                        onBlur={onBlur}
+                                        onChange={()=>{
+                                            onChange(); 
+                                            readTextFieldValue()}}
+                                        {...params}
+                                        label="Trainer"
+                                        variant="outlined"
+                                        value={value}
+                                        //error={errors.trainerId !== undefined}
+                                         />)}
+
                                 />
+                                // <TextField
+                                //     inputRef={ref}
+                                //     onChange={onChange}
+                                //     onBlur={onBlur}
+                                //     value={value}
+                                //     error={errors.trainerId !== undefined}
+                                //     variant="outlined"
+                                //     margin="normal"
+                                //     required
+                                //     type="number"
+                                //     label="Trainer Id"
+                                //     autoFocus
+                                // />
                             )}
 
                         />
                     </Grid>
+
+
 
                     <Grid item xs={12}>
                         <Controller
@@ -140,7 +194,7 @@ const AddWorkoutClass = () => {
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,
-                                      }}
+                                    }}
                                     inputProps={{ min: "2020-01-01T10:30", max: "2025-01-01T10:30" }}
                                 />
                             )}
