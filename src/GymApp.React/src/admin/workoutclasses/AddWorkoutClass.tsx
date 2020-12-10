@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddWorkoutClass = () => {
     const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
     const [searchedTrainer, setSearchedTrainer] = useState("");
-    const { control, handleSubmit, errors } = useForm<WorkoutClass>();
+    const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
 
     const textFieldRef = useRef<HTMLInputElement>();
     const readTextFieldValue = () => {
@@ -98,31 +98,37 @@ const AddWorkoutClass = () => {
                         <Controller
                             control={control}
                             name="trainerId"
-                            defaultValue={''}
                             rules={{
-                                required: true
                             }}
                             errors={errors}
-                            render={({ ref, value, onChange, onBlur }) => (
+                            render={({ value, onChange, onBlur }) => (
                                 <Autocomplete
                                     id="combo-box-trainer"
                                     options={paginatedTrainers?.items ?? []}
                                     getOptionLabel={(trainer) => trainer.fullName}
                                     style={{ width: 300 }}
+                                    onChange={(event, value) => setValue("trainerId",value?.id)} 
                                     renderInput={(params) => (<TextField
                                         inputRef={textFieldRef}
                                         onBlur={onBlur}
+
                                         onChange={()=>{
                                             onChange(); 
-                                            readTextFieldValue()}}
+                                            readTextFieldValue();
+                                            }}
+
                                         {...params}
+
+                                        //onKeyPress={}
+                                        
                                         label="Trainer"
                                         variant="outlined"
-                                        value={value}
-                                        //error={errors.trainerId !== undefined}
+                                        value={value?.id}
+                                        type="text"
+                                        error={errors.trainerId !== undefined}
                                          />)}
-
                                 />
+
                                 // <TextField
                                 //     inputRef={ref}
                                 //     onChange={onChange}
@@ -139,6 +145,8 @@ const AddWorkoutClass = () => {
                             )}
 
                         />
+
+                        {errors.trainerId && console.log(errors)}
                     </Grid>
 
 
@@ -190,7 +198,6 @@ const AddWorkoutClass = () => {
                                     inputRef={ref}
                                     label="Scheduled time"
                                     type="datetime-local"
-                                    defaultValue="2021-12-01T10:30"
                                     className={classes.textField}
                                     InputLabelProps={{
                                         shrink: true,
