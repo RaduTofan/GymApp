@@ -16,7 +16,7 @@ import { addClient } from '../../api/client/index';
 
 const AddClient = () => {
     const { control, handleSubmit, errors } = useForm<Client>();
-    const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
+    const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
 
 
     const minDate = new Date(1950, 1, 1);
@@ -27,8 +27,8 @@ const AddClient = () => {
     useEffect(() => {
         (async () => {
             try {
-                const nutPlan = await getAllNutritionPlans();
-                setNutritionPlans(nutPlan);
+                const nutPlans = await getAllNutritionPlans();
+                setNutritionPlans(nutPlans);
             } catch (error) {
                 console.error(error);
             }
@@ -226,7 +226,6 @@ const AddClient = () => {
                     </Grid>
 
 
-
                     <Grid item xs={12}>
                         <Controller
                             control={control}
@@ -244,9 +243,9 @@ const AddClient = () => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                 >
-                                    <MenuItem value={-1} disabled>Select nutrition plan</MenuItem>
+                                    <MenuItem value={-1} disabled>Nutrition plan</MenuItem>
                                     {
-                                        nutritionplans.map(p => (
+                                        nutritionPlans.map(p => (
                                             <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
                                         ))
                                     }

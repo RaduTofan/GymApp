@@ -48,7 +48,7 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
     };
 
     fetch(`${API_URL}workoutclasses`, requestOptions)
-        .then(response => response)
+        .then(response => response.json())
         .then(res => console.log(res))
         .catch(error => {
             console.log('Error while adding workoutclass: ', error);
@@ -77,7 +77,7 @@ export const getWorkoutClassesPaged =
     return data;
 }
 
-export const updateClient = async(workoutClassForUpdate : WorkoutClass)=>{
+export const updateWorkoutClass = async(workoutClassForUpdate : WorkoutClass)=>{
     const requestOptions = {
         method: 'PUT',
         headers: {

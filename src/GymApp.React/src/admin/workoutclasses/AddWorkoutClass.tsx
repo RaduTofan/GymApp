@@ -8,17 +8,19 @@ import { useHistory } from "react-router-dom";
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import { WorkoutClass } from '../../api/workoutclass/models/WorkoutClass';
 import { addWorkoutClass } from '../../api/workoutclass/index';
 
-
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { PaginatedResult } from "../../lib/grid/PaginatedResult";
 import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
 import { getTrainersPaged } from "../../api/trainer";
 import { ClientGridRow } from "../../api/client/models/ClientGridRow";
 import { getClientsPaged } from "../../api/client";
+import { ExercisePlan } from '../../api/exerciseplan/models/ExercisePlan';
+import { getAllExercisePlans } from '../../api/exerciseplan/index';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,10 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
 const AddWorkoutClass = () => {
     const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
     const [paginatedClients, setPaginatedClients] = useState<PaginatedResult<ClientGridRow>>();
+    const [exercisePlans, setExercisePlans] = useState<ExercisePlan[]>([] as ExercisePlan[]);
 
     const [searchedTrainer, setSearchedTrainer] = useState("");
     const [searchedClient, setSearchedClient] = useState("");
-    const [searchedExercisePlan, setSearchedExercisePlan] = useState("");
 
     const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
 
@@ -113,14 +115,26 @@ const AddWorkoutClass = () => {
         })();
     }, [searchedClient]);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const exPlans = await getAllExercisePlans();
+                setExercisePlans(exPlans);
+                console.log(exPlans)
+            } catch (error) {
+                console.error(error);
+            }
+        })()
+    }, []);
+
 
     const onSubmit = (form: WorkoutClass) => {
 
         (async () => {
             try {
                 console.log(form);
-                //await addWorkoutClass(form);
-                //history.push('/admin/workoutclasses');
+                await addWorkoutClass(form);
+                history.push('/admin/workoutclasses');
             } catch (error) {
                 console.error(error);
             }
@@ -166,20 +180,6 @@ const AddWorkoutClass = () => {
                                         error={errors.trainerId !== undefined}
                                          />)}
                                 />
-
-                                // <TextField
-                                //     inputRef={ref}
-                                //     onChange={onChange}
-                                //     onBlur={onBlur}
-                                //     value={value}
-                                //     error={errors.trainerId !== undefined}
-                                //     variant="outlined"
-                                //     margin="normal"
-                                //     required
-                                //     type="number"
-                                //     label="Trainer Id"
-                                //     autoFocus
-                                // />
                             )}
 
                         />
@@ -224,20 +224,6 @@ const AddWorkoutClass = () => {
                                         error={errors.clientId !== undefined}
                                          />)}
                                 />
-
-                                // <TextField
-                                //     inputRef={ref}
-                                //     onChange={onChange}
-                                //     onBlur={onBlur}
-                                //     value={value}
-                                //     error={errors.clientId !== undefined}
-                                //     variant="outlined"
-                                //     margin="normal"
-                                //     required
-                                //     type="number"
-                                //     label="Client Id"
-                                //     autoFocus
-                                // />
                             )}
                         />
                     </Grid>
@@ -249,8 +235,7 @@ const AddWorkoutClass = () => {
                             name="scheduledTime"
                             defaultValue="2021-12-01T10:30"
                             rules={{
-                                required: true,
-                                min: 0
+                                required: true
                             }}
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
@@ -278,23 +263,22 @@ const AddWorkoutClass = () => {
                             defaultValue={''}
                             rules={{
                                 required: true,
-                                min: 0
                             }}
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
-                                <TextField
+                                <Select
                                     inputRef={ref}
+                                    value={value}
                                     onChange={onChange}
                                     onBlur={onBlur}
-                                    value={value}
-                                    error={errors.exercisePlanId !== undefined}
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    type="number"
-                                    label="Exercise plan Id"
-                                    autoFocus
-                                />
+                                >
+                                    <MenuItem value={1} disabled>Exercise plan</MenuItem>
+                                    {
+                                        exercisePlans.map(p => (
+                                            <MenuItem key={p.id} value={p.id}>{p.exercisesType}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
                             )}
                         />
                     </Grid>
