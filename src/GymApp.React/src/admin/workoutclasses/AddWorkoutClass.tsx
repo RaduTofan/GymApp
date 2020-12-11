@@ -17,6 +17,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { PaginatedResult } from "../../lib/grid/PaginatedResult";
 import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
 import { getTrainersPaged } from "../../api/trainer";
+import { ClientGridRow } from "../../api/client/models/ClientGridRow";
+import { getClientsPaged } from "../../api/client";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -34,12 +36,22 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddWorkoutClass = () => {
     const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [paginatedClients, setPaginatedClients] = useState<PaginatedResult<ClientGridRow>>();
+
     const [searchedTrainer, setSearchedTrainer] = useState("");
+    const [searchedClient, setSearchedClient] = useState("");
+    const [searchedExercisePlan, setSearchedExercisePlan] = useState("");
+
     const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
 
-    const textFieldRef = useRef<HTMLInputElement>();
-    const readTextFieldValue = () => {
-        setSearchedTrainer(textFieldRef.current?.value!);
+    const textFieldRefTrainer = useRef<HTMLInputElement>();
+    const readTextFieldValueTrainer = () => {
+        setSearchedTrainer(textFieldRefTrainer.current?.value!);
+    }
+
+    const textFieldRefClient = useRef<HTMLInputElement>();
+    const readTextFieldValueClient = () => {
+        setSearchedClient(textFieldRefClient.current?.value!);
     }
 
     const classes = useStyles();
@@ -72,8 +84,34 @@ const AddWorkoutClass = () => {
                 console.error(error);
             }
         })();
-
     }, [searchedTrainer]);
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let data = await getClientsPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedClient
+                            }
+                        ]
+                    }
+                });
+                setPaginatedClients(data);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [searchedClient]);
 
 
     const onSubmit = (form: WorkoutClass) => {
@@ -107,14 +145,14 @@ const AddWorkoutClass = () => {
                                     options={paginatedTrainers?.items ?? []}
                                     getOptionLabel={(trainer) => trainer.fullName}
                                     style={{ width: 300 }}
-                                    onChange={(event, value) => setValue("trainerId",value?.id)} 
+                                    onChange={(event, value) => setValue("trainerId",value?.id)}
                                     renderInput={(params) => (<TextField
-                                        inputRef={textFieldRef}
+                                        inputRef={textFieldRefTrainer}
                                         onBlur={onBlur}
 
                                         onChange={()=>{
                                             onChange(); 
-                                            readTextFieldValue();
+                                            readTextFieldValueTrainer();
                                             }}
 
                                         {...params}
@@ -162,19 +200,44 @@ const AddWorkoutClass = () => {
                             }}
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
-                                <TextField
-                                    inputRef={ref}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    value={value}
-                                    error={errors.clientId !== undefined}
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    type="number"
-                                    label="Client Id"
-                                    autoFocus
+                                <Autocomplete
+                                    id="combo-box-client"
+                                    options={paginatedClients?.items ?? []}
+                                    getOptionLabel={(client) => client.fullName}
+                                    style={{ width: 300 }}
+                                    onChange={(event, value) => setValue("clientId",value?.id)} 
+                                    renderInput={(params) => (<TextField
+                                        inputRef={textFieldRefClient}
+                                        onBlur={onBlur}
+
+                                        onChange={()=>{
+                                            onChange(); 
+                                            readTextFieldValueClient();
+                                            }}
+
+                                        {...params}
+                                        
+                                        label="Client"
+                                        variant="outlined"
+                                        value={value?.id}
+                                        type="text"
+                                        error={errors.clientId !== undefined}
+                                         />)}
                                 />
+
+                                // <TextField
+                                //     inputRef={ref}
+                                //     onChange={onChange}
+                                //     onBlur={onBlur}
+                                //     value={value}
+                                //     error={errors.clientId !== undefined}
+                                //     variant="outlined"
+                                //     margin="normal"
+                                //     required
+                                //     type="number"
+                                //     label="Client Id"
+                                //     autoFocus
+                                // />
                             )}
                         />
                     </Grid>
