@@ -48,7 +48,7 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
     };
 
     fetch(`${API_URL}workoutclasses`, requestOptions)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(res => console.log(res))
         .catch(error => {
             console.log('Error while adding workoutclass: ', error);

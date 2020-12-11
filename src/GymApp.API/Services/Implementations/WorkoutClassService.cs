@@ -13,16 +13,26 @@ namespace GymApp.API.Services.Implementations
     public class WorkoutClassService : IWorkoutClassService
     {
         private readonly IRepository<WorkoutClass> _workoutClassRepository;
+        private readonly IRepository<Trainer> _trainerRepository;
+        private readonly IRepository<Client> _clientRepository;
+        private readonly IRepository<ExercisePlan> _exercisePlanRepository;
 
-        public WorkoutClassService(IRepository<WorkoutClass> workoutClassRepository)
+        public WorkoutClassService(IRepository<WorkoutClass> workoutClassRepository, 
+            IRepository<Trainer> trainerRepository,
+            IRepository<Client> clientRepository,
+            IRepository<ExercisePlan> exercisePlanRepository)
         {
             _workoutClassRepository = workoutClassRepository;
+            _trainerRepository = trainerRepository;
+            _clientRepository = clientRepository;
+            _exercisePlanRepository = exercisePlanRepository;
         }
 
         public WorkoutClass AddNewWorkoutClass(CreateWorkoutClassDto dto)
         {
-            if (_workoutClassRepository.Get(x => x.ClientId == dto.ClientId)==null ||
-                _workoutClassRepository.Get(x => x.TrainerId == dto.TrainerId)==null)
+            if ((_clientRepository.Get(dto.ClientId)==null) ||
+                (_trainerRepository.Get(dto.TrainerId)==null) ||
+                (_exercisePlanRepository.Get(dto.ExercisePlanId))==null)
             {
                 return null;
             }

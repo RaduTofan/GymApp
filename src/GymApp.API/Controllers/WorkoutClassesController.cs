@@ -42,7 +42,7 @@ namespace GymApp.API.Controllers
 
             if (workoutClass == null)
             {
-                return BadRequest("There is no such trainer or client in the database!");
+                return BadRequest("There is no such trainer, client or exercise plan in the database!");
             }
 
             var result = _mapper.Map<WorkoutClassDto>(workoutClass);
@@ -69,7 +69,7 @@ namespace GymApp.API.Controllers
             var workoutClass = _workoutClassService.UpdateWorkoutClass(id, dto);
             if (workoutClass == null)
             {
-                return BadRequest("There is no such trainer or client in the database!");
+                return BadRequest("There is no such trainer, client or exercise plan in the database!");
             }
 
 
