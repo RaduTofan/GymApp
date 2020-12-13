@@ -123,7 +123,7 @@ const TrainersList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeTrainer(rowToRemove); //TODO index.ts
+                        removeTrainer(rowToRemove); 
 
                         if (paginatedTrainers?.pageSize == 1) {
                             paginatedTrainers.pageIndex = -1;

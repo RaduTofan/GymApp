@@ -57,6 +57,7 @@ const AddWorkoutClass = () => {
     }
 
     const classes = useStyles();
+    
     const history = useHistory();
 
 

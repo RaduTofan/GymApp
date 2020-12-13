@@ -1,12 +1,396 @@
-import React from 'react';
+import { Button, Grid, MenuItem, Select, TextField } from "@material-ui/core";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+    KeyboardDatePicker
+} from '@material-ui/pickers';
+import { useHistory, useLocation } from "react-router-dom";
+import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+import { PaginatedResult } from "../../lib/grid/PaginatedResult";
+import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
+import { getTrainersPaged } from "../../api/trainer";
+import { ClientGridRow } from "../../api/client/models/ClientGridRow";
+import { getClientsPaged } from "../../api/client";
+import { ExercisePlan } from '../../api/exerciseplan/models/ExercisePlan';
+import { getAllExercisePlans } from '../../api/exerciseplan/index';
+import { WorkoutClassGridRow } from "../../api/workoutclass/models/WorkoutClassGridRow";
+import { WorkoutClass } from "../../api/workoutclass/models/WorkoutClass";
+import { updateWorkoutClass } from "../../api/workoutclass";
+
+
+interface CustomState {
+    pathname: string,
+    workoutClass: WorkoutClassGridRow
+}
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        container: {
+            display: 'flex',
+            flexWrap: 'wrap',
+        },
+        textField: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+            width: 200,
+        },
+    }),
+);
+
+const UpdateWorkoutClass = () => {
+    const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [paginatedClients, setPaginatedClients] = useState<PaginatedResult<ClientGridRow>>();
+    const [exercisePlans, setExercisePlans] = useState<ExercisePlan[]>([] as ExercisePlan[]);
+
+    const [searchedTrainer, setSearchedTrainer] = useState("");
+    const [searchedClient, setSearchedClient] = useState("");
+
+
+    const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
+
+    const textFieldRefTrainer = useRef<HTMLInputElement>();
+
+
+    const location = useLocation();
+    const customState = location.state as CustomState;
+    const workoutClassToUpdate = customState.workoutClass;
+
+
+    const trainerToReturn: TrainerGridRow = {
+        id: 0,
+        fullName: "XD",
+        experience: 0,
+        dateOfBirth: new Date(),
+        email: "",
+        phone: ""
+    }
+
+    const [defaultTrainer, setDefaultTrainer] = useState(trainerToReturn);
+
+
+    if (searchedTrainer == "") {
+        setSearchedTrainer(workoutClassToUpdate.trainer);
+        // console.log("XDXD",paginatedTrainers?.items[0]);
+        // setDefaultTrainer(paginatedTrainers?.items[0]!);
+    }
+
+
+    // const defaultTrainerValue = ():TrainerGridRow => {
+    //     // console.log("workoutClassToUpdate ",workoutClassToUpdate);
+
+    //     // if(paginatedTrainers==undefined){
+    //     //     console.log("xd");
+    //     //     setTimeout(()=>1000);
+    //     //     console.log("xd");
+    //     // }
+    //     // console.log( "items[0] ",paginatedTrainers?.items[0]);
+    //     // let trainerToReturn: TrainerGridRow = {
+    //     //     id: returnedTrainer.id,
+    //     //     fullName: returnedTrainer.fullName,
+    //     //     experience: returnedTrainer.experience,
+    //     //     dateOfBirth: returnedTrainer.dateOfBirth,
+    //     //     email: returnedTrainer.email,
+    //     //     phone: returnedTrainer.phone
+    //     // }
+    //     var returnedTrainer:TrainerGridRow;
+    //     // let trainerToReturn: TrainerGridRow = {
+    //     //     id: 4000,
+    //     //     fullName: "TEST",
+    //     //     experience: 42,
+    //     //     dateOfBirth: new Date("2000-05-05T00:00"),
+    //     //     email: "bruhmario@gmail.com",
+    //     //     phone: "069234789"
+    //     // }
+    //     //return trainerToReturn;
+
+    //     let myPromise = new Promise(()=>{
+
+    //         if (paginatedTrainers?.total==0) {
+
+    //         } else {
+    //             console.log("WAWAWEEWA NOOOOT");
+    //         }
+    //     });
+    //     myPromise.then(()=>{
+    //         returnedTrainer =paginatedTrainers?.items[0]!;
+    //     });
+    //     return returnedTrainer;
+
+
+    // }
 
 
 
-const UpdateWorkoutClass = () =>{
 
-    return(
-        <div>Update workout class</div>
-    )
+
+    const readTextFieldValueTrainer = () => {
+        setSearchedTrainer(textFieldRefTrainer.current?.value!);
+    }
+
+    const textFieldRefClient = useRef<HTMLInputElement>();
+    const readTextFieldValueClient = () => {
+        setSearchedClient(textFieldRefClient.current?.value!);
+    }
+    const classes = useStyles();
+
+    const history = useHistory();
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let data = await getTrainersPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedTrainer
+                            }
+                        ]
+                    }
+                });
+                if (data.items[0] !== undefined) {
+                    setPaginatedTrainers(data);
+                    setDefaultTrainer(data.items[0]);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [searchedTrainer]);
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                let data = await getClientsPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedClient
+                            }
+                        ]
+                    }
+                });
+                setPaginatedClients(data);
+                console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [searchedClient]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const exPlans = await getAllExercisePlans();
+                setExercisePlans(exPlans);
+                console.log(exPlans)
+            } catch (error) {
+                console.error(error);
+            }
+        })()
+    }, []);
+
+
+    const onSubmit = (form: WorkoutClass) => {
+
+        (async () => {
+            try {
+                console.log(form);
+                //await updateWorkoutClass(form);
+                //history.push('/admin/workoutclasses');
+            } catch (error) {
+                console.error(error);
+            }
+        })()
+    };
+
+    if (paginatedTrainers?.total === 0) {
+        return null;
+    } else {
+
+        return (
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <form noValidate onSubmit={handleSubmit(onSubmit)}>
+
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Controller
+                                control={control}
+                                name="trainerId"
+                                rules={{
+                                    required: true,
+                                }}
+                                errors={errors}
+                                render={({ value, onChange, onBlur }) => (
+                                    <Autocomplete
+                                        id="trainerId"
+                                        //value={defaultTrainer}
+
+                                        options={paginatedTrainers?.items ?? []}
+                                        getOptionLabel={(trainer) => trainer.fullName}
+                                        style={{ width: 300 }}
+                                        onChange={(event, value) => {
+                                            let result = defaultTrainer;
+                                            console.log(value);
+                                            // result.id=textFieldRefClient.current?.value.id;
+                                            // setDefaultTrainer(textFieldRefTrainer.current?.value)
+                                            setValue("trainerId", value?.id);
+                                        }}
+                                        renderInput={(params) => (<TextField
+                                            inputRef={textFieldRefTrainer}
+                                            onBlur={onBlur}
+
+                                            onChange={() => {
+                                                onChange();
+                                                readTextFieldValueTrainer();
+                                            }}
+
+                                            {...params}
+
+                                            //onKeyPress={}
+
+                                            label="Trainer"
+                                            variant="outlined"
+                                            value={value?.id ? value.id : ""}
+                                            type="text"
+                                            error={errors.trainerId !== undefined}
+                                        />)}
+                                    />
+                                )}
+
+                            />
+
+                            {errors.trainerId && console.log(errors)}
+                        </Grid>
+
+
+
+                        <Grid item xs={12}>
+                            <Controller
+                                control={control}
+                                name="clientId"
+                                defaultValue={""}
+                                rules={{
+                                    required: true,
+                                    min: 0
+                                }}
+                                errors={errors}
+                                render={({ ref, value, onChange, onBlur }) => (
+                                    <Autocomplete
+                                        id="combo-box-client"
+                                        options={paginatedClients?.items ?? []}
+                                        getOptionLabel={(client) => client.fullName}
+                                        style={{ width: 300 }}
+                                        onChange={(event, value) => setValue("clientId", value?.id)}
+                                        renderInput={(params) => (<TextField
+                                            inputRef={textFieldRefClient}
+                                            onBlur={onBlur}
+
+                                            onChange={() => {
+                                                onChange();
+                                                readTextFieldValueClient();
+                                            }}
+
+                                            {...params}
+
+                                            label="Client"
+                                            variant="outlined"
+                                            value={value?.id}
+                                            type="text"
+                                            error={errors.clientId !== undefined}
+                                        />)}
+                                    />
+                                )}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+
+                            <Controller
+                                control={control}
+                                name="scheduledTime"
+                                defaultValue="2021-12-01T10:30"
+                                rules={{
+                                    required: true
+                                }}
+                                errors={errors}
+                                render={({ ref, value, onChange, onBlur }) => (
+                                    <TextField
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                        inputRef={ref}
+                                        label="Scheduled time"
+                                        type="datetime-local"
+                                        className={classes.textField}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        inputProps={{ min: "2020-01-01T10:30", max: "2025-01-01T10:30" }}
+                                    />
+                                )}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Controller
+                                control={control}
+                                name="exercisePlanId"
+                                defaultValue={''}
+                                rules={{
+                                    required: true,
+                                }}
+                                errors={errors}
+                                render={({ ref, value, onChange, onBlur }) => (
+                                    <Select
+                                        inputRef={ref}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                    >
+                                        <MenuItem value={1} disabled>Exercise plan</MenuItem>
+                                        {
+                                            exercisePlans.map(p => (
+                                                <MenuItem key={p.id} value={p.id}>{p.exercisesType}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                )}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary">
+                                Create
+                        </Button>
+                        </Grid>
+
+                    </Grid>
+                </form>
+            </MuiPickersUtilsProvider>
+        );
+
+    }
 }
 
 export default UpdateWorkoutClass;

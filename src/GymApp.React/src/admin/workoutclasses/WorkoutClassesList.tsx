@@ -15,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+interface WorkoutClassToPush{
+pathname:string,
+state:{workoutClass : WorkoutClassGridRow}
+}
+
 const WorkoutClassList = () => {
     const [loading, setLoading] = useState(true);
     const [paginatedWorkoutClasses, setPaginatedWorkoutClasses] = useState<PaginatedResult<WorkoutClassGridRow>>();
@@ -103,11 +108,15 @@ const WorkoutClassList = () => {
             width: 250,
             renderCell: (params: CellParams) => {
                 const onClickEdit = () => {
-                    const clickedRow = params.row;
-                    history.push({
+                    const clickedRow = params.row as WorkoutClassGridRow;
+                    
+                    history.push(
+                        {
                         pathname: 'workoutclasses/update',
-                        state: { workoutclass: clickedRow }
-                    });
+                        state: { workoutClass: clickedRow }
+                    }
+                    
+                    );
                 };
 
 
@@ -120,7 +129,7 @@ const WorkoutClassList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeWorkoutClass(rowToRemove); //TODO index.ts
+                        removeWorkoutClass(rowToRemove); 
 
                         if (paginatedWorkoutClasses?.pageSize == 1) {
                             paginatedWorkoutClasses.pageIndex = -1;

@@ -85,6 +85,7 @@ const ClientsList = () => {
                     columnNameForSorting: sortColumn,
                     sortDirection: sortDirection
                 });
+                console.log("XDXD",sortColumn,sortDirection);
                 setPaginatedClients(data);
             } catch (error) {
                 console.error(error);
