@@ -57,6 +57,8 @@ const ClientsList = () => {
         setPage(params.page - 1);
     };
 
+
+
     const handleSortChange = (params: SortModelParams) => {
         const sortModel = params.sortModel[0];
         if (sortModel) {
@@ -68,12 +70,6 @@ const ClientsList = () => {
         }
     }
 
-    const sortModel = [
-        {
-            field: sortColumn,
-            sort: sortDirection as SortDirection,
-        },
-    ];
 
     useEffect(() => {
         (async () => {
@@ -172,8 +168,7 @@ const ClientsList = () => {
                             open={open}
                             onClose={handleAlertClose}
                             aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                        >
+                            aria-describedby="alert-dialog-description">
                             <DialogTitle id="alert-dialog-title">{"You are about to remove an item"}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
@@ -222,7 +217,7 @@ const ClientsList = () => {
                 onSortModelChange={handleSortChange}
                 onPageChange={handlePageChange}
                 loading={loading}
-                sortModel={sortModel}
+                
             />
 
         </div>

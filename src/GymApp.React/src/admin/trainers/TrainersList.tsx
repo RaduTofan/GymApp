@@ -56,12 +56,6 @@ const TrainersList = () => {
         }
     }
 
-    const sortModel = [
-        {
-            field: sortColumn,
-            sort: sortDirection as SortDirection,
-        },
-    ];
 
     useEffect(() => {
         (async () => {
@@ -206,7 +200,6 @@ const TrainersList = () => {
                 onSortModelChange={handleSortChange}
                 onPageChange={handlePageChange}
                 loading={loading}
-                sortModel={sortModel}
             />
         </div>
     )

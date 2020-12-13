@@ -48,12 +48,7 @@ const WorkoutClassList = () => {
         setPage(params.page - 1);
     };
 
-    const sortModel = [
-        {
-            field: sortColumn,
-            sort: sortDirection as SortDirection,
-        },
-    ];
+
 
     const handleSortChange = (params: SortModelParams) => {
         const sortModel = params.sortModel[0];
@@ -211,7 +206,6 @@ const WorkoutClassList = () => {
                     onSortModelChange={handleSortChange}
                     onPageChange={handlePageChange}
                     loading={loading}
-                    sortModel={sortModel}
                 />
         </div>
     )
