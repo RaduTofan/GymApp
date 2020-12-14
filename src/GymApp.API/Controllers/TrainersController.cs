@@ -17,21 +17,18 @@ namespace GymApp.API.Controllers
     [ApiController]
     public class TrainersController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly ITrainerService _trainerService;
 
-        public TrainersController(ITrainerService trainerService, IMapper mapper)
+        public TrainersController(ITrainerService trainerService)
         {
             _trainerService = trainerService;
-            _mapper = mapper;
         }
 
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var trainers = _trainerService.GetTrainers();
-            var result = trainers.Select(e => _mapper.Map<TrainerDto>(e));
+            var result = _trainerService.GetTrainers();
 
             return Ok(result);
         }
@@ -43,8 +40,7 @@ namespace GymApp.API.Controllers
             if (trainer == null)
                 return NotFound();
 
-            var result = _mapper.Map<TrainerDto>(trainer);
-            return Ok(result);
+            return Ok(trainer);
         }
 
         [HttpPost]
@@ -57,9 +53,8 @@ namespace GymApp.API.Controllers
                 return BadRequest("Trainer with such phone already exists!");
             }
 
-            var result = _mapper.Map<TrainerDto>(trainer);
 
-            return CreatedAtAction(nameof(GetTrainer), new { id = trainer.Id }, result);
+            return CreatedAtAction(nameof(GetTrainer), new { id = trainer.Id }, trainer);
         }
 
         [HttpPut("{id}")]
@@ -71,7 +66,6 @@ namespace GymApp.API.Controllers
             {
                 return BadRequest("The trainer you are trying to update doesn't exist or such phone already exists!");
             }
-
 
             return NoContent();
         }

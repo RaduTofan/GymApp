@@ -13,6 +13,7 @@ namespace GymApp.API.Profiles
         public TrainerProfile()
         {
             CreateMap<Trainer, TrainerDto>();
+            CreateMap<CreateTrainerDto, Trainer>();
             CreateMap<Trainer, TrainerGridRowDto>();
 
         }

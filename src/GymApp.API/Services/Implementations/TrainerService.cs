@@ -7,46 +7,50 @@ using GymApp.API.Dtos.Trainer;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
 using GymApp.API.Infrastructure.Models;
+using AutoMapper;
 
 namespace GymApp.API.Services.Implementations
 {
     public class TrainerService : ITrainerService
     {
         private readonly IRepository<Trainer> _trainerRepository;
+        private readonly IMapper _mapper;
 
-        public TrainerService(IRepository<Trainer> trainerRepository)
+        public TrainerService(IRepository<Trainer> trainerRepository, IMapper mapper)
         {
             _trainerRepository = trainerRepository;
+            _mapper = mapper;
         }
-        public Trainer AddNewTrainer(CreateTrainerDto dto)
+        public TrainerDto AddNewTrainer(CreateTrainerDto dto)
         {
             if (PhoneExists(dto.Phone))
             {
                 return null;
             }
 
-            var trainer = new Trainer
-            {
-                FullName = dto.FullName,
-                Experience = dto.Experience,
-                DateOfBirth = dto.DateOfBirth,
-                Email = dto.Email,
-                Phone = dto.Phone
-            };
+            var trainer = _mapper.Map<Trainer>(dto);
 
             _trainerRepository.Add(trainer);
             _trainerRepository.Save();
-            return trainer;
+
+            var result = _mapper.Map<TrainerDto>(trainer);
+
+            return result;
         }
 
-        public Trainer GetTrainerById(long id)
+        public TrainerDto GetTrainerById(long id)
         {
-            return _trainerRepository.Get(id);
+            var trainer = _trainerRepository.Get(id);
+            var result = _mapper.Map<TrainerDto>(trainer);
+            return result;
         }
 
-        public IList<Trainer> GetTrainers()
+        public IList<TrainerDto> GetTrainers()
         {
-            return _trainerRepository.GetAll();
+            var trainers=_trainerRepository.GetAll();
+            var result = _mapper.Map<IList<TrainerDto>>(trainers);
+
+            return result;
         }
 
         public bool RemoveTrainerById(long id)
@@ -61,7 +65,7 @@ namespace GymApp.API.Services.Implementations
             else return false;
         }
 
-        public Trainer UpdateTrainer(long id, CreateTrainerDto dto)
+        public TrainerDto UpdateTrainer(long id, CreateTrainerDto dto)
         {
             var trainer = _trainerRepository.Get(id);
 
@@ -70,15 +74,13 @@ namespace GymApp.API.Services.Implementations
                 return null;
             }
 
-            trainer.FullName = dto.FullName;
-            trainer.Experience = dto.Experience;
-            trainer.DateOfBirth = dto.DateOfBirth;
-            trainer.Email = dto.Email;
-            trainer.Phone = dto.Phone;
+            _mapper.Map(dto, trainer);
 
             _trainerRepository.Save();
 
-            return trainer;
+            var result = _mapper.Map<TrainerDto>(trainer);
+
+            return result;
 
         }
         private bool PhoneExists(string phone)

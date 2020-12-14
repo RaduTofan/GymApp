@@ -10,12 +10,12 @@ namespace GymApp.API.Services.Interfaces
 {
     public interface ITrainerService
     {
-        IList<Trainer> GetTrainers();
-        Trainer GetTrainerById(long id);
+        IList<TrainerDto> GetTrainers();
+        TrainerDto GetTrainerById(long id);
 
-        Trainer AddNewTrainer(CreateTrainerDto dto);
+        TrainerDto AddNewTrainer(CreateTrainerDto dto);
 
-        Trainer UpdateTrainer(long id, CreateTrainerDto dto);
+        TrainerDto UpdateTrainer(long id, CreateTrainerDto dto);
 
         bool RemoveTrainerById(long id);
 
