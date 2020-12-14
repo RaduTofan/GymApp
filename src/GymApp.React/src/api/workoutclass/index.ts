@@ -78,6 +78,7 @@ export const getWorkoutClassesPaged =
 }
 
 export const updateWorkoutClass = async(workoutClassForUpdate : WorkoutClass)=>{
+    console.log("UPDATE THIS BRF",workoutClassForUpdate);
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -87,11 +88,13 @@ export const updateWorkoutClass = async(workoutClassForUpdate : WorkoutClass)=>{
         body: JSON.stringify(workoutClassForUpdate)
     };
 
-    return fetch(`${API_URL}workoutclasses/${workoutClassForUpdate.id}`, requestOptions)
-        .then(response => response)
+     fetch(`${API_URL}workoutclasses/${workoutClassForUpdate.id}`, requestOptions)
+        .then(response => response.text())
+        .then(res => console.log(res))
         .catch(error => {
             console.log('Error while updating workout class: ', error);
         })
+    return;
 }
 
 export const removeWorkoutClass = async(id :number)=>{

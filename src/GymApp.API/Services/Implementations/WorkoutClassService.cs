@@ -79,7 +79,9 @@ namespace GymApp.API.Services.Implementations
 
         public WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
         {
-            if (_workoutClassRepository.Get(dto.ClientId) == null || _workoutClassRepository.Get(dto.TrainerId) == null)
+            if ((_clientRepository.Get(dto.ClientId) == null) ||
+                (_trainerRepository.Get(dto.TrainerId) == null) ||
+                (_exercisePlanRepository.Get(dto.ExercisePlanId)) == null)
             {
                 return null;
             }

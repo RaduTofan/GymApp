@@ -18,10 +18,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface WorkoutClassToPush{
-pathname:string,
-state:{workoutClass : WorkoutClassGridRow}
-}
 
 const WorkoutClassList = () => {
     const [loading, setLoading] = useState(true);
@@ -33,9 +29,13 @@ const WorkoutClassList = () => {
     const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [workoutClassIsRemoved, setWorkoutClassIsRemoved] = useState(false);
 
-
-    const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [workoutClassIdToUpdate, setWorkoutClassIdToUpdate]=useState(0);
     const [searchedTrainer, setSearchedTrainer] = useState("");
+    const [searchedClient, setSearchedClient] = useState("");
+    const [dateToUpdate, setDateToUpdate]=useState(new Date());
+    const [exercisePlanToUpdate, setExercisePlanToUpdate]=useState("");
+    
+
 
     const history = useHistory();
 
@@ -90,7 +90,8 @@ const WorkoutClassList = () => {
     useEffect(() => {
         (async () => {
             try {
-                let data = await getTrainersPaged({
+                setLoading(true);
+                let trainerData = await getTrainersPaged({
                     pageIndex: 0,
                     pageSize: 10,
                     columnNameForSorting: "",
@@ -105,14 +106,40 @@ const WorkoutClassList = () => {
                         ]
                     }
                 });
-                if (data.items[0] !== undefined) {
-                    setPaginatedTrainers(data);
+                let clientData = await getClientsPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedClient
+                            }
+                        ]
+                    }
+                });
+
+                if(trainerData?.total==1 && clientData.total==1){
+                    history.push(
+                        {
+                        pathname: 'workoutclasses/update',
+                        state: { 
+                            workoutClass: workoutClassIdToUpdate,
+                            trainer: trainerData?.items[0],
+                            client: clientData?.items[0],
+                            date: dateToUpdate,
+                            exercisePlan: exercisePlanToUpdate
+                         }
+                    });
                 }
             } catch (error) {
                 console.error(error);
             }
         })();
-    }, [searchedTrainer]);
+    }, [searchedTrainer,searchedClient]);
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
@@ -136,15 +163,12 @@ const WorkoutClassList = () => {
             width: 250,
             renderCell: (params: CellParams) => {
                 const onClickEdit = () => {
-                    const clickedRow = params.row as WorkoutClassGridRow;
+                    const clickedRow = params.row;
+                    setWorkoutClassIdToUpdate(clickedRow.id as number);
                     setSearchedTrainer(clickedRow.trainer);
-                    history.push(
-                        {
-                        pathname: 'workoutclasses/update',
-                        state: { trainer: paginatedTrainers?.items[0] }
-                    }
-                    
-                    );
+                    setSearchedClient(clickedRow.client);
+                    setDateToUpdate(clickedRow.scheduledTime);
+                    setExercisePlanToUpdate(clickedRow.exercisePlan);
                 };
 
 

@@ -22,9 +22,9 @@ interface CustomState {
 
 const UpdateClient = () => {
     const { control, handleSubmit, errors } = useForm<Client>();
-    const [nutritionplans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
+    const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
     const location = useLocation();
-    const [nutritionPlanId, setnutritionPlanId] = useState(0);
+    const [nutritionPlanId, setNutritionPlanId] = useState(0);
     
 
     const state = location.state as CustomState;
@@ -32,7 +32,7 @@ const UpdateClient = () => {
 
 
     const selectNplans = (e: any) => {
-        setnutritionPlanId(e.target.value);
+        setNutritionPlanId(e.target.value);
     }
 
 
@@ -46,7 +46,7 @@ const UpdateClient = () => {
 
                 for (let element of nutPlans) {
                     if (element.nutritionType === client.nutritionPlan) {
-                        setnutritionPlanId(element.id);
+                        setNutritionPlanId(element.id);
                         break;
                     }
                 }
@@ -260,7 +260,7 @@ const UpdateClient = () => {
                                 min: 0
                             }}
                             errors={errors}
-                            render={({ ref, value, onChange, onBlur }) => (
+                            render={({ ref, onBlur }) => (
                                 <Select
                                     inputRef={ref}
                                     value={nutritionPlanId}
@@ -269,7 +269,7 @@ const UpdateClient = () => {
                                 >
                                     <MenuItem value={0} disabled>Select nutrition plan</MenuItem>
                                     {
-                                        nutritionplans.map(p => (
+                                        nutritionPlans.map(p => (
                                             <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
                                         ))
                                     }

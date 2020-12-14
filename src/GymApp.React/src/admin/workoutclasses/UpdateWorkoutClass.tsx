@@ -23,8 +23,12 @@ import { updateWorkoutClass } from "../../api/workoutclass";
 
 
 interface CustomState {
-    pathname: string,
-    trainer: TrainerGridRow
+    workoutClass: number,
+    trainer: TrainerGridRow,
+    client: ClientGridRow,
+    date: Date,
+    exercisePlan: string
+
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,7 +52,7 @@ const UpdateWorkoutClass = () => {
 
     const [searchedTrainer, setSearchedTrainer] = useState("");
     const [searchedClient, setSearchedClient] = useState("");
-
+    const [searchedExercisePlan,setSearchedExercisePlan]=useState(0);
 
     const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
 
@@ -57,78 +61,11 @@ const UpdateWorkoutClass = () => {
 
     const location = useLocation();
     const customState = location.state as CustomState;
+    const workoutClassIdToUpdate= customState.workoutClass;
     const trainerFromWorkoutClassToUpdate = customState.trainer;
-
-    console.log(trainerFromWorkoutClassToUpdate);
-
-    const trainerToReturn: TrainerGridRow = {
-        id: 0,
-        fullName: "XD",
-        experience: 0,
-        dateOfBirth: new Date(),
-        email: "",
-        phone: ""
-    }
-
-    const [defaultTrainer, setDefaultTrainer] = useState(trainerToReturn);
-
-
-    if (searchedTrainer == "") {
-        console.log("XDXD");
-        setSearchedTrainer(trainerFromWorkoutClassToUpdate.fullName);
-        console.log("XD2",trainerFromWorkoutClassToUpdate);
-        setValue("trainerId",trainerFromWorkoutClassToUpdate.id);
-        // console.log("XDXD",paginatedTrainers?.items[0]);
-        // setDefaultTrainer(paginatedTrainers?.items[0]!);
-    }
-
-
-    // const defaultTrainerValue = ():TrainerGridRow => {
-    //     // console.log("workoutClassToUpdate ",workoutClassToUpdate);
-
-    //     // if(paginatedTrainers==undefined){
-    //     //     console.log("xd");
-    //     //     setTimeout(()=>1000);
-    //     //     console.log("xd");
-    //     // }
-    //     // console.log( "items[0] ",paginatedTrainers?.items[0]);
-    //     // let trainerToReturn: TrainerGridRow = {
-    //     //     id: returnedTrainer.id,
-    //     //     fullName: returnedTrainer.fullName,
-    //     //     experience: returnedTrainer.experience,
-    //     //     dateOfBirth: returnedTrainer.dateOfBirth,
-    //     //     email: returnedTrainer.email,
-    //     //     phone: returnedTrainer.phone
-    //     // }
-    //     var returnedTrainer:TrainerGridRow;
-    //     // let trainerToReturn: TrainerGridRow = {
-    //     //     id: 4000,
-    //     //     fullName: "TEST",
-    //     //     experience: 42,
-    //     //     dateOfBirth: new Date("2000-05-05T00:00"),
-    //     //     email: "bruhmario@gmail.com",
-    //     //     phone: "069234789"
-    //     // }
-    //     //return trainerToReturn;
-
-    //     let myPromise = new Promise(()=>{
-
-    //         if (paginatedTrainers?.total==0) {
-
-    //         } else {
-    //             console.log("WAWAWEEWA NOOOOT");
-    //         }
-    //     });
-    //     myPromise.then(()=>{
-    //         returnedTrainer =paginatedTrainers?.items[0]!;
-    //     });
-    //     return returnedTrainer;
-
-
-    // }
-
-
-
+    const clientFromWorkoutClassToUpdate = customState.client;
+    const dateFromWorkoutClassToUpdate = customState.date;
+    const exercisePlanFromWorkoutClassToUpdate = customState.exercisePlan;
 
 
     const readTextFieldValueTrainer = () => {
@@ -142,6 +79,10 @@ const UpdateWorkoutClass = () => {
     const classes = useStyles();
 
     const history = useHistory();
+
+    const selectExPlans = (e: any) => {
+        setSearchedExercisePlan(e.target.value);
+    }
 
 
     useEffect(() => {
@@ -164,7 +105,6 @@ const UpdateWorkoutClass = () => {
                 });
                 if (data.items[0] !== undefined) {
                     setPaginatedTrainers(data);
-                    setDefaultTrainer(data.items[0]);
                 }
             } catch (error) {
                 console.error(error);
@@ -192,7 +132,6 @@ const UpdateWorkoutClass = () => {
                     }
                 });
                 setPaginatedClients(data);
-                console.log(data);
             } catch (error) {
                 console.error(error);
             }
@@ -204,7 +143,16 @@ const UpdateWorkoutClass = () => {
             try {
                 const exPlans = await getAllExercisePlans();
                 setExercisePlans(exPlans);
-                console.log(exPlans)
+                console.log(exPlans, exercisePlanFromWorkoutClassToUpdate);
+                for (let element of exPlans) {
+                    if (element.exercisesType === exercisePlanFromWorkoutClassToUpdate) {
+                        console.log("got it", element);
+                        setSearchedExercisePlan(element.id);
+                        break;
+                    }
+                }
+                setValue("trainerId", trainerFromWorkoutClassToUpdate.id);
+                setValue("clientId", clientFromWorkoutClassToUpdate.id);
             } catch (error) {
                 console.error(error);
             }
@@ -213,182 +161,176 @@ const UpdateWorkoutClass = () => {
 
 
     const onSubmit = (form: WorkoutClass) => {
-
         (async () => {
             try {
+                form.id=workoutClassIdToUpdate;
+                form.exercisePlanId=searchedExercisePlan;
                 console.log(form);
-                //await updateWorkoutClass(form);
-                //history.push('/admin/workoutclasses');
+                await updateWorkoutClass(form);
+                history.push('/admin/workoutclasses');
             } catch (error) {
                 console.error(error);
             }
         })()
     };
 
-    if (paginatedTrainers?.total === 0) {
-        return null;
-    } else {
 
-        return (
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <form noValidate onSubmit={handleSubmit(onSubmit)}>
+    return (
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}>
 
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Controller
-                                control={control}
-                                name="trainerId"
-                                rules={{
-                                    required: true,
-                                }}
-                                errors={errors}
-                                render={({ value, onChange, onBlur }) => (
-                                    <Autocomplete
-                                        id="trainerId"
-                                        defaultValue={trainerFromWorkoutClassToUpdate}
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Controller
+                            control={control}
+                            name="trainerId"
+                            rules={{
+                                required: true,
+                            }}
+                            errors={errors}
+                            render={({ value, onChange, onBlur }) => (
+                                <Autocomplete
+                                    id="trainerId"
+                                    defaultValue={trainerFromWorkoutClassToUpdate}
 
-                                        options={paginatedTrainers?.items ?? []}
-                                        getOptionLabel={(trainer) => trainer.fullName}
-                                        style={{ width: 300 }}
-                                        onChange={(event, value) => setValue("trainerId", value?.id)}
-                                        renderInput={(params) => (<TextField
-                                            inputRef={textFieldRefTrainer}
-                                            onBlur={onBlur}
-
-                                            onChange={() => {
-                                                onChange();
-                                                readTextFieldValueTrainer();
-                                            }}
-
-                                            {...params}
-
-                                            //onKeyPress={}
-
-                                            label="Trainer"
-                                            variant="outlined"
-                                            value={value?.id ? value.id : ""}
-                                            type="text"
-                                            error={errors.trainerId !== undefined}
-                                        />)}
-                                    />
-                                )}
-
-                            />
-
-                            {errors.trainerId && console.log(errors)}
-                        </Grid>
-
-
-
-                        <Grid item xs={12}>
-                            <Controller
-                                control={control}
-                                name="clientId"
-                                defaultValue={""}
-                                rules={{
-                                    required: true,
-                                    min: 0
-                                }}
-                                errors={errors}
-                                render={({ ref, value, onChange, onBlur }) => (
-                                    <Autocomplete
-                                        id="combo-box-client"
-                                        options={paginatedClients?.items ?? []}
-                                        getOptionLabel={(client) => client.fullName}
-                                        style={{ width: 300 }}
-                                        onChange={(event, value) => setValue("clientId", value?.id)}
-                                        renderInput={(params) => (<TextField
-                                            inputRef={textFieldRefClient}
-                                            onBlur={onBlur}
-
-                                            onChange={() => {
-                                                onChange();
-                                                readTextFieldValueClient();
-                                            }}
-
-                                            {...params}
-
-                                            label="Client"
-                                            variant="outlined"
-                                            value={value?.id}
-                                            type="text"
-                                            error={errors.clientId !== undefined}
-                                        />)}
-                                    />
-                                )}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-
-                            <Controller
-                                control={control}
-                                name="scheduledTime"
-                                defaultValue="2021-12-01T10:30"
-                                rules={{
-                                    required: true
-                                }}
-                                errors={errors}
-                                render={({ ref, value, onChange, onBlur }) => (
-                                    <TextField
-                                        value={value}
-                                        onChange={onChange}
+                                    options={paginatedTrainers?.items ?? []}
+                                    getOptionLabel={(trainer) => trainer.fullName}
+                                    style={{ width: 300 }}
+                                    onChange={(event, value) => setValue("trainerId", value?.id)}
+                                    renderInput={(params) => (<TextField
+                                        inputRef={textFieldRefTrainer}
                                         onBlur={onBlur}
-                                        inputRef={ref}
-                                        label="Scheduled time"
-                                        type="datetime-local"
-                                        className={classes.textField}
-                                        InputLabelProps={{
-                                            shrink: true,
+
+                                        onChange={() => {
+                                            onChange();
+                                            readTextFieldValueTrainer();
                                         }}
-                                        inputProps={{ min: "2020-01-01T10:30", max: "2025-01-01T10:30" }}
-                                    />
-                                )}
-                            />
-                        </Grid>
+                                        {...params}
+                                        label="Trainer"
+                                        variant="outlined"
+                                        value={value?.id ? value.id : ""}
+                                        type="text"
+                                        error={errors.trainerId !== undefined}
+                                    />)}
+                                />
+                            )}
 
-                        <Grid item xs={12}>
-                            <Controller
-                                control={control}
-                                name="exercisePlanId"
-                                defaultValue={''}
-                                rules={{
-                                    required: true,
-                                }}
-                                errors={errors}
-                                render={({ ref, value, onChange, onBlur }) => (
-                                    <Select
-                                        inputRef={ref}
-                                        value={value}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                    >
-                                        <MenuItem value={1} disabled>Exercise plan</MenuItem>
-                                        {
-                                            exercisePlans.map(p => (
-                                                <MenuItem key={p.id} value={p.id}>{p.exercisesType}</MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                                )}
-                            />
-                        </Grid>
+                        />
 
-                        <Grid item xs={12}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary">
-                                Create
-                        </Button>
-                        </Grid>
-
+                        {errors.trainerId && console.log(errors)}
                     </Grid>
-                </form>
-            </MuiPickersUtilsProvider>
-        );
 
-    }
+
+
+                    <Grid item xs={12}>
+                        <Controller
+                            control={control}
+                            name="clientId"
+                            rules={{
+                                required: true
+                            }}
+                            errors={errors}
+                            render={({ ref, value, onChange, onBlur }) => (
+                                <Autocomplete
+                                    id="combo-box-client"
+                                    defaultValue={clientFromWorkoutClassToUpdate}
+                                    options={paginatedClients?.items ?? []}
+                                    getOptionLabel={(client) => client.fullName}
+                                    style={{ width: 300 }}
+                                    onChange={(event, value) => setValue("clientId", value?.id)}
+                                    renderInput={(params) => (<TextField
+                                        inputRef={textFieldRefClient}
+                                        onBlur={onBlur}
+
+                                        onChange={() => {
+                                            onChange();
+                                            readTextFieldValueClient();
+                                        }}
+
+                                        {...params}
+
+                                        label="Client"
+                                        variant="outlined"
+                                        value={value?.id}
+                                        type="text"
+                                        error={errors.clientId !== undefined}
+                                    />)}
+                                />
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+
+                        <Controller
+                            control={control}
+                            name="scheduledTime"
+                            defaultValue={dateFromWorkoutClassToUpdate}
+                            rules={{
+                                required: true
+                            }}
+                            errors={errors}
+                            render={({ ref, value, onChange, onBlur }) => (
+                                <TextField
+                                    value={value}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    inputRef={ref}
+                                    label="Scheduled time"
+                                    type="datetime-local"
+                                    className={classes.textField}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    inputProps={{ min: "2020-01-01T10:30", max: "2025-01-01T10:30" }}
+                                />
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Controller
+                            control={control}
+                            name="exercisePlanId"
+                            defaultValue={searchedExercisePlan}
+                            rules={{
+                                required: true,
+                                min: 0
+                            }}
+                            errors={errors}
+                            render={({ ref, onBlur }) => (
+                                <Select
+                                    inputRef={ref}
+                                    value={searchedExercisePlan}
+                                    onChange={selectExPlans}
+                                    onBlur={onBlur}
+                                >
+                                    <MenuItem value={0} disabled>Exercise plan</MenuItem>
+                                    {
+                                        exercisePlans.map(p => (
+                                            <MenuItem key={p.id} value={p.id}>{p.exercisesType}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            )}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary">
+                            Update
+                        </Button>
+                    </Grid>
+
+                </Grid>
+            </form>
+        </MuiPickersUtilsProvider>
+    );
+
 }
+
 
 export default UpdateWorkoutClass;
