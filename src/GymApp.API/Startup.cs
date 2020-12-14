@@ -1,3 +1,4 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using GymApp.Domain.Auth;
 using GymApp.API.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Reflection;
 
 namespace GymApp.API
 {
@@ -49,7 +51,6 @@ namespace GymApp.API
                 optionsbuilder.UseSqlServer(Configuration.GetConnectionString("GymAppConnection"));
             });
 
-            var mapperConfig = new MapperConfiguration(m => m.AddProfile(new MappingProfile()));
 
             ConfigureSwagger(services);
 
@@ -58,7 +59,6 @@ namespace GymApp.API
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ITrainerService, TrainerService>();
 
-            services.AddSingleton(mapperConfig.CreateMapper());
             services.AddScoped<IClientService, ClientService>();
 
             services.AddScoped<IWorkoutClassService, WorkoutClassService>();
@@ -92,6 +92,8 @@ namespace GymApp.API
             {
                 options.Filters.Add(new AuthorizeFilter());
             });
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         }
 
