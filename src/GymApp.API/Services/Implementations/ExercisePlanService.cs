@@ -1,4 +1,6 @@
-﻿using GymApp.API.Repositories.Interfaces;
+﻿using AutoMapper;
+using GymApp.API.Dtos.ExercisePlan;
+using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
 using GymApp.Domain;
 using System;
@@ -11,15 +13,20 @@ namespace GymApp.API.Services.Implementations
     public class ExercisePlanService : IExercisePlanService
     {
         private readonly IRepository<ExercisePlan> _exercisePlanRepository;
+        private readonly IMapper _mapper;
 
-        public ExercisePlanService(IRepository<ExercisePlan> exercisePlanRepository)
+        public ExercisePlanService(IRepository<ExercisePlan> exercisePlanRepository, IMapper mapper)
         {
             _exercisePlanRepository = exercisePlanRepository;
+            _mapper = mapper;
         }
 
-        public IList<ExercisePlan> GetExercisePlans()
+        public IList<ExercisePlanDto> GetExercisePlans()
         {
-            return _exercisePlanRepository.GetAll();
+            var exercisePlans = _exercisePlanRepository.GetAll();
+
+            var result = _mapper.Map<IList<ExercisePlanDto>>(exercisePlans);
+            return result;
         }
     }
 }

@@ -10,10 +10,10 @@ namespace GymApp.API.Services.Interfaces
 {
     public interface IClientService
     {
-        IList<Client> GetClients();
-        Client GetClientById(long id);
+        IList<ClientDto> GetClients();
+        ClientDto GetClientById(long id);
 
-        Client AddNewClient(CreateClientDto dto);
+        ClientDto AddNewClient(CreateClientDto dto);
 
         Client UpdateClient(long id, CreateClientDto dto);
 

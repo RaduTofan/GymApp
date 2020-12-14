@@ -16,20 +16,17 @@ namespace GymApp.API.Controllers
     {
 
         private readonly IExercisePlanService _exercisePlanService;
-        private readonly IMapper _mapper;
 
 
-        public ExercisePlansController(IExercisePlanService exercisePlanService, IMapper mapper)
+        public ExercisePlansController(IExercisePlanService exercisePlanService)
         {
             _exercisePlanService = exercisePlanService;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var exercisePlans = _exercisePlanService.GetExercisePlans();
-            var result = exercisePlans.Select(e => _mapper.Map<ExercisePlanDto>(e));
+            var result = _exercisePlanService.GetExercisePlans();
 
             return Ok(result);
         }

@@ -16,20 +16,17 @@ namespace GymApp.API.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientService _clientService;
-        private readonly IMapper _mapper;
 
-        public ClientsController(IClientService clientService, IMapper mapper)
+        public ClientsController(IClientService clientService)
         {
             _clientService = clientService;
-            _mapper = mapper;
         }
 
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var clients = _clientService.GetClients();
-            var result = clients.Select(e => _mapper.Map<ClientDto>(e));
+            var result = _clientService.GetClients();
 
             return Ok(result);
         }
@@ -37,11 +34,10 @@ namespace GymApp.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetClient(long id)
         {
-            var client = _clientService.GetClientById(id);
-            if (client == null)
+            var result = _clientService.GetClientById(id);
+            if (result == null)
                 return NotFound();
-
-            var result = _mapper.Map<ClientDto>(client);
+            
             return Ok(result);
         }
 
@@ -55,9 +51,7 @@ namespace GymApp.API.Controllers
                 return BadRequest("Client with such phone already exists!");
             }
 
-            var result = _mapper.Map<ClientDto>(client);
-
-            return CreatedAtAction(nameof(GetClient), new { id = client.Id }, result);
+            return CreatedAtAction(nameof(GetClient), new { id = client.Id }, client);
         }
 
         [HttpPut("{id}")]

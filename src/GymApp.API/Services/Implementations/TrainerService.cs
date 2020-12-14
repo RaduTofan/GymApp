@@ -83,7 +83,8 @@ namespace GymApp.API.Services.Implementations
         }
         private bool PhoneExists(string phone)
         {
-            return _trainerRepository.Get(x => x.Phone == phone) != null;
+            var trainerPhone = _trainerRepository.Get(x => x.Phone == phone);
+            return trainerPhone != null;
         }
 
         public async Task<PaginatedResult<TrainerGridRowDto>> GetPaginatedTrainers(PaginatedRequest paginatedRequest)

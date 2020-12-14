@@ -1,4 +1,5 @@
-﻿using GymApp.Domain;
+﻿using GymApp.API.Dtos.ExercisePlan;
+using GymApp.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace GymApp.API.Services.Interfaces
 {
     public interface IExercisePlanService
     {
-        IList<ExercisePlan> GetExercisePlans();
+        IList<ExercisePlanDto> GetExercisePlans();
     }
 }

@@ -7,49 +7,49 @@ using GymApp.API.Dtos.Client;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
 using GymApp.API.Infrastructure.Models;
+using AutoMapper;
 
 namespace GymApp.API.Services.Implementations
 {
     public class ClientService : IClientService
     {
         private readonly IRepository<Client> _clientRepository;
+        private readonly IMapper _mapper;
 
-        public ClientService(IRepository<Client> clientRepository)
+        public ClientService(IRepository<Client> clientRepository, IMapper mapper)
         {
             _clientRepository = clientRepository;
+            _mapper = mapper;
         }
-        public Client AddNewClient(CreateClientDto dto)
+        public ClientDto AddNewClient(CreateClientDto dto)
         {
             if (PhoneExists(dto.Phone))
             {
                 return null;
             }
 
-
-            var client = new Client
-            {
-                FullName = dto.FullName,
-                DateOfBirth = dto.DateOfBirth,
-                Email = dto.Email,
-                Phone = dto.Phone,
-                Height = dto.Height,
-                ClientWeight = dto.ClientWeight,
-                NutritionPlanId = dto.NutritionPlanId
-            };
+            var client = _mapper.Map<Client>(dto);
 
             _clientRepository.Add(client);
             _clientRepository.Save();
-            return client;
+
+            var result = _mapper.Map<ClientDto>(client);
+
+            return result;
         }
 
-        public Client GetClientById(long id)
+        public ClientDto GetClientById(long id)
         {
-            return _clientRepository.Get(id);
+            var client = _clientRepository.Get(id);
+            var result = _mapper.Map<ClientDto>(client);
+            return result;
         }
 
-        public IList<Client> GetClients()
+        public IList<ClientDto> GetClients()
         {
-            return _clientRepository.GetAll();
+            var clients = _clientRepository.GetAll();
+            var result = _mapper.Map<IList<ClientDto>>(clients);
+            return result;
         }
 
         public bool RemoveClientById(long id)
@@ -73,13 +73,7 @@ namespace GymApp.API.Services.Implementations
                 return null;
             }
 
-            client.FullName = dto.FullName;
-            client.DateOfBirth = dto.DateOfBirth;
-            client.Email = dto.Email;
-            client.Phone = dto.Phone;
-            client.Height = dto.Height;
-            client.ClientWeight = dto.ClientWeight;
-            client.NutritionPlanId = dto.NutritionPlanId;
+            _mapper.Map(dto, client);
 
             _clientRepository.Save();
 
@@ -88,12 +82,13 @@ namespace GymApp.API.Services.Implementations
 
         private bool PhoneExists(string phone)
         {
-            return _clientRepository.Get(x => x.Phone == phone) !=null;
+            var clientPhone = _clientRepository.Get(x => x.Phone == phone);
+            return clientPhone != null;
         }
 
         public async Task<PaginatedResult<ClientGridRowDto>> GetPaginatedClients(PaginatedRequest paginatedRequest)
         {
-            var clients = await _clientRepository.GetPagedData<Client,ClientGridRowDto>(paginatedRequest);
+            var clients = await _clientRepository.GetPagedData<Client, ClientGridRowDto>(paginatedRequest);
 
             return clients;
         }
