@@ -25,7 +25,6 @@ namespace GymApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<NutritionPlansController>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,7 +34,6 @@ namespace GymApp.API.Controllers
             return Ok(result);
         }
 
-        // GET api/<NutritionPlansController>/5
         [HttpGet("{id}")]
         public IActionResult GetNutritionPlan(long id)
         {

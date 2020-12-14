@@ -59,10 +59,7 @@ namespace GymApp.API.Services.Implementations
 
         public IList<WorkoutClass> GetWorkoutClasses()
         {
-            IQueryable<WorkoutClass> workoutClasses;
-            workoutClasses = _workoutClassRepository.GetAll();
-
-            return workoutClasses.ToList();
+            return _workoutClassRepository.GetAll();
         }
 
         public bool RemoveWorkoutClassById(long id)

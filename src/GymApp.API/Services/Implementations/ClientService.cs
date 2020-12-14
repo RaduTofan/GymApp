@@ -49,10 +49,7 @@ namespace GymApp.API.Services.Implementations
 
         public IList<Client> GetClients()
         {
-            IQueryable<Client> clients;
-            clients = _clientRepository.GetAll();
-
-            return clients.ToList();
+            return _clientRepository.GetAll();
         }
 
         public bool RemoveClientById(long id)

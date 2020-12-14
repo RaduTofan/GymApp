@@ -46,10 +46,7 @@ namespace GymApp.API.Services.Implementations
 
         public IList<Trainer> GetTrainers()
         {
-            IQueryable<Trainer> trainers;
-            trainers = _trainerRepository.GetAll();
-
-            return trainers.ToList();
+            return _trainerRepository.GetAll();
         }
 
         public bool RemoveTrainerById(long id)

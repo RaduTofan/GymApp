@@ -24,7 +24,6 @@ namespace GymApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<WorkoutClasssController>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -34,7 +33,6 @@ namespace GymApp.API.Controllers
             return Ok(result);
         }
 
-        // POST api/<WorkoutClasssController>
         [HttpPost]
         public IActionResult Post([FromBody] CreateWorkoutClassDto dto)
         {
@@ -50,7 +48,6 @@ namespace GymApp.API.Controllers
             return CreatedAtAction(nameof(GetAll), result);
         }
 
-        // GET api/<WorkoutClasssController>/id
         [HttpGet("{id}")]
         public IActionResult GetWorkoutClass(long id)
         {
@@ -62,7 +59,6 @@ namespace GymApp.API.Controllers
             return Ok(result);
         }
 
-        // PUT api/<WorkoutClasssController>/id
         [HttpPut("{id}")]
         public IActionResult Put(long id, [FromBody] CreateWorkoutClassDto dto)
         {
@@ -77,7 +73,6 @@ namespace GymApp.API.Controllers
         }
 
 
-        // DELETE api/<WorkoutClasssController>/id
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {

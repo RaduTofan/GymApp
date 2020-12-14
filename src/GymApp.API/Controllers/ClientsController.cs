@@ -25,7 +25,6 @@ namespace GymApp.API.Controllers
         }
 
 
-        // GET: api/<ClientsController>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -35,7 +34,6 @@ namespace GymApp.API.Controllers
             return Ok(result);
         }
 
-        // GET api/<clientsController>/id
         [HttpGet("{id}")]
         public IActionResult GetClient(long id)
         {
@@ -47,7 +45,6 @@ namespace GymApp.API.Controllers
             return Ok(result);
         }
 
-        // POST api/<clientsController>
         [HttpPost]
         public IActionResult Post([FromBody] CreateClientDto dto)
         {
@@ -63,7 +60,6 @@ namespace GymApp.API.Controllers
             return CreatedAtAction(nameof(GetClient), new { id = client.Id }, result);
         }
 
-        // PUT api/<clientsController>/5
         [HttpPut("{id}")]
         public IActionResult Put(long id, [FromBody] CreateClientDto dto)
         {
@@ -77,7 +73,6 @@ namespace GymApp.API.Controllers
         }
 
 
-        // DELETE api/<clientsController>/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {

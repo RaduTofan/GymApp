@@ -25,7 +25,6 @@ namespace GymApp.API.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/<ExercisePlanController>
         [HttpGet]
         public IActionResult GetAll()
         {

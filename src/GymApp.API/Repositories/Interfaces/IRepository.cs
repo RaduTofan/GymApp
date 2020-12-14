@@ -15,7 +15,7 @@ namespace GymApp.API.Repositories.Interfaces
         void Remove(TEntity entity);
         TEntity Get(long id);
         TEntity Get(Expression<Func<TEntity, bool>> predicate);
-        IQueryable<TEntity> GetAll();
+        IList<TEntity> GetAll();
         TEntity Update(TEntity entity);
         void Save();
         Task<PaginatedResult<TDto>> GetPagedData<TEntity, TDto>(PaginatedRequest paginatedRequest) where TEntity : Entity

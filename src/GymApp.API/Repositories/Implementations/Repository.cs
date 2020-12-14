@@ -54,9 +54,9 @@ namespace GymApp.API.Repositories.Implementations
             return _dbSet.FirstOrDefault(predicate);
         }
 
-        public IQueryable<TEntity> GetAll()
+        public IList<TEntity> GetAll()
         {
-            return _dbSet.OrderByDescending(x => x.Id);
+            return _dbSet.ToList();
         }
 
         TEntity IRepository<TEntity>.Update(TEntity entity)

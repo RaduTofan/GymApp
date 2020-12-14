@@ -24,10 +24,7 @@ namespace GymApp.API.Services.Implementations
 
         public IList<NutritionPlan> GetNutritionPlans()
         {
-            IQueryable<NutritionPlan> nutritionPlans;
-            nutritionPlans = _nutritionPlanRepository.GetAll();
-
-            return nutritionPlans.ToList();
+            return _nutritionPlanRepository.GetAll();
         }
     }
 }

@@ -19,10 +19,7 @@ namespace GymApp.API.Services.Implementations
 
         public IList<ExercisePlan> GetExercisePlans()
         {
-            IQueryable<ExercisePlan> exercisePlans;
-            exercisePlans = _exercisePlanRepository.GetAll();
-
-            return exercisePlans.ToList();
+            return _exercisePlanRepository.GetAll();
         }
     }
 }
