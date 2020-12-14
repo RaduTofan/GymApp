@@ -35,7 +35,7 @@ const ClientsList = () => {
     const [rowToRemove, setRowToRemove]= useState<string|number>();
     const [clientIsRemoved, setClientIsRemoved] = useState(false);
 
-
+    console.log("main ",clientIsRemoved);
     const history = useHistory();
 
     const classes = useStyles();
@@ -144,6 +144,7 @@ const ClientsList = () => {
                         setClientIsRemoved(true);
    
                         handleAlertClose();
+                        console.log("after removed",clientIsRemoved);
                     }
                    
                 }

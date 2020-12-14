@@ -27,6 +27,7 @@ const TrainersList = () => {
     const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [trainerIsRemoved, setTrainerIsRemoved] = useState(false);
 
+    console.log("main ",trainerIsRemoved);
 
     const history = useHistory();
 
@@ -125,6 +126,7 @@ const TrainersList = () => {
                         setTrainerIsRemoved(true);
 
                         handleAlertClose();
+                        console.log("after removed",trainerIsRemoved);
                     }
 
                 }

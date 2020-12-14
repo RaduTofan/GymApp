@@ -8,6 +8,9 @@ import { Link, useHistory } from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
+import { getClientsPaged } from "../../api/client";
+import { getTrainersPaged } from "../../api/trainer";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -30,6 +33,9 @@ const WorkoutClassList = () => {
     const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [workoutClassIsRemoved, setWorkoutClassIsRemoved] = useState(false);
 
+
+    const [paginatedTrainers, setPaginatedTrainers] = useState<PaginatedResult<TrainerGridRow>>();
+    const [searchedTrainer, setSearchedTrainer] = useState("");
 
     const history = useHistory();
 
@@ -81,6 +87,33 @@ const WorkoutClassList = () => {
 
     }, [page, sortColumn, sortDirection, workoutClassIsRemoved]);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                let data = await getTrainersPaged({
+                    pageIndex: 0,
+                    pageSize: 10,
+                    columnNameForSorting: "",
+                    sortDirection: "",
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: searchedTrainer
+                            }
+                        ]
+                    }
+                });
+                if (data.items[0] !== undefined) {
+                    setPaginatedTrainers(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        })();
+    }, [searchedTrainer]);
+
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
         { field: 'trainer', headerName: 'Trainer', width: 200 },
@@ -104,11 +137,11 @@ const WorkoutClassList = () => {
             renderCell: (params: CellParams) => {
                 const onClickEdit = () => {
                     const clickedRow = params.row as WorkoutClassGridRow;
-                    
+                    setSearchedTrainer(clickedRow.trainer);
                     history.push(
                         {
                         pathname: 'workoutclasses/update',
-                        state: { workoutClass: clickedRow }
+                        state: { trainer: paginatedTrainers?.items[0] }
                     }
                     
                     );
@@ -119,7 +152,6 @@ const WorkoutClassList = () => {
                     handleAlertClickOpen();
                     setRowToRemove(params.row.id);
                     setWorkoutClassIsRemoved(false);
-
                 }
 
                 const deleteItem = () => {

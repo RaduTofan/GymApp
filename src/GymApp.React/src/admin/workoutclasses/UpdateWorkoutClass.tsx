@@ -24,7 +24,7 @@ import { updateWorkoutClass } from "../../api/workoutclass";
 
 interface CustomState {
     pathname: string,
-    workoutClass: WorkoutClassGridRow
+    trainer: TrainerGridRow
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,8 +57,9 @@ const UpdateWorkoutClass = () => {
 
     const location = useLocation();
     const customState = location.state as CustomState;
-    const workoutClassToUpdate = customState.workoutClass;
+    const trainerFromWorkoutClassToUpdate = customState.trainer;
 
+    console.log(trainerFromWorkoutClassToUpdate);
 
     const trainerToReturn: TrainerGridRow = {
         id: 0,
@@ -73,7 +74,10 @@ const UpdateWorkoutClass = () => {
 
 
     if (searchedTrainer == "") {
-        setSearchedTrainer(workoutClassToUpdate.trainer);
+        console.log("XDXD");
+        setSearchedTrainer(trainerFromWorkoutClassToUpdate.fullName);
+        console.log("XD2",trainerFromWorkoutClassToUpdate);
+        setValue("trainerId",trainerFromWorkoutClassToUpdate.id);
         // console.log("XDXD",paginatedTrainers?.items[0]);
         // setDefaultTrainer(paginatedTrainers?.items[0]!);
     }
@@ -241,18 +245,12 @@ const UpdateWorkoutClass = () => {
                                 render={({ value, onChange, onBlur }) => (
                                     <Autocomplete
                                         id="trainerId"
-                                        //value={defaultTrainer}
+                                        defaultValue={trainerFromWorkoutClassToUpdate}
 
                                         options={paginatedTrainers?.items ?? []}
                                         getOptionLabel={(trainer) => trainer.fullName}
                                         style={{ width: 300 }}
-                                        onChange={(event, value) => {
-                                            let result = defaultTrainer;
-                                            console.log(value);
-                                            // result.id=textFieldRefClient.current?.value.id;
-                                            // setDefaultTrainer(textFieldRefTrainer.current?.value)
-                                            setValue("trainerId", value?.id);
-                                        }}
+                                        onChange={(event, value) => setValue("trainerId", value?.id)}
                                         renderInput={(params) => (<TextField
                                             inputRef={textFieldRefTrainer}
                                             onBlur={onBlur}
