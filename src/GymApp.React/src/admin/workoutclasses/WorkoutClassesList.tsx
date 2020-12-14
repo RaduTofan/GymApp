@@ -122,7 +122,7 @@ const WorkoutClassList = () => {
                     }
                 });
 
-                if(trainerData?.total==1 && clientData.total==1){
+                if(trainerData?.total===1 && clientData.total===1){
                     history.push(
                         {
                         pathname: 'workoutclasses/update',
@@ -181,7 +181,7 @@ const WorkoutClassList = () => {
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
                         removeWorkoutClass(rowToRemove).then(()=>{
-                            if (paginatedWorkoutClasses?.pageSize == 1) {
+                            if (paginatedWorkoutClasses?.pageSize === 1) {
                                 paginatedWorkoutClasses.pageIndex = -1;
                             }
                             setWorkoutClassIsRemoved(true);

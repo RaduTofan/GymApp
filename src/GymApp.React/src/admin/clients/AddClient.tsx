@@ -189,7 +189,7 @@ const AddClient = () => {
                                     margin="normal"
                                     required
                                     type="number"
-                                    label="Height"
+                                    label="Height (cm)"
                                     autoFocus
                                 />
                             )}
@@ -218,7 +218,7 @@ const AddClient = () => {
                                     margin="normal"
                                     required
                                     type="number"
-                                    label="Weight"
+                                    label="Weight (kg)"
                                     autoFocus
                                 />
                             )}

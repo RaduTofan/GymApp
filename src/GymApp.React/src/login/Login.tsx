@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Controller, useForm } from 'react-hook-form';
 import { UserForLogin, login } from '../api/account/login';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,10 +34,11 @@ export default function Login() {
 
     const classes = useStyles();
     const { control, handleSubmit, errors } = useForm<UserForLogin>();
+    
+    const history = useHistory();
 
     const onSubmit = (data: UserForLogin) => {
-        console.log("the data from form:",data);
-        const token = login(data);
+        login(data);
         
     }
 

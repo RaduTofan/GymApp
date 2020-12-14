@@ -22,9 +22,12 @@ export const login = async (form: UserForLogin) => {
   .then(response=>response.json())
   .then(response=>{
     token = response.accessToken;
-    localStorage.setItem('token',token);
-    console.log("token from localstorage func",localStorage.getItem('token'));
-    history.push("/admin");
+    if(token!==undefined){
+      localStorage.setItem('token',token);
+      console.log("token from localstorage func",localStorage.getItem('token'));
+      history.push('/admin');
+
+    }
   })
   .catch(error=>{
     console.log("Eror trying to login",error);

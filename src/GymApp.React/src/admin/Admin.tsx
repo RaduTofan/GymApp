@@ -23,9 +23,10 @@ import Paper from '@material-ui/core/Paper';
 import {
   BrowserRouter,
   Link as RouterLink, LinkProps as RouterLinkProps,
-  Route, Switch as RouterSwitch, Router
+  Route, Switch as RouterSwitch, Router, Redirect
 } from 'react-router-dom';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useHistory } from "react-router-dom";
+import { Button, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import ClientsList from './clients/ClientsList';
 import AddClient from './clients/AddClient';
 import UpdateClient from './clients/UpdateClient';
@@ -39,9 +40,9 @@ import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import { light } from '@material-ui/core/styles/createPalette';
 import WelcomePage from './welcomepage/WelcomePage';
-import { history } from "../history";
 import { Dashboard } from '@material-ui/icons';
 import { addTrainer } from '../api/trainer';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 const drawerWidth = 240;
@@ -128,6 +129,10 @@ const useStyles = makeStyles((theme) => ({
 const Admin = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const token = localStorage.getItem('token');
+
+  const history = useHistory();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -136,127 +141,142 @@ const Admin = () => {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  return <>
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
+  const handleLogout = () => {
+    localStorage.clear();
+    history.push('/login');
+
+    console.log(localStorage.getItem('token'));
+    console.log(localStorage.getItem('token') !== null);
+  };
+
+  if (token === null) {
+    return <Redirect to="/login" />
+  }
+  else
+    return <>
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}>
+              <MenuIcon />
+            </IconButton>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
 
-          <ListItem button component={RouterLink} to="/admin">
-            <ListItemIcon>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
+            <Button onClick={handleLogout}
+              startIcon={<ExitToAppIcon />}
+              type="submit"
+              variant="contained"
+              color="secondary">
+              Logout
+            </Button>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
 
-          <ListItem button component={RouterLink} to="/admin/clients">
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Clients" />
-          </ListItem>
+          </div>
+          <Divider />
+          <List>
 
-          <ListItem button component={RouterLink} to="/admin/trainers">
-            <ListItemIcon>
-              <SupervisedUserCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Trainers" />
-          </ListItem>
+            <ListItem button component={RouterLink} to="/admin">
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
 
-          <ListItem button component={RouterLink} to="/admin/workoutclasses">
-            <ListItemIcon>
-              <FitnessCenterIcon />
-            </ListItemIcon>
-            <ListItemText primary="Workout Classes" />
-          </ListItem>
+            <ListItem button component={RouterLink} to="/admin/clients">
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Clients" />
+            </ListItem>
 
-        </List>
+            <ListItem button component={RouterLink} to="/admin/trainers">
+              <ListItemIcon>
+                <SupervisedUserCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Trainers" />
+            </ListItem>
 
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
+            <ListItem button component={RouterLink} to="/admin/workoutclasses">
+              <ListItemIcon>
+                <FitnessCenterIcon />
+              </ListItemIcon>
+              <ListItemText primary="Workout Classes" />
+            </ListItem>
 
-            <Grid item xs={12} md={2} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <WelcomePage />
-              </Paper>
+          </List>
+
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+
+              <Grid item xs={12} md={2} lg={9}>
+                <Paper className={fixedHeightPaper}>
+                  <WelcomePage />
+                </Paper>
+              </Grid>
+
             </Grid>
-
-          </Grid>
-        </Container>
+          </Container>
 
 
-        <RouterSwitch>
-          
-          <Route exact path='/admin/clients' component={ClientsList}>
-          </Route>
+          <RouterSwitch>
 
-          <Route exact path='/admin/clients/create' component={AddClient}>
-          </Route>
+            <Route exact path='/admin/clients' component={ClientsList}>
+            </Route>
 
-          <Route exact path='/admin/clients/update' component={UpdateClient}>
-          </Route>
+            <Route exact path='/admin/clients/create' component={AddClient}>
+            </Route>
 
-          <Route exact path={`/admin/trainers`}>
-            <TrainersList />
-          </Route>
+            <Route exact path='/admin/clients/update' component={UpdateClient}>
+            </Route>
 
-          <Route exact path={`/admin/trainers/create`}>
-            <AddTrainer/>
-          </Route>
+            <Route exact path={`/admin/trainers`}>
+              <TrainersList />
+            </Route>
 
-          <Route exact path={`/admin/trainers/update`}>
-            <UpdateTrainer/>
-          </Route>
+            <Route exact path={`/admin/trainers/create`}>
+              <AddTrainer />
+            </Route>
 
-          <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
-          </Route>
+            <Route exact path={`/admin/trainers/update`}>
+              <UpdateTrainer />
+            </Route>
 
-          <Route exact path='/admin/workoutclasses/create' component={AddWorkoutClass}>
-          </Route>
+            <Route exact path='/admin/workoutclasses' component={WorkoutClassList}>
+            </Route>
 
-          <Route exact path='/admin/workoutclasses/update' component={UpdateWorkoutClass}>
-          </Route>
-        </RouterSwitch>
+            <Route exact path='/admin/workoutclasses/create' component={AddWorkoutClass}>
+            </Route>
 
-      </main>
-    </div>
-  </>
+            <Route exact path='/admin/workoutclasses/update' component={UpdateWorkoutClass}>
+            </Route>
+          </RouterSwitch>
+
+        </main>
+      </div>
+    </>
 };
 
 export default Admin;

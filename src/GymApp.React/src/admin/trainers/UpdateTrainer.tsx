@@ -101,7 +101,7 @@ const UpdateTrainer = () => {
                                     margin="normal"
                                     required
                                     type="number"
-                                    label="Experience"
+                                    label="Experience (months)"
                                     autoFocus
                                 />
                             )}

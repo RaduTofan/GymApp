@@ -36,7 +36,6 @@ const ClientsList = () => {
     const [clientIsRemoved, setClientIsRemoved] = useState(false);
     var timesRemoved=1;
 
-    console.log("main ",clientIsRemoved);
     const history = useHistory();
 
     const classes = useStyles();
@@ -144,11 +143,8 @@ const ClientsList = () => {
        
                             handleAlertClose();
                             console.log("after removed",clientIsRemoved);
-                        });
-
-                        
+                        });   
                     }
-                   
                 }
 
                 return <div><Button
