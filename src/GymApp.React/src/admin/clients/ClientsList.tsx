@@ -34,6 +34,7 @@ const ClientsList = () => {
     const [open, setOpen] = useState(false);
     const [rowToRemove, setRowToRemove]= useState<string|number>();
     const [clientIsRemoved, setClientIsRemoved] = useState(false);
+    var timesRemoved=1;
 
     console.log("main ",clientIsRemoved);
     const history = useHistory();
@@ -135,15 +136,17 @@ const ClientsList = () => {
                 
                 const deleteItem=()=>{
                     if(rowToRemove!==undefined && typeof rowToRemove!=='string'){
-                        removeClient(rowToRemove);
+                        removeClient(rowToRemove).then(()=>{
+                            if(paginatedClients?.pageSize===1){
+                                paginatedClients.pageIndex=-1;
+                            }
+                            setClientIsRemoved(true);
+       
+                            handleAlertClose();
+                            console.log("after removed",clientIsRemoved);
+                        });
 
-                        if(paginatedClients?.pageSize==1){
-                            paginatedClients.pageIndex=-1;
-                        }
-                        setClientIsRemoved(true);
-   
-                        handleAlertClose();
-                        console.log("after removed",clientIsRemoved);
+                        
                     }
                    
                 }

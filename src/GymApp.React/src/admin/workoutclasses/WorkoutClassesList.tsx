@@ -180,14 +180,15 @@ const WorkoutClassList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeWorkoutClass(rowToRemove); 
+                        removeWorkoutClass(rowToRemove).then(()=>{
+                            if (paginatedWorkoutClasses?.pageSize == 1) {
+                                paginatedWorkoutClasses.pageIndex = -1;
+                            }
+                            setWorkoutClassIsRemoved(true);
+    
+                            handleAlertClose();
 
-                        if (paginatedWorkoutClasses?.pageSize == 1) {
-                            paginatedWorkoutClasses.pageIndex = -1;
-                        }
-                        setWorkoutClassIsRemoved(true);
-
-                        handleAlertClose();
+                        }); 
                     }
 
                 }

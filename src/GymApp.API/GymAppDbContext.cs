@@ -31,21 +31,9 @@ namespace GymApp.API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new ClientConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(ClientConfig)));
-            modelBuilder.ApplyConfiguration(new ExercisePlanConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(ExercisePlanConfig)));
-            modelBuilder.ApplyConfiguration(new MealConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(MealConfig)));
-            modelBuilder.ApplyConfiguration(new NutritionPlanMealConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(NutritionPlanMealConfig)));
-            modelBuilder.ApplyConfiguration(new NutritionPlanConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(NutritionPlanConfig)));
-            modelBuilder.ApplyConfiguration(new TrainerConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(TrainerConfig)));
-            modelBuilder.ApplyConfiguration(new WorkoutClassConfig());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(WorkoutClassConfig)));
 
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(ClientConfig)));
+           
 
             ApplyIdentityMapConfiguration(modelBuilder);
 

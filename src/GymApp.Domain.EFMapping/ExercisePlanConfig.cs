@@ -15,12 +15,9 @@ namespace GymApp.Domain.EFMapping
             builder.HasIndex(e => e.ExercisesType)
                     .IsUnique();
 
-            builder.HasKey(e => e.Id);
-
             builder.Property(e => e.ExercisesType)
                 .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
+                .HasMaxLength(255);
         }
     }
 }

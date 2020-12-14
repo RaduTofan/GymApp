@@ -118,15 +118,17 @@ const TrainersList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeTrainer(rowToRemove); 
+                        removeTrainer(rowToRemove).then(()=>{
+                            if (paginatedTrainers?.pageSize == 1) {
+                                paginatedTrainers.pageIndex = -1;
+                            }
+                            setTrainerIsRemoved(true);
+    
+                            handleAlertClose();
+                            console.log("after removed",trainerIsRemoved);
+                        }); 
 
-                        if (paginatedTrainers?.pageSize == 1) {
-                            paginatedTrainers.pageIndex = -1;
-                        }
-                        setTrainerIsRemoved(true);
-
-                        handleAlertClose();
-                        console.log("after removed",trainerIsRemoved);
+                        
                     }
 
                 }

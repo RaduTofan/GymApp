@@ -7,6 +7,6 @@ namespace GymApp.Domain
     public class Meal : Entity
     {
         public string MealName { get; set; }
-        public virtual ICollection<Meal> NutritionPlanMeals { get; set; }
+        public ICollection<Meal> NutritionPlanMeals { get; set; }
     }
 }

@@ -15,24 +15,17 @@ namespace GymApp.Domain.EFMapping
             builder.HasIndex(e => e.Phone)
                 .IsUnique();
 
-            builder.HasKey(e => e.Id);
-
-            builder.Property(e => e.DateOfBirth).HasColumnType("date").IsRequired();
-
             builder.Property(e => e.Email)
                 .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
+                .HasMaxLength(255);
 
-            builder.Property(e => e.FullName).HasMaxLength(255).IsRequired();
+            builder.Property(e => e.FullName)
+                .IsRequired()
+                .HasMaxLength(255);
 
             builder.Property(e => e.Phone)
                 .IsRequired()
-                .HasMaxLength(255)
-                .IsUnicode(false);
-
-            builder.Property(e => e.ClientWeight)
-                .IsRequired();
+                .HasMaxLength(15);
 
             builder.HasOne(d => d.NutritionPlan)
                 .WithMany()

@@ -12,17 +12,6 @@ namespace GymApp.Domain.EFMapping
     {
         public void Configure(EntityTypeBuilder<WorkoutClass> builder)
         {
-            builder.HasKey(e => e.Id);
-
-            builder.Property(e => e.ClientId).IsRequired();
-
-            builder.Property(e => e.ExercisePlanId).IsRequired();
-
-            builder.Property(e => e.TrainerId).IsRequired();
-
-            builder.Property(e => e.ScheduledTime).IsRequired();
-
-
             builder.HasOne(d => d.ExercisePlan)
                 .WithMany()
                 .HasForeignKey(d => d.ExercisePlanId)

@@ -12,10 +12,6 @@ namespace GymApp.Domain.EFMapping
     {
         public void Configure(EntityTypeBuilder<NutritionPlanMeal> builder)
         {
-            builder.Property(e => e.MealId);
-
-            builder.Property(e => e.NutritionPlanId);
-
             builder.HasKey(pm => new { pm.MealId, pm.NutritionPlanId });
         }
     }

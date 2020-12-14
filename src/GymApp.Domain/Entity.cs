@@ -5,9 +5,8 @@ using System.Text;
 
 namespace GymApp.Domain
 {
-    public class Entity
+    public abstract class Entity
     {
-        
         public long Id { get; set; }
     }
 }

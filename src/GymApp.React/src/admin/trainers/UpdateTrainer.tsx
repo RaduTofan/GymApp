@@ -202,7 +202,7 @@ const UpdateTrainer = () => {
                             type="submit"
                             variant="contained"
                             color="primary">
-                            Create
+                            Update
                         </Button>
                     </Grid>
 

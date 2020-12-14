@@ -12,7 +12,7 @@ namespace GymApp.Domain
         public float Height { get; set; }
         public float ClientWeight { get; set; }
 		public long? NutritionPlanId { get; set; }
-        public virtual NutritionPlan NutritionPlan { get; set; }
-        public virtual ICollection<WorkoutClass> WorkoutClasses { get; set; }
+        public NutritionPlan NutritionPlan { get; set; }
+        public ICollection<WorkoutClass> WorkoutClasses { get; set; }
     }
 }

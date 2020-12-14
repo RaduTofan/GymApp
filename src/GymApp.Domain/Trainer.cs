@@ -11,6 +11,6 @@ namespace GymApp.Domain
         public DateTime DateOfBirth { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public virtual ICollection<WorkoutClass> WorkoutClasses { get; set; }
+        public ICollection<WorkoutClass> WorkoutClasses { get; set; }
     }
 }
