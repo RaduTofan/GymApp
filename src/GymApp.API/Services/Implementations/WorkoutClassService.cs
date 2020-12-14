@@ -7,6 +7,7 @@ using GymApp.API.Dtos.WorkoutClass;
 using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
 using GymApp.API.Infrastructure.Models;
+using AutoMapper;
 
 namespace GymApp.API.Services.Implementations
 {
@@ -16,50 +17,55 @@ namespace GymApp.API.Services.Implementations
         private readonly IRepository<Trainer> _trainerRepository;
         private readonly IRepository<Client> _clientRepository;
         private readonly IRepository<ExercisePlan> _exercisePlanRepository;
+        private readonly IMapper _mapper;
 
-        public WorkoutClassService(IRepository<WorkoutClass> workoutClassRepository, 
+        public WorkoutClassService(IRepository<WorkoutClass> workoutClassRepository,
             IRepository<Trainer> trainerRepository,
             IRepository<Client> clientRepository,
-            IRepository<ExercisePlan> exercisePlanRepository)
+            IRepository<ExercisePlan> exercisePlanRepository,
+            IMapper mapper)
         {
             _workoutClassRepository = workoutClassRepository;
             _trainerRepository = trainerRepository;
             _clientRepository = clientRepository;
             _exercisePlanRepository = exercisePlanRepository;
+            _mapper = mapper;
         }
 
-        public WorkoutClass AddNewWorkoutClass(CreateWorkoutClassDto dto)
+        public WorkoutClassDto AddNewWorkoutClass(CreateWorkoutClassDto dto)
         {
-            if ((_clientRepository.Get(dto.ClientId)==null) ||
-                (_trainerRepository.Get(dto.TrainerId)==null) ||
-                (_exercisePlanRepository.Get(dto.ExercisePlanId))==null)
+            if ((_clientRepository.Get(dto.ClientId) == null) ||
+                (_trainerRepository.Get(dto.TrainerId) == null) ||
+                (_exercisePlanRepository.Get(dto.ExercisePlanId)) == null)
             {
                 return null;
             }
 
-            var workoutClass = new WorkoutClass
-            {
-                TrainerId = dto.TrainerId,
-                ClientId = dto.ClientId,
-                ScheduledTime = dto.ScheduledTime,
-                ExercisePlanId = dto.ExercisePlanId
-            };
+            var workoutClass = _mapper.Map<WorkoutClass>(dto);
 
             _workoutClassRepository.Add(workoutClass);
             _workoutClassRepository.Save();
 
-            return workoutClass;
+            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
+
+            return result;
         }
 
-        public WorkoutClass GetWorkoutClassById(long id)
+        public WorkoutClassDto GetWorkoutClassById(long id)
         {
-            return _workoutClassRepository.Get(id);
+            var workoutClass = _workoutClassRepository.Get(id);
+
+            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
+
+            return result;
         }
 
 
-        public IList<WorkoutClass> GetWorkoutClasses()
+        public IList<WorkoutClassDto> GetWorkoutClasses()
         {
-            return _workoutClassRepository.GetAll();
+            var workoutClasses = _workoutClassRepository.GetAll();
+            var result =  _mapper.Map<IList<WorkoutClassDto>>(workoutClasses);
+            return result;
         }
 
         public bool RemoveWorkoutClassById(long id)
@@ -74,7 +80,7 @@ namespace GymApp.API.Services.Implementations
             else return false;
         }
 
-        public WorkoutClass UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
+        public WorkoutClassDto UpdateWorkoutClass(long id, CreateWorkoutClassDto dto)
         {
             if ((_clientRepository.Get(dto.ClientId) == null) ||
                 (_trainerRepository.Get(dto.TrainerId) == null) ||
@@ -84,15 +90,13 @@ namespace GymApp.API.Services.Implementations
             }
 
             var workoutClass = _workoutClassRepository.Get(id);
-
-            workoutClass.TrainerId = dto.TrainerId;
-            workoutClass.ClientId = dto.ClientId;
-            workoutClass.ScheduledTime = dto.ScheduledTime;
-            workoutClass.ExercisePlanId = dto.ExercisePlanId;
+            _mapper.Map(dto, workoutClass);
 
             _workoutClassRepository.Save();
 
-            return workoutClass;
+            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
+
+            return result;
         }
 
 

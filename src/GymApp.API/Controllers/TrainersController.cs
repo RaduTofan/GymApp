@@ -53,7 +53,6 @@ namespace GymApp.API.Controllers
                 return BadRequest("Trainer with such phone already exists!");
             }
 
-
             return CreatedAtAction(nameof(GetTrainer), new { id = trainer.Id }, trainer);
         }
 

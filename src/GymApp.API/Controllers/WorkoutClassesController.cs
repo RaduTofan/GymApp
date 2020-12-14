@@ -16,19 +16,16 @@ namespace GymApp.API.Controllers
     public class WorkoutClassesController : ControllerBase
     {
         private readonly IWorkoutClassService _workoutClassService;
-        private readonly IMapper _mapper;
 
-        public WorkoutClassesController(IWorkoutClassService workoutClassService, IMapper mapper)
+        public WorkoutClassesController(IWorkoutClassService workoutClassService)
         {
             _workoutClassService = workoutClassService;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var workoutClasses = _workoutClassService.GetWorkoutClasses();
-            var result = workoutClasses.Select(e => _mapper.Map<WorkoutClassDto>(e));
+            var result = _workoutClassService.GetWorkoutClasses();
 
             return Ok(result);
         }
@@ -43,9 +40,7 @@ namespace GymApp.API.Controllers
                 return BadRequest("There is no such trainer, client or exercise plan in the database!");
             }
 
-            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
-
-            return CreatedAtAction(nameof(GetAll), result);
+            return CreatedAtAction(nameof(GetAll), new { id = workoutClass.Id }, workoutClass);
         }
 
         [HttpGet("{id}")]
@@ -55,8 +50,7 @@ namespace GymApp.API.Controllers
             if (workoutClass == null)
                 return NotFound();
 
-            var result = _mapper.Map<WorkoutClassDto>(workoutClass);
-            return Ok(result);
+            return Ok(workoutClass);
         }
 
         [HttpPut("{id}")]
@@ -67,7 +61,6 @@ namespace GymApp.API.Controllers
             {
                 return BadRequest("There is no such trainer, client or exercise plan in the database!");
             }
-
 
             return NoContent();
         }
