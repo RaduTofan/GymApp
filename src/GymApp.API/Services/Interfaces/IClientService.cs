@@ -15,7 +15,7 @@ namespace GymApp.API.Services.Interfaces
 
         ClientDto AddNewClient(CreateClientDto dto);
 
-        Client UpdateClient(long id, CreateClientDto dto);
+        ClientDto UpdateClient(long id, CreateClientDto dto);
 
         bool RemoveClientById(long id);
 

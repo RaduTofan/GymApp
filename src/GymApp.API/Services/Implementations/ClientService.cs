@@ -64,7 +64,7 @@ namespace GymApp.API.Services.Implementations
             else return false;
         }
 
-        public Client UpdateClient(long id, CreateClientDto dto)
+        public ClientDto UpdateClient(long id, CreateClientDto dto)
         {
             var client = _clientRepository.Get(id);
 
@@ -77,7 +77,9 @@ namespace GymApp.API.Services.Implementations
 
             _clientRepository.Save();
 
-            return client;
+            var result = _mapper.Map<ClientDto>(client);
+
+            return result;
         }
 
         private bool PhoneExists(string phone)

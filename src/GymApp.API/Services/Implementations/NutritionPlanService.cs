@@ -1,4 +1,6 @@
-﻿using GymApp.API.Repositories.Interfaces;
+﻿using AutoMapper;
+using GymApp.API.Dtos.NutritionPlan;
+using GymApp.API.Repositories.Interfaces;
 using GymApp.API.Services.Interfaces;
 using GymApp.Domain;
 using System;
@@ -11,20 +13,29 @@ namespace GymApp.API.Services.Implementations
     public class NutritionPlanService : INutritionPlanService
     {
         private readonly IRepository<NutritionPlan> _nutritionPlanRepository;
+        private readonly IMapper _mapper;
 
-        public NutritionPlanService(IRepository<NutritionPlan> nutritionPlanRepository)
+        public NutritionPlanService(IRepository<NutritionPlan> nutritionPlanRepository, IMapper mapper)
         {
             _nutritionPlanRepository = nutritionPlanRepository;
+            _mapper = mapper;
         }
 
-        public NutritionPlan GetNutritionPlanById(long id)
+        public NutritionPlanDto GetNutritionPlanById(long id)
         {
-            return _nutritionPlanRepository.Get(id);
+            var nutritionPlan=_nutritionPlanRepository.Get(id);
+            var result = _mapper.Map<NutritionPlanDto>(nutritionPlan);
+
+            return result;
         }
 
-        public IList<NutritionPlan> GetNutritionPlans()
+        public IList<NutritionPlanDto> GetNutritionPlans()
         {
-            return _nutritionPlanRepository.GetAll();
+            var nutritionPlans=_nutritionPlanRepository.GetAll();
+
+            var result = _mapper.Map<IList<NutritionPlanDto>>(nutritionPlans);
+
+            return result;
         }
     }
 }

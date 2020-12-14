@@ -16,20 +16,17 @@ namespace GymApp.API.Controllers
     {
 
         private readonly INutritionPlanService _nutritionPlanService;
-        private readonly IMapper _mapper;
 
 
-        public NutritionPlansController(INutritionPlanService nutritionPlanService, IMapper mapper)
+        public NutritionPlansController(INutritionPlanService nutritionPlanService)
         {
             _nutritionPlanService = nutritionPlanService;
-            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var nutritionPlans = _nutritionPlanService.GetNutritionPlans();
-            var result = nutritionPlans.Select(e => _mapper.Map<NutritionPlanDto>(e));
+            var result = _nutritionPlanService.GetNutritionPlans();
 
             return Ok(result);
         }
@@ -41,8 +38,7 @@ namespace GymApp.API.Controllers
             if (nutritionPlan == null)
                 return NotFound();
 
-            var result = _mapper.Map<NutritionPlanDto>(nutritionPlan);
-            return Ok(result);
+            return Ok(nutritionPlan);
         }
 
        

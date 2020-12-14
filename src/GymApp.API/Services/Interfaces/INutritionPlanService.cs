@@ -1,4 +1,5 @@
-﻿using GymApp.Domain;
+﻿using GymApp.API.Dtos.NutritionPlan;
+using GymApp.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace GymApp.API.Services.Interfaces
 {
     public interface INutritionPlanService
     {
-        IList<NutritionPlan> GetNutritionPlans();
-        NutritionPlan GetNutritionPlanById(long id);
+        IList<NutritionPlanDto> GetNutritionPlans();
+        NutritionPlanDto GetNutritionPlanById(long id);
     }
 }
