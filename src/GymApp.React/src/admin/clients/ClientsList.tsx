@@ -4,7 +4,7 @@ import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, getAllClients } from "../../api/client/index";
-import { Button, makeStyles, TextField } from "@material-ui/core";
+import { Button, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 import EditIcon from '@material-ui/icons/Edit';
@@ -17,7 +17,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeClient } from "../../api/client/index";
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import BackspaceIcon from '@material-ui/icons/Backspace';
-
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -38,7 +37,7 @@ const ClientsList = () => {
     const [fullNameFilter, setFullNameFilter] = useState("");
     const [emailFilter, setEmailFilter] = useState("");
     const [phoneFilter, setPhoneFilter] = useState("");
-
+    const [operatorFilter, setOperatorFilter] = useState(0);
 
 
     const fullNameFilterRef = useRef<HTMLInputElement>();
@@ -56,6 +55,7 @@ const ClientsList = () => {
         setPhoneFilter(phoneFilterRef.current?.value!);
     }
 
+ 
 
     const history = useHistory();
 
@@ -100,7 +100,7 @@ const ClientsList = () => {
                     columnNameForSorting: sortColumn,
                     sortDirection: sortDirection,
                     requestFilters: {
-                        logicalOperator: 0,
+                        logicalOperator: operatorFilter,
                         filters: [
                             {
                                 path: "fullName",
@@ -126,7 +126,7 @@ const ClientsList = () => {
         })();
 
     }, [page, sortColumn, sortDirection, clientIsRemoved,
-        fullNameFilter, emailFilter, phoneFilter]);
+        fullNameFilter, emailFilter, phoneFilter,operatorFilter]);
 
 
 
@@ -274,12 +274,27 @@ const ClientsList = () => {
                     inputRef={phoneFilterRef}
                 />
 
+                <FormControl
+                style={{minWidth:120}}>
+                    <InputLabel >Logical operator</InputLabel>
+                    <Select
+                        value={operatorFilter}
+                        onChange={(event:any)=>{
+                            setOperatorFilter(event.target.value);
+                        }}
+                        label="operator">
+                        <MenuItem value={0}>And</MenuItem>
+                        <MenuItem value={1}>Or</MenuItem>
+                    </Select>
+                </FormControl>
+
                 <Button
                     className={classes.button}
                     onClick={() => {
                         setFullNameFilter("");
                         setEmailFilter("");
                         setPhoneFilter("");
+                        setOperatorFilter(0);
 
                     }}
                     size="large"

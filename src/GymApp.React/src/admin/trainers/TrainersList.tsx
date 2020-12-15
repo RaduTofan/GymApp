@@ -1,14 +1,14 @@
 import { getAllTrainers, getTrainersPaged, removeTrainer, updateTrainer } from "../../api/trainer/index";
 import { PaginatedResult } from '../../lib/grid/PaginatedResult';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CellParams, ColDef, DataGrid, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { TrainerGridRow } from "../../api/trainer/models/TrainerGridRow";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
-
+import BackspaceIcon from '@material-ui/icons/Backspace';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +26,26 @@ const TrainersList = () => {
     const [open, setOpen] = useState(false);
     const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [trainerIsRemoved, setTrainerIsRemoved] = useState(false);
+    const [fullNameFilter, setFullNameFilter] = useState("");
+    const [emailFilter, setEmailFilter] = useState("");
+    const [phoneFilter, setPhoneFilter] = useState("");
+    const [operatorFilter, setOperatorFilter] = useState(0);
 
-    console.log("main ",trainerIsRemoved);
+
+    const fullNameFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValueFullName = () => {
+        setFullNameFilter(fullNameFilterRef.current?.value!);
+    }
+
+    const emailFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValueEmail = () => {
+        setEmailFilter(emailFilterRef.current?.value!);
+    }
+
+    const phoneFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValuePhone = () => {
+        setPhoneFilter(phoneFilterRef.current?.value!);
+    }
 
     const history = useHistory();
 
@@ -66,7 +84,24 @@ const TrainersList = () => {
                     pageIndex: page,
                     pageSize: 5,
                     columnNameForSorting: sortColumn,
-                    sortDirection: sortDirection
+                    sortDirection: sortDirection,
+                    requestFilters: {
+                        logicalOperator: operatorFilter,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: fullNameFilter
+                            },
+                            {
+                                path: "email",
+                                value: emailFilter
+                            },
+                            {
+                                path: "phone",
+                                value: phoneFilter
+                            }
+                        ]
+                    }
                 });
                 setPaginatedTrainers(data);
             } catch (error) {
@@ -76,7 +111,8 @@ const TrainersList = () => {
             }
         })();
 
-    }, [page, sortColumn, sortDirection, trainerIsRemoved]);
+    }, [page, sortColumn, sortDirection, trainerIsRemoved,
+        fullNameFilter, emailFilter, phoneFilter, operatorFilter]);
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
@@ -118,17 +154,17 @@ const TrainersList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeTrainer(rowToRemove).then(()=>{
+                        removeTrainer(rowToRemove).then(() => {
                             if (paginatedTrainers?.pageSize == 1) {
                                 paginatedTrainers.pageIndex = -1;
                             }
                             setTrainerIsRemoved(true);
-    
-                            handleAlertClose();
-                            console.log("after removed",trainerIsRemoved);
-                        }); 
 
-                        
+                            handleAlertClose();
+                            console.log("after removed", trainerIsRemoved);
+                        });
+
+
                     }
 
                 }
@@ -184,13 +220,86 @@ const TrainersList = () => {
 
     return (
         <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
-            <Button 
-            component={Link} 
-            to="/admin/trainers/create" 
-            size="medium" 
-            variant="contained" 
-            color="primary"
-            startIcon={<AddCircleIcon/>}>
+            <div><h3>Filters</h3></div>
+            <div>
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="text"
+                    label="Full Name"
+                    value={fullNameFilter}
+                    onChange={(event) => {
+                        setFullNameFilter(event.target.value);
+                        readTextFieldValueFullName();
+                    }}
+                    inputRef={fullNameFilterRef}
+                />
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="text"
+                    label="Email"
+                    value={emailFilter}
+                    onChange={(event) => {
+                        setEmailFilter(event.target.value);
+                        readTextFieldValueEmail();
+                    }}
+                    inputRef={emailFilterRef}
+                />
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="number"
+                    label="Phone"
+                    value={phoneFilter}
+                    onChange={(event) => {
+                        setPhoneFilter(event.target.value);
+                        readTextFieldValuePhone();
+                    }}
+                    inputRef={phoneFilterRef}
+                />
+
+                <FormControl
+                    style={{ minWidth: 120 }}>
+                    <InputLabel >Logical operator</InputLabel>
+                    <Select
+                        value={operatorFilter}
+                        onChange={(event: any) => {
+                            setOperatorFilter(event.target.value);
+                        }}
+                        label="operator">
+                        <MenuItem value={0}>And</MenuItem>
+                        <MenuItem value={1}>Or</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <Button
+                    className={classes.button}
+                    onClick={() => {
+                        setFullNameFilter("");
+                        setEmailFilter("");
+                        setPhoneFilter("");
+                        setOperatorFilter(0);
+
+                    }}
+                    size="large"
+                    variant="contained"
+                    startIcon={<BackspaceIcon />}
+                >
+                </Button>
+            </div>
+
+            <Button
+                className={classes.button}
+                component={Link}
+                to="/admin/trainers/create"
+                size="medium"
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleIcon />}>
                 Add trainer
             </Button>
             <DataGrid

@@ -244,6 +244,7 @@ const WorkoutClassList = () => {
     return (
         <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
             <Button 
+            className={classes.button}
             component={Link} 
             to="/admin/workoutclasses/create" 
             size="medium" 

@@ -60,6 +60,7 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
 
 export const getWorkoutClassesPaged =
   async (paginatedRequest: PaginatedRequest) => {
+      console.log(paginatedRequest);
     const response = await fetch(API_URL + 'workoutclasses/PaginatedSearch/', {
       method: 'POST',
       headers: {
