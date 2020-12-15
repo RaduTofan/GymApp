@@ -30,3 +30,15 @@ export const getAllNutritionPlans = async () => {
     return data;
 
 }
+
+export const getYtVideosId = async(query:string) =>{
+    const result = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&key=AIzaSyC9V-n1Q3lTnmTB7TJAPSVxIHO-81vV_LA`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }});
+    
+    const data = await result.json();
+
+    return data;
+}
