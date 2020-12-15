@@ -178,7 +178,7 @@ const UpdateWorkoutClass = () => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-            style={{ marginTop: 20, padding: "5%" }}>
+            style={{ padding: "5%" }}>
                 <h1>Update workout class</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

@@ -4,9 +4,9 @@ const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
 
 
-export const getNutritionPlanById = (index: any) => {
+export const getNutritionPlanById = (index: number) => {
     return async () => {
-        const response = await fetch(`${API_URL}nutritionplans/${index.match.params.id}`,{
+        const response = await fetch(`${API_URL}nutritionplans/${index}`,{
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer '+authToken,

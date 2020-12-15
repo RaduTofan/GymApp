@@ -303,7 +303,7 @@ const TrainersList = () => {
                 Add trainer
             </Button>
 
-            <div style={{ width: '1000px' }}>
+            <div style={{ width: '1160px'}}>
                 <DataGrid
                     autoHeight={true}
                     disableExtendRowFullWidth={true}

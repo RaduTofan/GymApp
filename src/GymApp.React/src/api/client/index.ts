@@ -8,9 +8,9 @@ const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
 
 
-export const getClientById = (index: any) => {
+export const getClientById = (index: number) => {
     return async () => {
-        const response = await fetch(`${API_URL}clients/${index.match.params.id}`,{
+        const response = await fetch(`${API_URL}clients/${index}`,{
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer '+authToken,
@@ -36,7 +36,7 @@ export const getAllClients = async () => {
 }
 
 
-export const addClient = async (clientData: any) => {
+export const addClient = async (clientData: Client) => {
     const requestOptions = {
         method: 'POST',
         headers: {

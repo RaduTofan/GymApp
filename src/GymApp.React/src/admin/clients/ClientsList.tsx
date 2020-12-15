@@ -315,7 +315,7 @@ const ClientsList = () => {
                 Add client
             </Button>
 
-            <div style={{ width: '1000px' }}>
+            <div style={{ width: '1260px'}}>
                 <DataGrid
                     autoHeight={true}
                     disableExtendRowFullWidth={true}

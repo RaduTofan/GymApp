@@ -8,9 +8,9 @@ const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
 
 
-export const getTrainerById = (index: any) => {
+export const getTrainerById = (index: number) => {
     return async () => {
-        const response = await fetch(`${API_URL}trainers/${index.match.params.id}`,{
+        const response = await fetch(`${API_URL}trainers/${index}`,{
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer '+authToken,
@@ -36,7 +36,7 @@ export const getAllTrainers = async () => {
 }
 
 
-export const addTrainer = async (trainerData: any) => {
+export const addTrainer = async (trainerData: Trainer) => {
     
     
     const requestOptions = {

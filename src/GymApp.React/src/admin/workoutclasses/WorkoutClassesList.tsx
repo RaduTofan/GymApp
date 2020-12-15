@@ -253,7 +253,7 @@ const WorkoutClassList = () => {
                 startIcon={<AddCircleIcon />}>
                 Add workout class
             </Button>
-            <div style={{ width: '1000px' }}>
+            <div style={{ width: '1080px' }}>
                 <DataGrid
                     autoHeight={true}
                     disableExtendRowFullWidth={true}
