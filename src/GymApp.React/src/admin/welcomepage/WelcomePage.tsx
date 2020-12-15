@@ -6,8 +6,10 @@ import Paper from '@material-ui/core/Paper';
 const WelcomePage = ()=>{
 
     return(
+      <Grid item xs={12} md={2} lg={9}>
+          <h1>main page/dashboard</h1>
+      </Grid>
 
-      <h1>main page/dashboard</h1>
 
     )
 }

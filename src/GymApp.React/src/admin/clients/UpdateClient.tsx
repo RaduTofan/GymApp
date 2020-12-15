@@ -1,4 +1,4 @@
-import { Button, Grid, MenuItem, Select, TextField } from "@material-ui/core";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
 import React, { useEffect, useState, useCallback } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -73,7 +73,9 @@ const UpdateClient = () => {
 
     return <>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}
+             style={{ marginTop: 20, padding: "5%" }}>
+                <h1>Update client</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Controller
@@ -261,6 +263,9 @@ const UpdateClient = () => {
                             }}
                             errors={errors}
                             render={({ ref, onBlur }) => (
+                                <FormControl
+                                style={{minWidth:120}}>
+                                    <InputLabel >Nutrition Plan</InputLabel>
                                 <Select
                                     inputRef={ref}
                                     value={nutritionPlanId}
@@ -274,6 +279,7 @@ const UpdateClient = () => {
                                         ))
                                     }
                                 </Select>
+                                </FormControl>
                             )}
                         />
                     </Grid>

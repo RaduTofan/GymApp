@@ -1,4 +1,4 @@
-import { Button, Grid, MenuItem, Select, TextField } from "@material-ui/core";
+import { Button, FormControl, Grid, InputLabel, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -14,6 +14,7 @@ import { Client } from '../../api/client/models/Client';
 import { addClient } from '../../api/client/index';
 
 
+
 const AddClient = () => {
     const { control, handleSubmit, errors } = useForm<Client>();
     const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
@@ -23,6 +24,7 @@ const AddClient = () => {
     const maxDate = new Date(2005, 1, 1);
 
     const history = useHistory();
+
 
     useEffect(() => {
         (async () => {
@@ -48,7 +50,9 @@ const AddClient = () => {
 
     return <>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <form noValidate onSubmit={handleSubmit(onSubmit)}
+            style={{ marginTop: 20, padding: "5%" }}>
+                <h1>Add client</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Controller
@@ -237,6 +241,9 @@ const AddClient = () => {
                             }}
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
+                                <FormControl
+                                style={{minWidth:120}}>
+                                    <InputLabel >Nutrition Plan</InputLabel>
                                 <Select
                                     inputRef={ref}
                                     value={value}
@@ -250,6 +257,7 @@ const AddClient = () => {
                                         ))
                                     }
                                 </Select>
+                                </FormControl>
                             )}
                         />
                     </Grid>

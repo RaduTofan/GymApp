@@ -144,8 +144,9 @@ const AddWorkoutClass = () => {
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
-
+            <form noValidate onSubmit={handleSubmit(onSubmit)}
+            style={{ marginTop: 20, padding: "5%" }}>
+                <h1>Add workout class</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Controller

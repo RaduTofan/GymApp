@@ -43,7 +43,7 @@ import WelcomePage from './welcomepage/WelcomePage';
 import { Dashboard } from '@material-ui/icons';
 import { addTrainer } from '../api/trainer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import HomeIcon from '@material-ui/icons/Home';
 
 const drawerWidth = 240;
 
@@ -195,11 +195,11 @@ const Admin = () => {
           <Divider />
           <List>
 
-            <ListItem button component={RouterLink} to="/admin">
+            <ListItem button component={RouterLink} to="/admin/home">
               <ListItemIcon>
-                <Dashboard />
+                <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="Home" />
             </ListItem>
 
             <ListItem button component={RouterLink} to="/admin/clients">
@@ -230,18 +230,15 @@ const Admin = () => {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-
-              <Grid item xs={12} md={2} lg={9}>
-                <Paper className={fixedHeightPaper}>
-                  <WelcomePage />
-                </Paper>
-              </Grid>
-
+              <h3>GymApp</h3>
             </Grid>
           </Container>
 
 
           <RouterSwitch>
+
+            <Route exact path='admin/home' component={WelcomePage}>
+            </Route>
 
             <Route exact path='/admin/clients' component={ClientsList}>
             </Route>
