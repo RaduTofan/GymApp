@@ -4,7 +4,7 @@ import { PaginatedResult } from '../../lib/grid/PaginatedResult';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { CellParams, ColDef, DataGrid, GridApi, PageChangeParams, SortDirection, SortModelParams } from '@material-ui/data-grid';
 import { getClientsPaged, getAllClients } from "../../api/client/index";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, makeStyles, TextField } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 import EditIcon from '@material-ui/icons/Edit';
@@ -16,6 +16,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeClient } from "../../api/client/index";
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
+import BackspaceIcon from '@material-ui/icons/Backspace';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,15 +33,33 @@ const ClientsList = () => {
     const [sortColumn, setSortColumn] = useState('height');
     const [sortDirection, setSortDirection] = useState('asc');
     const [open, setOpen] = useState(false);
-    const [rowToRemove, setRowToRemove]= useState<string|number>();
+    const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [clientIsRemoved, setClientIsRemoved] = useState(false);
-    var timesRemoved=1;
+    const [fullNameFilter, setFullNameFilter] = useState("");
+    const [emailFilter, setEmailFilter] = useState("");
+    const [phoneFilter, setPhoneFilter] = useState("");
+
+
+
+    const fullNameFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValueFullName = () => {
+        setFullNameFilter(fullNameFilterRef.current?.value!);
+    }
+
+    const emailFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValueEmail = () => {
+        setEmailFilter(emailFilterRef.current?.value!);
+    }
+
+    const phoneFilterRef = useRef<HTMLInputElement>();
+    const readTextFieldValuePhone = () => {
+        setPhoneFilter(phoneFilterRef.current?.value!);
+    }
+
 
     const history = useHistory();
 
     const classes = useStyles();
-
-
 
     const handleAlertClickOpen = () => {
         setOpen(true);
@@ -79,7 +98,24 @@ const ClientsList = () => {
                     pageIndex: page,
                     pageSize: 5,
                     columnNameForSorting: sortColumn,
-                    sortDirection: sortDirection
+                    sortDirection: sortDirection,
+                    requestFilters: {
+                        logicalOperator: 0,
+                        filters: [
+                            {
+                                path: "fullName",
+                                value: fullNameFilter
+                            },
+                            {
+                                path: "email",
+                                value: emailFilter
+                            },
+                            {
+                                path: "phone",
+                                value: phoneFilter
+                            }
+                        ]
+                    }
                 });
                 setPaginatedClients(data);
             } catch (error) {
@@ -89,12 +125,13 @@ const ClientsList = () => {
             }
         })();
 
-    }, [page, sortColumn, sortDirection, clientIsRemoved]);
+    }, [page, sortColumn, sortDirection, clientIsRemoved,
+        fullNameFilter, emailFilter, phoneFilter]);
 
 
 
     const columns: ColDef[] = [
-        { field: 'id', headerName: 'Id', hide:true },
+        { field: 'id', headerName: 'Id', hide: true },
         { field: 'fullName', headerName: 'Full Name', width: 150 },
         {
             field: 'dateOfBirth',
@@ -132,18 +169,18 @@ const ClientsList = () => {
                     setClientIsRemoved(false);
 
                 }
-                
-                const deleteItem=()=>{
-                    if(rowToRemove!==undefined && typeof rowToRemove!=='string'){
-                        removeClient(rowToRemove).then(()=>{
-                            if(paginatedClients?.pageSize===1){
-                                paginatedClients.pageIndex=-1;
+
+                const deleteItem = () => {
+                    if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
+                        removeClient(rowToRemove).then(() => {
+                            if (paginatedClients?.pageSize === 1) {
+                                paginatedClients.pageIndex = -1;
                             }
                             setClientIsRemoved(true);
-       
+
                             handleAlertClose();
-                            console.log("after removed",clientIsRemoved);
-                        });   
+                            console.log("after removed", clientIsRemoved);
+                        });
                     }
                 }
 
@@ -153,7 +190,7 @@ const ClientsList = () => {
                     color="primary"
                     startIcon={<EditIcon />} onClick={onClickEdit}>
                     Edit
-                        </Button>
+                    </Button>
 
                     <Button
                         variant="contained"
@@ -194,14 +231,72 @@ const ClientsList = () => {
 
     return (
         <div
-        id="thegrid" style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
-            <Button 
-            component={Link} 
-            to="/admin/clients/create" 
-            size="medium" 
-            variant="contained" 
-            color="primary"
-            startIcon={<AddCircleIcon/>}>
+            id="thegrid" style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+            <div><h3>Filters</h3></div>
+            <div>
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="text"
+                    label="Full Name"
+                    value={fullNameFilter}
+                    onChange={(event) => {
+                        setFullNameFilter(event.target.value);
+                        readTextFieldValueFullName();
+                    }}
+                    inputRef={fullNameFilterRef}
+                />
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="text"
+                    label="Email"
+                    value={emailFilter}
+                    onChange={(event) => {
+                        setEmailFilter(event.target.value);
+                        readTextFieldValueEmail();
+                    }}
+                    inputRef={emailFilterRef}
+                />
+                <TextField
+                    className={classes.button}
+                    variant="outlined"
+                    margin="normal"
+                    type="number"
+                    label="Phone"
+                    value={phoneFilter}
+                    onChange={(event) => {
+                        setPhoneFilter(event.target.value);
+                        readTextFieldValuePhone();
+                    }}
+                    inputRef={phoneFilterRef}
+                />
+
+                <Button
+                    className={classes.button}
+                    onClick={() => {
+                        setFullNameFilter("");
+                        setEmailFilter("");
+                        setPhoneFilter("");
+
+                    }}
+                    size="large"
+                    variant="contained"
+                    startIcon={<BackspaceIcon />}
+                >
+                </Button>
+            </div>
+
+            <Button
+                className={classes.button}
+                component={Link}
+                to="/admin/clients/create"
+                size="medium"
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleIcon />}>
                 Add client
             </Button>
 
@@ -216,10 +311,10 @@ const ClientsList = () => {
                 onSortModelChange={handleSortChange}
                 onPageChange={handlePageChange}
                 loading={loading}
-                
+
             />
 
-        </div>
+        </div >
     )
 
 
