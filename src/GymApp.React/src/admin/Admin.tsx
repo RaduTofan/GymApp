@@ -45,8 +45,10 @@ import { addTrainer } from '../api/trainer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
 import KitchenIcon from '@material-ui/icons/Kitchen';
-import NutritionPlansList from './nutritionplans/NutritionPlansList'
-import avatar from '../assets/avatar.png'
+import NutritionPlansList from './nutritionplans/NutritionPlansList';
+import ExercisePlansList from './exerciseplans/ExercisePlansList';
+import avatar from '../assets/avatar.png';
+import SportsKabaddiIcon from '@material-ui/icons/SportsKabaddi';
 
 const drawerWidth = 240;
 
@@ -221,7 +223,7 @@ const Admin = () => {
 
             <ListItem button component={RouterLink} to="/admin/workoutclasses">
               <ListItemIcon>
-                <FitnessCenterIcon />
+                <SportsKabaddiIcon />
               </ListItemIcon>
               <ListItemText primary="Workout Classes" />
             </ListItem>
@@ -238,12 +240,12 @@ const Admin = () => {
               <ListItemText primary="Nutrition Plans" />
             </ListItem>
 
-            {/* <ListItem button component={RouterLink} to="/admin/workoutclasses">
+            <ListItem button component={RouterLink} to="/admin/exerciseplans">
               <ListItemIcon>
                 <FitnessCenterIcon />
               </ListItemIcon>
-              <ListItemText primary="Workout Classes" />
-            </ListItem> */}
+              <ListItemText primary="Exercise Plans" />
+            </ListItem>
           </List>
 
         </Drawer>
@@ -287,6 +289,11 @@ const Admin = () => {
 
             <Route exact path='/admin/nutritionplans' component={NutritionPlansList}>
             </Route>
+
+
+            <Route exact path='/admin/exerciseplans' component={ExercisePlansList}>
+            </Route>
+            
           </RouterSwitch>
 
         </main>
