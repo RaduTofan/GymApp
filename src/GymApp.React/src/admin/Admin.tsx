@@ -26,7 +26,7 @@ import {
   Route, Switch as RouterSwitch, Router, Redirect
 } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
-import { Button, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
+import { Avatar, Button, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import ClientsList from './clients/ClientsList';
 import AddClient from './clients/AddClient';
 import UpdateClient from './clients/UpdateClient';
@@ -44,6 +44,9 @@ import { Dashboard } from '@material-ui/icons';
 import { addTrainer } from '../api/trainer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HomeIcon from '@material-ui/icons/Home';
+import KitchenIcon from '@material-ui/icons/Kitchen';
+import NutritionPlansList from './nutritionplans/NutritionPlansList'
+import avatar from '../assets/avatar.png'
 
 const drawerWidth = 240;
 
@@ -179,7 +182,7 @@ const Admin = () => {
           open={open}
         >
           <div className={classes.toolbarIcon}>
-
+            <Avatar alt="Remy Sharp" src={avatar}  />
             <Button onClick={handleLogout}
               startIcon={<ExitToAppIcon />}
               type="submit"
@@ -225,6 +228,24 @@ const Admin = () => {
 
           </List>
 
+          <Divider />
+
+          <List>
+            <ListItem button component={RouterLink} to="/admin/nutritionplans">
+              <ListItemIcon>
+                <KitchenIcon />
+              </ListItemIcon>
+              <ListItemText primary="Nutrition Plans" />
+            </ListItem>
+
+            {/* <ListItem button component={RouterLink} to="/admin/workoutclasses">
+              <ListItemIcon>
+                <FitnessCenterIcon />
+              </ListItemIcon>
+              <ListItemText primary="Workout Classes" />
+            </ListItem> */}
+          </List>
+
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -262,6 +283,9 @@ const Admin = () => {
             </Route>
 
             <Route exact path='/admin/workoutclasses/update' component={UpdateWorkoutClass}>
+            </Route>
+
+            <Route exact path='/admin/nutritionplans' component={NutritionPlansList}>
             </Route>
           </RouterSwitch>
 

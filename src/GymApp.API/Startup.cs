@@ -57,13 +57,16 @@ namespace GymApp.API
             services.AddControllers();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddScoped(typeof(IRepository<NutritionPlan>), typeof(NutritionPlanRepository<NutritionPlan>));
+
             services.AddScoped<ITrainerService, TrainerService>();
 
             services.AddScoped<IClientService, ClientService>();
 
             services.AddScoped<IWorkoutClassService, WorkoutClassService>();
 
-            services.AddScoped<INutritionPlanService,NutritionPlanService>();
+            services.AddScoped<INutritionPlanService, NutritionPlanService>();
 
             services.AddScoped<IExercisePlanService, ExercisePlanService>();
 

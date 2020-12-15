@@ -21,17 +21,17 @@ namespace GymApp.API.Services.Implementations
             _mapper = mapper;
         }
 
-        public NutritionPlanDto GetNutritionPlanById(long id)
+        public NutritionPlanMenuDto GetNutritionPlanById(long id)
         {
-            var nutritionPlan=_nutritionPlanRepository.Get(id);
-            var result = _mapper.Map<NutritionPlanDto>(nutritionPlan);
+            var nutritionPlan = _nutritionPlanRepository.Get(id);
+            var result = _mapper.Map<NutritionPlanMenuDto>(nutritionPlan);
 
             return result;
         }
 
         public IList<NutritionPlanDto> GetNutritionPlans()
         {
-            var nutritionPlans=_nutritionPlanRepository.GetAll();
+            var nutritionPlans = _nutritionPlanRepository.GetAll();
 
             var result = _mapper.Map<IList<NutritionPlanDto>>(nutritionPlans);
 

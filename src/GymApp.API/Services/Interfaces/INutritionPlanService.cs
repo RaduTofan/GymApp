@@ -10,6 +10,6 @@ namespace GymApp.API.Services.Interfaces
     public interface INutritionPlanService
     {
         IList<NutritionPlanDto> GetNutritionPlans();
-        NutritionPlanDto GetNutritionPlanById(long id);
+        NutritionPlanMenuDto GetNutritionPlanById(long id);
     }
 }

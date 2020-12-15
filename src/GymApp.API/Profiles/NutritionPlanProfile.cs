@@ -13,6 +13,8 @@ namespace GymApp.API.Profiles
         public NutritionPlanProfile()
         {
             CreateMap<NutritionPlan, NutritionPlanDto>();
+            CreateMap<NutritionPlan, NutritionPlanMenuDto>()
+            .ForMember(dto => dto.Meals, opt => opt.MapFrom(x => x.NutritionPlanMeals.Select(y => y.Meal)));
 
         }
     }
