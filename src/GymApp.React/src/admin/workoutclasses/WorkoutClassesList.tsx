@@ -29,12 +29,12 @@ const WorkoutClassList = () => {
     const [rowToRemove, setRowToRemove] = useState<string | number>();
     const [workoutClassIsRemoved, setWorkoutClassIsRemoved] = useState(false);
 
-    const [workoutClassIdToUpdate, setWorkoutClassIdToUpdate]=useState(0);
+    const [workoutClassIdToUpdate, setWorkoutClassIdToUpdate] = useState(0);
     const [searchedTrainer, setSearchedTrainer] = useState("");
     const [searchedClient, setSearchedClient] = useState("");
-    const [dateToUpdate, setDateToUpdate]=useState(new Date());
-    const [exercisePlanToUpdate, setExercisePlanToUpdate]=useState("");
-    
+    const [dateToUpdate, setDateToUpdate] = useState(new Date());
+    const [exercisePlanToUpdate, setExercisePlanToUpdate] = useState("");
+
 
 
     const history = useHistory();
@@ -122,24 +122,24 @@ const WorkoutClassList = () => {
                     }
                 });
 
-                if(trainerData?.total===1 && clientData.total===1){
+                if (trainerData?.total === 1 && clientData.total === 1) {
                     history.push(
                         {
-                        pathname: 'workoutclasses/update',
-                        state: { 
-                            workoutClass: workoutClassIdToUpdate,
-                            trainer: trainerData?.items[0],
-                            client: clientData?.items[0],
-                            date: dateToUpdate,
-                            exercisePlan: exercisePlanToUpdate
-                         }
-                    });
+                            pathname: 'workoutclasses/update',
+                            state: {
+                                workoutClass: workoutClassIdToUpdate,
+                                trainer: trainerData?.items[0],
+                                client: clientData?.items[0],
+                                date: dateToUpdate,
+                                exercisePlan: exercisePlanToUpdate
+                            }
+                        });
                 }
             } catch (error) {
                 console.error(error);
             }
         })();
-    }, [searchedTrainer,searchedClient]);
+    }, [searchedTrainer, searchedClient]);
 
     const columns: ColDef[] = [
         { field: 'id', headerName: 'Id', hide: true },
@@ -180,15 +180,15 @@ const WorkoutClassList = () => {
 
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
-                        removeWorkoutClass(rowToRemove).then(()=>{
+                        removeWorkoutClass(rowToRemove).then(() => {
                             if (paginatedWorkoutClasses?.pageSize === 1) {
                                 paginatedWorkoutClasses.pageIndex = -1;
                             }
                             setWorkoutClassIsRemoved(true);
-    
+
                             handleAlertClose();
 
-                        }); 
+                        });
                     }
 
                 }
@@ -242,18 +242,21 @@ const WorkoutClassList = () => {
 
 
     return (
-        <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
-            <Button 
-            className={classes.button}
-            component={Link} 
-            to="/admin/workoutclasses/create" 
-            size="medium" 
-            variant="contained" 
-            color="primary"
-            startIcon={<AddCircleIcon/>}>
+        <div style={{ padding: "2%" }}>
+            <Button
+                className={classes.button}
+                component={Link}
+                to="/admin/workoutclasses/create"
+                size="medium"
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleIcon />}>
                 Add workout class
             </Button>
+            <div style={{ width: '1000px' }}>
                 <DataGrid
+                    autoHeight={true}
+                    disableExtendRowFullWidth={true}
                     rows={paginatedWorkoutClasses?.items ?? []}
                     columns={columns}
                     pagination
@@ -265,6 +268,7 @@ const WorkoutClassList = () => {
                     onPageChange={handlePageChange}
                     loading={loading}
                 />
+            </div>
         </div>
     )
 

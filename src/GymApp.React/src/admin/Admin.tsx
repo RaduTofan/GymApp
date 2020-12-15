@@ -167,7 +167,7 @@ const Admin = () => {
               <MenuIcon />
             </IconButton>
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              Dashboard
+              GymApp
           </Typography>
           </Toolbar>
         </AppBar>
@@ -228,16 +228,10 @@ const Admin = () => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-              <h3>GymApp</h3>
-            </Grid>
-          </Container>
-
 
           <RouterSwitch>
 
-            <Route exact path='admin/home' component={WelcomePage}>
+            <Route exact path='/admin/home' component={WelcomePage}>
             </Route>
 
             <Route exact path='/admin/clients' component={ClientsList}>

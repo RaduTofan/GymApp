@@ -55,7 +55,7 @@ const ClientsList = () => {
         setPhoneFilter(phoneFilterRef.current?.value!);
     }
 
- 
+
 
     const history = useHistory();
 
@@ -126,7 +126,7 @@ const ClientsList = () => {
         })();
 
     }, [page, sortColumn, sortDirection, clientIsRemoved,
-        fullNameFilter, emailFilter, phoneFilter,operatorFilter]);
+        fullNameFilter, emailFilter, phoneFilter, operatorFilter]);
 
 
 
@@ -231,7 +231,7 @@ const ClientsList = () => {
 
     return (
         <div
-            id="thegrid" style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+            style={{ padding: "2%" }}>
             <div><h3>Filters</h3></div>
             <div>
                 <TextField
@@ -275,11 +275,11 @@ const ClientsList = () => {
                 />
 
                 <FormControl
-                style={{minWidth:120}}>
+                    style={{ minWidth: 120 }}>
                     <InputLabel >Logical operator</InputLabel>
                     <Select
                         value={operatorFilter}
-                        onChange={(event:any)=>{
+                        onChange={(event: any) => {
                             setOperatorFilter(event.target.value);
                         }}
                         label="operator">
@@ -315,20 +315,23 @@ const ClientsList = () => {
                 Add client
             </Button>
 
-            <DataGrid
-                rows={paginatedClients?.items ?? []}
-                columns={columns}
-                pagination
-                pageSize={paginatedClients?.pageSize ?? 0}
-                rowCount={paginatedClients?.total ?? 0}
-                paginationMode="server"
-                sortingMode="server"
-                onSortModelChange={handleSortChange}
-                onPageChange={handlePageChange}
-                loading={loading}
+            <div style={{ width: '1000px' }}>
+                <DataGrid
+                    autoHeight={true}
+                    disableExtendRowFullWidth={true}
+                    rows={paginatedClients?.items ?? []}
+                    columns={columns}
+                    pagination
+                    pageSize={paginatedClients?.pageSize ?? 0}
+                    rowCount={paginatedClients?.total ?? 0}
+                    paginationMode="server"
+                    sortingMode="server"
+                    onSortModelChange={handleSortChange}
+                    onPageChange={handlePageChange}
+                    loading={loading}
 
-            />
-
+                />
+            </div>
         </div >
     )
 

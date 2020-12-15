@@ -219,7 +219,7 @@ const TrainersList = () => {
 
 
     return (
-        <div style={{ height: 500, width: '98%', marginTop: 20, padding: "2%" }}>
+        <div style={{ padding: "2%" }}>
             <div><h3>Filters</h3></div>
             <div>
                 <TextField
@@ -302,18 +302,23 @@ const TrainersList = () => {
                 startIcon={<AddCircleIcon />}>
                 Add trainer
             </Button>
-            <DataGrid
-                rows={paginatedTrainers?.items ?? []}
-                columns={columns}
-                pagination
-                pageSize={paginatedTrainers?.pageSize ?? 0}
-                rowCount={paginatedTrainers?.total ?? 0}
-                paginationMode="server"
-                sortingMode="server"
-                onSortModelChange={handleSortChange}
-                onPageChange={handlePageChange}
-                loading={loading}
-            />
+
+            <div style={{ width: '1000px' }}>
+                <DataGrid
+                    autoHeight={true}
+                    disableExtendRowFullWidth={true}
+                    rows={paginatedTrainers?.items ?? []}
+                    columns={columns}
+                    pagination
+                    pageSize={paginatedTrainers?.pageSize ?? 0}
+                    rowCount={paginatedTrainers?.total ?? 0}
+                    paginationMode="server"
+                    sortingMode="server"
+                    onSortModelChange={handleSortChange}
+                    onPageChange={handlePageChange}
+                    loading={loading}
+                />
+            </div>
         </div>
     )
 
