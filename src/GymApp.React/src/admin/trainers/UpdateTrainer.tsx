@@ -79,6 +79,12 @@ const UpdateTrainer = () => {
                             )}
                             
                         />
+                        {errors.fullName && errors.fullName.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.fullName && errors.fullName.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 7 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -108,6 +114,15 @@ const UpdateTrainer = () => {
                                 />
                             )}
                         />
+                        {errors.experience && errors.experience.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.experience && errors.experience.type === "min" && (
+                            <p style={{ color: "red" }}>The minimum experience is 0</p>
+                        )}
+                        {errors.experience && errors.experience.type === "max" && (
+                            <p style={{ color: "red" }}>The maximum experience is 300</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -168,6 +183,12 @@ const UpdateTrainer = () => {
                                 />
                             )}
                         />
+                        {errors.email && errors.email.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.email && errors.email.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 5 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -191,12 +212,21 @@ const UpdateTrainer = () => {
                                     variant="outlined"
                                     margin="normal"
                                     required
-                                    type="text"
+                                    type="number"
                                     label="Phone"
                                     autoFocus
                                 />
                             )}
                         />
+                        {errors.phone && errors.phone.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.phone && errors.phone.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 9 characters</p>
+                        )}
+                        {errors.phone && errors.phone.type === "maxLength" && (
+                            <p style={{ color: "red" }}>The maximum length is 9 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>

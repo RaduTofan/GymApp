@@ -52,7 +52,7 @@ const UpdateWorkoutClass = () => {
 
     const [searchedTrainer, setSearchedTrainer] = useState("");
     const [searchedClient, setSearchedClient] = useState("");
-    const [searchedExercisePlan,setSearchedExercisePlan]=useState(0);
+    const [searchedExercisePlan, setSearchedExercisePlan] = useState(0);
 
     const { control, handleSubmit, errors, setValue } = useForm<WorkoutClass>();
 
@@ -61,7 +61,7 @@ const UpdateWorkoutClass = () => {
 
     const location = useLocation();
     const customState = location.state as CustomState;
-    const workoutClassIdToUpdate= customState.workoutClass;
+    const workoutClassIdToUpdate = customState.workoutClass;
     const trainerFromWorkoutClassToUpdate = customState.trainer;
     const clientFromWorkoutClassToUpdate = customState.client;
     const dateFromWorkoutClassToUpdate = customState.date;
@@ -143,10 +143,8 @@ const UpdateWorkoutClass = () => {
             try {
                 const exPlans = await getAllExercisePlans();
                 setExercisePlans(exPlans);
-                console.log(exPlans, exercisePlanFromWorkoutClassToUpdate);
                 for (let element of exPlans) {
                     if (element.exercisesType === exercisePlanFromWorkoutClassToUpdate) {
-                        console.log("got it", element);
                         setSearchedExercisePlan(element.id);
                         break;
                     }
@@ -163,9 +161,8 @@ const UpdateWorkoutClass = () => {
     const onSubmit = (form: WorkoutClass) => {
         (async () => {
             try {
-                form.id=workoutClassIdToUpdate;
-                form.exercisePlanId=searchedExercisePlan;
-                console.log(form);
+                form.id = workoutClassIdToUpdate;
+                form.exercisePlanId = searchedExercisePlan;
                 await updateWorkoutClass(form);
                 history.push('/admin/workoutclasses');
             } catch (error) {
@@ -178,7 +175,7 @@ const UpdateWorkoutClass = () => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-            style={{ padding: "5%" }}>
+                style={{ padding: "5%" }}>
                 <h1>Update workout class</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -217,8 +214,9 @@ const UpdateWorkoutClass = () => {
                             )}
 
                         />
-
-                        {errors.trainerId && console.log(errors)}
+                        {errors.trainerId && errors.trainerId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
                     </Grid>
 
 
@@ -259,6 +257,9 @@ const UpdateWorkoutClass = () => {
                                 />
                             )}
                         />
+                        {errors.clientId && errors.clientId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -315,6 +316,9 @@ const UpdateWorkoutClass = () => {
                                 </Select>
                             )}
                         />
+                        {errors.exercisePlanId && errors.exercisePlanId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>

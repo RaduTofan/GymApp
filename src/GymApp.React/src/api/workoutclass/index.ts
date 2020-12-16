@@ -49,7 +49,6 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
 
     fetch(`${API_URL}workoutclasses`, requestOptions)
         .then(response => response.text())
-        .then(res => console.log(res))
         .catch(error => {
             console.log('Error while adding workoutclass: ', error);
         })
@@ -60,7 +59,6 @@ export const addWorkoutClass = async (workoutclassesData: any) => {
 
 export const getWorkoutClassesPaged =
   async (paginatedRequest: PaginatedRequest) => {
-      console.log(paginatedRequest);
     const response = await fetch(API_URL + 'workoutclasses/PaginatedSearch/', {
       method: 'POST',
       headers: {
@@ -79,7 +77,6 @@ export const getWorkoutClassesPaged =
 }
 
 export const updateWorkoutClass = async(workoutClassForUpdate : WorkoutClass)=>{
-    console.log("UPDATE THIS BRF",workoutClassForUpdate);
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -91,7 +88,6 @@ export const updateWorkoutClass = async(workoutClassForUpdate : WorkoutClass)=>{
 
      fetch(`${API_URL}workoutclasses/${workoutClassForUpdate.id}`, requestOptions)
         .then(response => response.text())
-        .then(res => console.log(res))
         .catch(error => {
             console.log('Error while updating workout class: ', error);
         })

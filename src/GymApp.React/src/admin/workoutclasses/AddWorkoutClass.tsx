@@ -57,7 +57,7 @@ const AddWorkoutClass = () => {
     }
 
     const classes = useStyles();
-    
+
     const history = useHistory();
 
 
@@ -82,7 +82,6 @@ const AddWorkoutClass = () => {
                     }
                 });
                 setPaginatedTrainers(data);
-                console.log(data);
             } catch (error) {
                 console.error(error);
             }
@@ -109,7 +108,6 @@ const AddWorkoutClass = () => {
                     }
                 });
                 setPaginatedClients(data);
-                console.log(data);
             } catch (error) {
                 console.error(error);
             }
@@ -121,7 +119,6 @@ const AddWorkoutClass = () => {
             try {
                 const exPlans = await getAllExercisePlans();
                 setExercisePlans(exPlans);
-                console.log(exPlans)
             } catch (error) {
                 console.error(error);
             }
@@ -145,7 +142,7 @@ const AddWorkoutClass = () => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-            style={{ padding: "5%" }}>
+                style={{ padding: "5%" }}>
                 <h1>Add workout class</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -153,6 +150,7 @@ const AddWorkoutClass = () => {
                             control={control}
                             name="trainerId"
                             rules={{
+                                required: true,
                             }}
                             errors={errors}
                             render={({ value, onChange, onBlur }) => (
@@ -161,32 +159,30 @@ const AddWorkoutClass = () => {
                                     options={paginatedTrainers?.items ?? []}
                                     getOptionLabel={(trainer) => trainer.fullName}
                                     style={{ width: 300 }}
-                                    onChange={(event, value) => setValue("trainerId",value?.id)}
+                                    onChange={(event, value) => setValue("trainerId", value?.id)}
                                     renderInput={(params) => (<TextField
                                         inputRef={textFieldRefTrainer}
                                         onBlur={onBlur}
 
-                                        onChange={()=>{
-                                            onChange(); 
+                                        onChange={() => {
+                                            onChange();
                                             readTextFieldValueTrainer();
-                                            }}
+                                        }}
 
                                         {...params}
-
-                                        //onKeyPress={}
-                                        
                                         label="Trainer"
                                         variant="outlined"
                                         value={value?.id}
                                         type="text"
                                         error={errors.trainerId !== undefined}
-                                         />)}
+                                    />)}
                                 />
                             )}
 
                         />
-
-                        {errors.trainerId && console.log(errors)}
+                        {errors.trainerId && errors.trainerId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
                     </Grid>
 
 
@@ -207,27 +203,28 @@ const AddWorkoutClass = () => {
                                     options={paginatedClients?.items ?? []}
                                     getOptionLabel={(client) => client.fullName}
                                     style={{ width: 300 }}
-                                    onChange={(event, value) => setValue("clientId",value?.id)} 
+                                    onChange={(event, value) => setValue("clientId", value?.id)}
                                     renderInput={(params) => (<TextField
                                         inputRef={textFieldRefClient}
                                         onBlur={onBlur}
 
-                                        onChange={()=>{
-                                            onChange(); 
+                                        onChange={() => {
+                                            onChange();
                                             readTextFieldValueClient();
-                                            }}
-
+                                        }}
                                         {...params}
-                                        
                                         label="Client"
                                         variant="outlined"
                                         value={value?.id}
                                         type="text"
                                         error={errors.clientId !== undefined}
-                                         />)}
+                                    />)}
                                 />
                             )}
                         />
+                        {errors.clientId && errors.clientId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -283,6 +280,10 @@ const AddWorkoutClass = () => {
                                 </Select>
                             )}
                         />
+                        {errors.exercisePlanId && errors.exercisePlanId.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        
                     </Grid>
 
                     <Grid item xs={12}>

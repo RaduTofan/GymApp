@@ -2,6 +2,9 @@ import config from "../../config";
 
 const API_URL = config.API_URL;
 const authToken = localStorage.getItem('token');
+const ytApiKey1="AIzaSyBC_zYcmpUhk1gst7TioVpFG2SKyZcSEng";
+const ytApiKey2="AIzaSyC9V-n1Q3lTnmTB7TJAPSVxIHO-81vV_LA";
+const ytApiKey3="AIzaSyAptzjBGN_kvGeYV8Ey-_ksfDGq924brbE";
 
 
 export const getNutritionPlanById = (index: number) => {
@@ -32,7 +35,7 @@ export const getAllNutritionPlans = async () => {
 }
 
 export const getYtVideosId = async(query:string) =>{
-    const result = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&key=AIzaSyBC_zYcmpUhk1gst7TioVpFG2SKyZcSEng`,{
+    const result = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&key=${ytApiKey1}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

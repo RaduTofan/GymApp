@@ -103,6 +103,12 @@ const UpdateClient = () => {
                                 />
                             )}
                         />
+                        {errors.fullName && errors.fullName.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.fullName && errors.fullName.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 7 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -161,6 +167,12 @@ const UpdateClient = () => {
                                 />
                             )}
                         />
+                        {errors.email && errors.email.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.email && errors.email.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 5 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -190,6 +202,15 @@ const UpdateClient = () => {
                                 />
                             )}
                         />
+                        {errors.phone && errors.phone.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.phone && errors.phone.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 9 characters</p>
+                        )}
+                        {errors.phone && errors.phone.type === "maxLength" && (
+                            <p style={{ color: "red" }}>The maximum length is 9 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -219,6 +240,15 @@ const UpdateClient = () => {
                                 />
                             )}
                         />
+                        {errors.height && errors.height.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.height && errors.height.type === "min" && (
+                            <p style={{ color: "red" }}>The minimum height is 120cm</p>
+                        )}
+                        {errors.height && errors.height.type === "max" && (
+                            <p style={{ color: "red" }}>The max height is 250cm</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -248,6 +278,15 @@ const UpdateClient = () => {
                                 />
                             )}
                         />
+                        {errors.clientWeight && errors.clientWeight.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.clientWeight && errors.clientWeight.type === "min" && (
+                            <p style={{ color: "red" }}>The minimum weight is 40kg</p>
+                        )}
+                        {errors.clientWeight && errors.clientWeight.type === "max" && (
+                            <p style={{ color: "red" }}>The max weight is 350kg</p>
+                        )}
                     </Grid>
 
 

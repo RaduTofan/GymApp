@@ -39,7 +39,7 @@ import UpdateWorkoutClass from './workoutclasses/UpdateWorkoutClass';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import { light } from '@material-ui/core/styles/createPalette';
-import WelcomePage from './welcomepage/WelcomePage';
+import HomePage from './homepage/HomePage';
 import { Dashboard } from '@material-ui/icons';
 import { addTrainer } from '../api/trainer';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -254,7 +254,7 @@ const Admin = () => {
 
           <RouterSwitch>
 
-            <Route exact path='/admin/home' component={WelcomePage}>
+            <Route exact path='/admin/home' component={HomePage}>
             </Route>
 
             <Route exact path='/admin/clients' component={ClientsList}>

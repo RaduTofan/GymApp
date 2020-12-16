@@ -3,15 +3,17 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
-const WelcomePage = ()=>{
+const HomePage = () => {
 
-    return(
+  return (
+    <div style={{ padding: "2%" }}>
       <Grid item xs={12} md={2} lg={9}>
-          <h1>main page/dashboard</h1>
+        <h1>main page/dashboard</h1>
       </Grid>
+    </div>
 
 
-    )
+  )
 }
 
-export default WelcomePage;
+export default HomePage;

@@ -25,7 +25,7 @@ const AddTrainer = () => {
 
 
     const onSubmit = (form: Trainer) => {
-        
+
         (async () => {
             try {
                 console.log(form);
@@ -40,7 +40,7 @@ const AddTrainer = () => {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-            style={{ padding: "5%" }}>
+                style={{ padding: "5%" }}>
                 <h1>Add trainer</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -68,8 +68,13 @@ const AddTrainer = () => {
                                     autoFocus
                                 />
                             )}
-                            
                         />
+                        {errors.fullName && errors.fullName.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.fullName && errors.fullName.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 7 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -99,6 +104,15 @@ const AddTrainer = () => {
                                 />
                             )}
                         />
+                        {errors.experience && errors.experience.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.experience && errors.experience.type === "min" && (
+                            <p style={{ color: "red" }}>The minimum experience is 0</p>
+                        )}
+                        {errors.experience && errors.experience.type === "max" && (
+                            <p style={{ color: "red" }}>The maximum experience is 300</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -159,6 +173,12 @@ const AddTrainer = () => {
                                 />
                             )}
                         />
+                        {errors.email && errors.email.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.email && errors.email.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 5 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
@@ -182,12 +202,21 @@ const AddTrainer = () => {
                                     variant="outlined"
                                     margin="normal"
                                     required
-                                    type="text"
+                                    type="number"
                                     label="Phone"
                                     autoFocus
                                 />
                             )}
                         />
+                        {errors.phone && errors.phone.type === "required" && (
+                            <p style={{ color: "red" }}>This is required</p>
+                        )}
+                        {errors.phone && errors.phone.type === "minLength" && (
+                            <p style={{ color: "red" }}>The minimum length is 9 characters</p>
+                        )}
+                        {errors.phone && errors.phone.type === "maxLength" && (
+                            <p style={{ color: "red" }}>The maximum length is 9 characters</p>
+                        )}
                     </Grid>
 
                     <Grid item xs={12}>
