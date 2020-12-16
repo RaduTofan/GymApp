@@ -13,6 +13,7 @@ import { Client } from '../../api/client/models/Client';
 import { ClientGridRow } from "../../api/client/models/ClientGridRow";
 import { setPageStateUpdate } from "@material-ui/data-grid";
 import { updateClient } from "../../api/client/index";
+import ParticlesBackground from '../particles/ParticlesBackground';
 
 interface CustomState {
     pathname: string,
@@ -25,7 +26,7 @@ const UpdateClient = () => {
     const [nutritionPlans, setNutritionPlans] = useState<NutritionPlan[]>([] as NutritionPlan[]);
     const location = useLocation();
     const [nutritionPlanId, setNutritionPlanId] = useState(0);
-    
+
 
     const state = location.state as CustomState;
     const client = state.client;
@@ -61,7 +62,7 @@ const UpdateClient = () => {
     const onSubmit = (form: Client) => {
         (async () => {
             try {
-                form.id=client.id;
+                form.id = client.id;
                 form.nutritionPlanId = nutritionPlanId;
                 await updateClient(form);
                 history.push('/admin/clients');
@@ -74,7 +75,7 @@ const UpdateClient = () => {
     return <>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-             style={{ padding: "5%" }}>
+                style={{ padding: "5%" }}>
                 <h1>Update client</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -303,21 +304,21 @@ const UpdateClient = () => {
                             errors={errors}
                             render={({ ref, onBlur }) => (
                                 <FormControl
-                                style={{minWidth:120}}>
+                                    style={{ minWidth: 120 }}>
                                     <InputLabel >Nutrition Plan</InputLabel>
-                                <Select
-                                    inputRef={ref}
-                                    value={nutritionPlanId}
-                                    onChange={selectNplans}
-                                    onBlur={onBlur}
-                                >
-                                    <MenuItem value={0} disabled>Select nutrition plan</MenuItem>
-                                    {
-                                        nutritionPlans.map(p => (
-                                            <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
+                                    <Select
+                                        inputRef={ref}
+                                        value={nutritionPlanId}
+                                        onChange={selectNplans}
+                                        onBlur={onBlur}
+                                    >
+                                        <MenuItem value={0} disabled>Select nutrition plan</MenuItem>
+                                        {
+                                            nutritionPlans.map(p => (
+                                                <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
                                 </FormControl>
                             )}
                         />

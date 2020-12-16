@@ -12,7 +12,7 @@ import { NutritionPlan } from '../../api/nutritionplan/models/NutritionPlan';
 import { getAllNutritionPlans } from '../../api/nutritionplan/index';
 import { Client } from '../../api/client/models/Client';
 import { addClient } from '../../api/client/index';
-
+import ParticlesBackground from '../particles/ParticlesBackground';
 
 
 const AddClient = () => {
@@ -51,7 +51,7 @@ const AddClient = () => {
     return <>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <form noValidate onSubmit={handleSubmit(onSubmit)}
-            style={{ padding: "5%" }}>
+                style={{ padding: "5%" }}>
                 <h1>Add client</h1>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
@@ -281,21 +281,21 @@ const AddClient = () => {
                             errors={errors}
                             render={({ ref, value, onChange, onBlur }) => (
                                 <FormControl
-                                style={{minWidth:120}}>
+                                    style={{ minWidth: 120 }}>
                                     <InputLabel >Nutrition Plan</InputLabel>
-                                <Select
-                                    inputRef={ref}
-                                    value={value}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                >
-                                    <MenuItem value={-1} disabled>Nutrition plan</MenuItem>
-                                    {
-                                        nutritionPlans.map(p => (
-                                            <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
+                                    <Select
+                                        inputRef={ref}
+                                        value={value}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                    >
+                                        <MenuItem value={-1} disabled>Nutrition plan</MenuItem>
+                                        {
+                                            nutritionPlans.map(p => (
+                                                <MenuItem key={p.id} value={p.id}>{p.nutritionType}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
                                 </FormControl>
                             )}
                         />

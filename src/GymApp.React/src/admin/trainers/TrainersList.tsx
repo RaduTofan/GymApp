@@ -155,7 +155,7 @@ const TrainersList = () => {
                 const deleteItem = () => {
                     if (rowToRemove !== undefined && typeof rowToRemove !== 'string') {
                         removeTrainer(rowToRemove).then(() => {
-                            if (paginatedTrainers?.pageSize == 1) {
+                            if (paginatedTrainers?.pageSize === 1) {
                                 paginatedTrainers.pageIndex = -1;
                             }
                             setTrainerIsRemoved(true);

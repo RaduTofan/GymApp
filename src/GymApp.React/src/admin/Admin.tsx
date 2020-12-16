@@ -49,6 +49,7 @@ import NutritionPlansList from './nutritionplans/NutritionPlansList';
 import ExercisePlansList from './exerciseplans/ExercisePlansList';
 import avatar from '../assets/avatar.png';
 import SportsKabaddiIcon from '@material-ui/icons/SportsKabaddi';
+import ParticlesBackground from './particles/ParticlesBackground';
 
 const drawerWidth = 240;
 

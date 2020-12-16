@@ -17,11 +17,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { removeClient } from "../../api/client/index";
 import AddCircleIcon from '@material-ui/icons/AddCircleOutline';
 import BackspaceIcon from '@material-ui/icons/Backspace';
+import ParticlesBackground from '../particles/ParticlesBackground';
+import '../../App.css';
+import liftImg from '../../assets/dumbbells.jpg'
 
 const useStyles = makeStyles((theme) => ({
     button: {
         margin: theme.spacing(1),
-    },
+    }
 }));
 
 
@@ -315,7 +318,7 @@ const ClientsList = () => {
                 Add client
             </Button>
 
-            <div style={{ width: '1260px'}}>
+            <div style={{ width: '1260px' }}>
                 <DataGrid
                     autoHeight={true}
                     disableExtendRowFullWidth={true}

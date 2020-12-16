@@ -34,16 +34,16 @@ export default function Login() {
 
     const classes = useStyles();
     const { control, handleSubmit, errors } = useForm<UserForLogin>();
-    
+
     const history = useHistory();
 
     const onSubmit = (data: UserForLogin) => {
         login(data);
-        
+
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" >
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
